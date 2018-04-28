@@ -170,12 +170,11 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
 
                         default:
                             Object[] values = ClazzTypeUtil.convertValuesByType(model.getValue());
-                            List list =Arrays.asList(values);
-                            list.add(0,join.get(field).as(clazz));
                             if (existJoin) {
-                                predicate = (Predicate) method.invoke(cb,list);
+                                predicate = (Predicate) method.invoke(cb, ArrayUtils.add(values, 0, join.get(field).as(clazz)));
                             } else {
-                                predicate = (Predicate) method.invoke(cb,list);
+                                Object[] objects = ArrayUtils.add(values, 0, root.get(field).as(clazz));
+                                predicate = (Predicate) method.invoke(cb, objects);
                             }
 
                     }
