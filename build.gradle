@@ -21,6 +21,8 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: "$lang3_v"
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: "$swaggerUI_v"
     compile group: 'io.springfox', name: 'springfox-swagger2', version: "$swagger2_v"
+    compile group: 'com.alibaba', name: 'druid', version: "$druid_v"
+
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 

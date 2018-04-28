@@ -1,12 +1,21 @@
 # frame
-工具：idea
-环境：fedora27+jdk1.8
-框架基础：SpringBoot2.0.1、Jpa、hibernate5.2、Gradle4+、Mysql5+
-页面渲染：thymeleaf
-json插件: fastJson
-日志：logback
-api : swagger
-目录结构：
+``工具：idea``
+
+``环境：fedora27+jdk1.8``
+
+``框架基础：SpringBoot2.0.1、Jpa、hibernate5.2、Gradle4+、Mysql5+``
+
+``页面渲染：thymeleaf``
+
+``json插件: fastJson``
+
+``日志：logback``
+
+``连接池：druid``
+
+``api : swagger``
+
+``目录结构：``
 
 
         1-- base    所有基类包，及基类封装的类包

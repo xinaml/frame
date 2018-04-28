@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
@@ -19,6 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @PropertySource({"classpath:config.properties"}) //加载配置文件
 @EnableTransactionManagement //开启事务
 @EnableSwagger2 //Swagger api文档开启
+@ServletComponentScan //druid 监控中心开启
 public class AppRoot {
 
 	public static void main(String[] args) {
