@@ -1,0 +1,30 @@
+apply from: 'config.gradle'
+buildscript {
+    ext {
+        springBootVersion = '2.0.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-jdbc')
+    runtime('mysql:mysql-connector-java')
+    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    compile group: 'com.alibaba', name: 'fastjson', version: "$fastjson_v"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: "$lang3_v"
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: "$swaggerUI_v"
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: "$swagger2_v"
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+
+}
+
+

@@ -1,0 +1,25 @@
+allprojects {
+
+
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'com.xinaml'
+    version = '0.0.1'
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+
+    ext {
+        fastjson_v = '1.2.47'
+        lang3_v = '3.7'
+        swaggerUI_v = '2.7.0'
+        swagger2_v = '2.7.0'
+    }
+}
