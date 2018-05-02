@@ -173,8 +173,8 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
                             if (existJoin) {
                                 predicate = (Predicate) method.invoke(cb, ArrayUtils.add(values, 0, join.get(field).as(clazz)));
                             } else {
-                                Object[] objects = ArrayUtils.add(values, 0, root.get(field).as(clazz));
-                                predicate = (Predicate) method.invoke(cb, objects);
+                                predicate = (Predicate) method.invoke(cb, ArrayUtils.add(values, 0, root.get(field).as(clazz)));
+
                             }
 
                     }

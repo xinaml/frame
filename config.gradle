@@ -21,6 +21,7 @@ allprojects {
         lang3_v = '3.7'
         swaggerUI_v = '2.7.0'
         swagger2_v = '2.7.0'
-        druid_v='1.1.8'
+        druid_v='1.1.9'
+        nekohtml_v='1.9.22'
     }
 }

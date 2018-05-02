@@ -1,2 +1,6 @@
 访问地址：
         http://localhost:8088/druid/index.html
+
+        密码加密：
+            找到.m2 的druid jar 包目录下执行
+            java -cp druid-1.1.5.jar com.alibaba.druid.filter.config.ConfigTools your_password
