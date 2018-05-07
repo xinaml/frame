@@ -59,8 +59,14 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
     @Override
     public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder criteriaBuilder) {
         try {
+
             Predicate predicate = initPredicates(dto, root, criteriaBuilder);
-            return query.where(predicate).getRestriction();
+            if(null!=predicate){
+                return query.where(predicate).getRestriction();
+            }else {
+                return query.getRestriction();
+            }
+
 
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

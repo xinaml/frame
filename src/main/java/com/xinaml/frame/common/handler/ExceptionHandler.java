@@ -39,6 +39,7 @@ public class ExceptionHandler extends AbstractHandlerExceptionResolver {
                 rs.setCode(Integer.parseInt(code));
                 rs.setMsg(StringUtils.substringAfter(e.getMessage(), "@"));
             } else {
+                rs.setMsg(code);
                 rs.setCode(1);
             }
             httpServletResponse.setStatus(SUCCESS_STATUS);
