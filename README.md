@@ -9,7 +9,7 @@
 
 ``json插件: fastJson``
 
-``日志：logback``
+``日志：log4j2``
 
 ``连接池：druid``
 
@@ -34,6 +34,7 @@
                 9.5-- result    控制器层返回对象封装类包
                 9.6-- types     通用的类型类包
                 9.7-- utils     通用调工具类包
+                9.8-- interceptor     拦截器处理类包
         10 --AppRoot 启动类
          
         11--resources

@@ -4,3 +4,5 @@
         密码加密：
             找到.m2 的druid jar 包目录下执行
             java -cp druid-1.1.5.jar com.alibaba.druid.filter.config.ConfigTools your_password
+
+druid监控日志: 会每天保存在 /storage/logs/info.log下

@@ -7,10 +7,14 @@
 package com.xinaml.frame.entity;
 
 import com.xinaml.frame.base.entity.BaseEntity;
+import com.xinaml.frame.types.SexType;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_user")
@@ -22,9 +26,34 @@ public class User extends BaseEntity {
     @Column(unique = true, nullable = false, length = 20, columnDefinition = "VARCHAR(25) COMMENT '邮件'")
     private String email;
 
+    //常用类型 ：String
     @Column(unique = true, nullable = false, length = 20, columnDefinition = "VARCHAR(25) COMMENT '手机号'")
     private String phone;
 
+    //常用类型 ：Integer
+    @Range(min = 0, max = 100) //取范围
+    @Column(columnDefinition = "TINYINT COMMENT '年龄'")
+    private Integer age;
+
+    // 常用类型 ：Double
+    @Column(columnDefinition = " DECIMAL(5,2) COMMENT '重量'")
+    private Double weight;
+
+    //常用类型 ：Enum
+    @Column(columnDefinition = "TINYINT(2) COMMENT '性别'")
+    private SexType sexType;
+
+    //常用类型 ：Boolean
+    @Column(name = "is_expired", columnDefinition = "TINYINT(1) DEFAULT 0 COMMENT '是否过期'", nullable = false, insertable = false)
+    private Boolean expired;
+
+    //常用类型 ：Date
+    @Column(columnDefinition = "DATE  COMMENT '日期'")
+    private LocalDate birthday;
+
+    //常用类型 ：DateTime
+    @Column(columnDefinition = "DATETIME  COMMENT '创建时间'")
+    private LocalDateTime createTime;
 
     public String getUsername() {
         return username;
@@ -48,5 +77,53 @@ public class User extends BaseEntity {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public SexType getSexType() {
+        return sexType;
+    }
+
+    public void setSexType(SexType sexType) {
+        this.sexType = sexType;
+    }
+
+    public Boolean getExpired() {
+        return expired;
+    }
+
+    public void setExpired(Boolean expired) {
+        this.expired = expired;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 }

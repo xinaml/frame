@@ -1,0 +1,12 @@
+默认保存目录为 :/storage/logs
+
+    info: info.log
+
+    error: error.log
+
+    debug: debug.log （默认已屏蔽）
+
+    warn: warn.log
+
+    (每天按日期生成新文件，超500M进行压缩)
+

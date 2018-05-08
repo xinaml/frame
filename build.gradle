@@ -7,12 +7,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"){
-            exclude group: 'org.springframework.boot',module:'spring-boot-starter-logging'
-        }
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
-configurations {
+configurations {  //过滤spring boot 自带的日志
     compile.exclude module: 'spring-boot-starter-logging'
 }
 dependencies {
@@ -28,7 +26,6 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: "$thymeleaf_v" //模板
     compile group: 'net.sourceforge.nekohtml', name: 'nekohtml', version: "$nekohtml_v" //html 标签闭合
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: "$log4j2_v"
-
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 

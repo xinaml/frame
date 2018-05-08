@@ -1,9 +1,9 @@
 package com.xinaml.frame.to;
 
-import com.xinaml.frame.common.aspect.ADD;
-import com.xinaml.frame.common.aspect.DEL;
-import com.xinaml.frame.common.aspect.EDIT;
-import com.xinaml.frame.common.aspect.GET;
+import com.xinaml.frame.base.entity.ADD;
+import com.xinaml.frame.base.entity.DEL;
+import com.xinaml.frame.base.entity.EDIT;
+import com.xinaml.frame.base.entity.GET;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Email;

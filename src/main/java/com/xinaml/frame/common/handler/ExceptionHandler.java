@@ -47,10 +47,12 @@ public class ExceptionHandler extends AbstractHandlerExceptionResolver {
             rs.setCode(EXCEPTION_CODE);
         }
         if (!StringUtil.isChinese(e.getMessage())) {
+            LOGGER.error(o + e.getMessage());
             rs.setMsg("服务器错误");
         } else {
             if (StringUtils.isBlank(rs.getMsg())) {
                 rs.setMsg(e.getMessage());
+                LOGGER.info(o + rs.getMsg());
             }
         }
 
@@ -67,7 +69,7 @@ public class ExceptionHandler extends AbstractHandlerExceptionResolver {
 
     private String handleJapException(Throwable throwable) {
         String msg = throwable.getMessage();
-        String result ;
+        String result;
         result = StringUtils.substringAfter(msg, "Caused by: java.sql.SQLIntegrityConstraintViolationException:");
 
         if (StringUtils.isNotBlank(result)) {

@@ -2,7 +2,7 @@ package com.xinaml.frame.action;
 
 import com.xinaml.frame.base.atction.BaseAct;
 import com.xinaml.frame.base.dto.RT;
-import com.xinaml.frame.common.aspect.ADD;
+import com.xinaml.frame.base.entity.ADD;
 import com.xinaml.frame.common.exception.ActException;
 import com.xinaml.frame.common.exception.SerException;
 import com.xinaml.frame.common.result.ActResult;
@@ -25,7 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
-@Api(value="UserAPI",tags={"用户接口"})
+
+@Api(value = "UserAPI", tags = {"用户接口"})
 @Controller
 @RequestMapping("user")
 public class UserAct extends BaseAct {
@@ -33,12 +34,12 @@ public class UserAct extends BaseAct {
     @Autowired
     private UserSer userSer;
 
-    @ApiOperation(value="列表")
+    @ApiOperation(value = "列表")
     @ResponseBody
     @GetMapping("list")
     public Result list(UserDTO dto) throws ActException {
         try {
-           dto.addRT(RT.eq("username", "lgq"));
+            dto.addRT(RT.eq("username", "lgq"));
             return new ActResult(userSer.findByRTS(dto));
         } catch (SerException e) {
             throw new ActException(e.getMessage());
@@ -46,14 +47,14 @@ public class UserAct extends BaseAct {
     }
 
 
-    @ApiOperation(value="添加")
-    @ApiImplicitParam( dataTypeClass = UserTO.class)
+    @ApiOperation(value = "添加")
+    @ApiImplicitParam(dataTypeClass = UserTO.class)
     @ResponseBody
     @PostMapping("add")
     public Result add(@Validated(ADD.class) UserTO to, BindingResult rs) throws ActException {
         try {
             User user = new User();
-            BeanUtils.copyProperties(to,user);
+            BeanUtils.copyProperties(to, user);
             user.setCreateDate(LocalDateTime.now());
             userSer.save(user);
             return new ActResult("success");
@@ -61,7 +62,6 @@ public class UserAct extends BaseAct {
             throw new ActException(e.getMessage());
         }
     }
-
 
 
 }
