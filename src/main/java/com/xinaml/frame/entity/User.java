@@ -6,9 +6,11 @@
  **/
 package com.xinaml.frame.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.xinaml.frame.base.entity.BaseEntity;
 import com.xinaml.frame.types.SexType;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,9 +53,6 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "DATE  COMMENT '日期'")
     private LocalDate birthday;
 
-    //常用类型 ：DateTime
-    @Column(columnDefinition = "DATETIME  COMMENT '创建时间'")
-    private LocalDateTime createTime;
 
     public String getUsername() {
         return username;
@@ -119,11 +118,4 @@ public class User extends BaseEntity {
         this.birthday = birthday;
     }
 
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
 }

@@ -6,9 +6,8 @@
  **/
 package com.xinaml.frame.base.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -32,7 +31,6 @@ public abstract class BaseEntity implements Serializable {
     private String id;
 
     @Column(nullable = false, columnDefinition = "DATETIME  COMMENT '创建时间'")
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime createDate;
 
     public String getId() {
@@ -42,7 +40,7 @@ public abstract class BaseEntity implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
-
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss") //json 转换时日期处理
     public LocalDateTime getCreateDate() {
         return createDate;
     }

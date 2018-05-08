@@ -1,7 +1,5 @@
 package com.xinaml.frame.common.result;
 
-import com.alibaba.fastjson.JSON;
-
 /**
  * action 返回对象
  *
@@ -10,7 +8,7 @@ import com.alibaba.fastjson.JSON;
  **/
 public class ActResult implements Result {
     private int code = 0;
-    private String msg ;
+    private String msg;
     private Object data;
 
     public ActResult() {
@@ -67,24 +65,9 @@ public class ActResult implements Result {
         this.data = data;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("{\"code\":");
-        sb.append(code);
-        sb.append(",");
-        sb.append("\"msg\":\"");
-        sb.append(msg);
-        sb.append("\"");
-        if (null != data) {
-            sb.append(",\"data\":\"");
-            sb.append(JSON.toJSONString(data));
-            sb.append("\"");
-        }
-        sb.append("}");
-        return sb.toString();
-    }
 
     public static ActResult initialize(Object data) {
         return new ActResult(null, data);
     }
+
 }
