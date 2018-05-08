@@ -10,7 +10,7 @@ import com.alibaba.fastjson.JSON;
  **/
 public class ActResult implements Result {
     private int code = 0;
-    private String msg = "success";
+    private String msg ;
     private Object data;
 
     public ActResult() {

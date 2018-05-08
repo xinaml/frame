@@ -39,7 +39,6 @@ public class ExceptionHandler extends AbstractHandlerExceptionResolver {
                 rs.setCode(Integer.parseInt(code));
                 rs.setMsg(StringUtils.substringAfter(e.getMessage(), "@"));
             } else {
-                rs.setMsg(code);
                 rs.setCode(1);
             }
             httpServletResponse.setStatus(SUCCESS_STATUS);
@@ -50,7 +49,7 @@ public class ExceptionHandler extends AbstractHandlerExceptionResolver {
         if (!StringUtil.isChinese(e.getMessage())) {
             rs.setMsg("服务器错误");
         } else {
-            if (null == rs.getMsg()) {
+            if (StringUtils.isBlank(rs.getMsg())) {
                 rs.setMsg(e.getMessage());
             }
         }
