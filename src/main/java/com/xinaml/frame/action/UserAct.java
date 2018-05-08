@@ -38,8 +38,8 @@ public class UserAct extends BaseAct {
     @GetMapping("list")
     public Result list(UserDTO dto) throws ActException {
         try {
-           dto.addRT(RT.eq("username", null));
-            return new ActResult(userSer.findByPage(dto));
+           dto.addRT(RT.eq("username", "lgq"));
+            return new ActResult(userSer.findByRTS(dto));
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }
