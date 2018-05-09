@@ -1,5 +1,6 @@
 package com.xinaml.frame.action;
 
+import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.base.atction.BaseAct;
 import com.xinaml.frame.base.dto.RT;
 import com.xinaml.frame.base.entity.ADD;
@@ -25,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Api(value = "UserAPI", tags = {"用户接口"})
 @Controller
@@ -33,6 +37,29 @@ public class UserAct extends BaseAct {
 
     @Autowired
     private UserSer userSer;
+
+
+
+    @GetMapping("page")
+    public String page(UserDTO dto) throws ActException {
+        return "page";
+    }
+
+
+    @ResponseBody
+    @GetMapping("maps")
+    public String maps(UserDTO dto) throws ActException {
+        try {
+            List<User> rows = userSer.findByPage(dto);
+            long total = userSer.count(dto);
+            Map<String,Object> maps = new HashMap<>(1);
+            maps.put("rows",rows);
+            maps.put("total",total);
+            return JSON.toJSONString(maps);
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
+        }
+    }
 
     @ApiOperation(value = "列表")
     @ResponseBody
@@ -45,6 +72,7 @@ public class UserAct extends BaseAct {
             throw new ActException(e.getMessage());
         }
     }
+
 
 
     @ApiOperation(value = "添加")

@@ -5,6 +5,7 @@ import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.result.ActResult;
 import com.xinaml.frame.common.utils.ResponseUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -67,7 +68,7 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
-
-
     }
+
+
 }

@@ -22,6 +22,7 @@ public abstract class PageDTO {
      */
     protected Integer page = 1;
 
+
     public Integer getLimit() {
         return limit;
     }
@@ -37,4 +38,5 @@ public abstract class PageDTO {
     public void setPage(Integer page) {
         this.page = page;
     }
+
 }
