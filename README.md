@@ -47,7 +47,11 @@
             11.5-- logback.properties     日志配置文件参数
             11.6-- logback.xml            日志主配置文件
         
-打包：
-    gradle build -xtest
-运行 :
-    java -jar frame-0.0.1.jar
+`打包：
+    gradle build -xtest`
+    
+`运行 :
+    java -jar frame-0.0.1.jar`
+    
+` 日志文件目录：/storage/logs(假如应用没有权限创建，
+        手动执行：sudo mkdir /storage;chmod 777 -R /storage)`  
