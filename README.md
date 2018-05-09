@@ -27,14 +27,16 @@
         7-- ser     业务层类包
         8-- types   枚举类型类包
         9--common   通用包
-                9.1-- aspect    切面处理类包
-                9.2-- exception 自定义异常类包
-                9.3-- handler   处理器类包
-                9.4-- http      写入数据到页面工具包类
-                9.5-- result    控制器层返回对象封装类包
-                9.6-- types     通用的类型类包
-                9.7-- utils     通用调工具类包
-                9.8-- interceptor     拦截器处理类包
+                9.1-- aspect    切面处理类包                     
+                9.2-- custom    自定义类包
+                      9.2.1 -- annotation：自定义注解包
+                      9.2.2 -- exception ： 自定义异常包
+                      9.2.3 -- result ： 自定义返回数据类包
+                      9.2.4 -- types ： 共用枚举类型类包
+                9.3-- config    配置类包
+                9.4-- handler   处理器类包
+                9.5-- utils     通用调工具类包
+                9.6-- interceptor     拦截器处理类包
         10 --AppRoot 启动类
          
         11--resources

@@ -1,4 +1,4 @@
-package com.xinaml.frame.common.types;
+package com.xinaml.frame.common.custom.types;
 /**
  * rep错误类型
  *

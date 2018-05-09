@@ -1,4 +1,4 @@
-package com.xinaml.frame.common.result;
+package com.xinaml.frame.common.custom.result;
 
 /**
  * action 返回接口

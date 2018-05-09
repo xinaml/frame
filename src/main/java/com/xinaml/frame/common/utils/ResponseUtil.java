@@ -1,4 +1,4 @@
-package com.xinaml.frame.common.http;
+package com.xinaml.frame.common.utils;
 
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -16,10 +16,10 @@ import java.io.IOException;
  * @author lgq
  * @date 2018/4/15
  **/
-public class ResponseContext {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResponseContext.class);
+public class ResponseUtil {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResponseUtil.class);
 
-    private ResponseContext() {
+    private ResponseUtil() {
     }
 
     public static HttpServletResponse get() {

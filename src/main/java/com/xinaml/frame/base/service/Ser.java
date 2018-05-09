@@ -6,7 +6,7 @@ package com.xinaml.frame.base.service;
 
 import com.xinaml.frame.base.dto.BaseDTO;
 import com.xinaml.frame.base.entity.BaseEntity;
-import com.xinaml.frame.common.exception.SerException;
+import com.xinaml.frame.common.custom.exception.SerException;
 
 import java.util.List;
 

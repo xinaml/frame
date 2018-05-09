@@ -1,4 +1,4 @@
-package com.xinaml.frame.common.annotation;
+package com.xinaml.frame.common.custom.annotation;
 
 
 import java.lang.annotation.*;

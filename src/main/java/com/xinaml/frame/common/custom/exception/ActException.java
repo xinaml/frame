@@ -4,7 +4,7 @@
  * @author lgq
  * @date 2018/4/15
  **/
-package com.xinaml.frame.common.exception;
+package com.xinaml.frame.common.custom.exception;
 
 public class ActException extends Exception {
     public ActException(String msg) {

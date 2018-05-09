@@ -10,8 +10,8 @@ import com.xinaml.frame.base.dto.BaseDTO;
 import com.xinaml.frame.base.entity.BaseEntity;
 import com.xinaml.frame.base.rep.JapRep;
 import com.xinaml.frame.base.rep.JpaSpec;
-import com.xinaml.frame.common.exception.RepException;
-import com.xinaml.frame.common.exception.SerException;
+import com.xinaml.frame.common.custom.exception.RepException;
+import com.xinaml.frame.common.custom.exception.SerException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements Ser<BE, BD>, Serializable {
     @Autowired(required = false)
     protected JapRep<BE, BD> rep;

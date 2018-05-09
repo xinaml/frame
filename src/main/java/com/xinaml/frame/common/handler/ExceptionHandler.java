@@ -1,8 +1,8 @@
 package com.xinaml.frame.common.handler;
 
-import com.xinaml.frame.common.exception.ActException;
-import com.xinaml.frame.common.http.ResponseContext;
-import com.xinaml.frame.common.result.ActResult;
+import com.xinaml.frame.common.custom.exception.ActException;
+import com.xinaml.frame.common.custom.result.ActResult;
+import com.xinaml.frame.common.utils.ResponseUtil;
 import com.xinaml.frame.common.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -63,7 +63,7 @@ public class ExceptionHandler extends AbstractHandlerExceptionResolver {
         if (StringUtils.isNotBlank(msg)) {
             rs.setMsg(msg);
         }
-        ResponseContext.writeData(rs);
+        ResponseUtil.writeData(rs);
         return new ModelAndView();
     }
 

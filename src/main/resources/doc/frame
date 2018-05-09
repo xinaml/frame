@@ -1,0 +1,25 @@
+拦截器：
+   1. LoginIntercept：
+        用法：可在控制器类，或者方法上添加 @Login 注解，加上该注解后便进行登录拦截，如果在类添加，测控制器类所有方法
+            全部校验登录，如果在方法上添加，则仅该方法上有效
+
+添加自定义拦截器 ：
+    1.拦截器目录：common/interceptor
+    2.参照 LoginIntercept 登录拦截器用法
+    3.添加拦截器类后并为生效，需在common/config/WebConf类的拦截链下添加注册你的拦截器
+        如：registry.addInterceptor(拦截器类).addPathPatterns(拦截url);
+        例：registry.addInterceptor(new LoginIntercept()).addPathPatterns("/**");
+
+
+
+AOP切面:
+    1.JSR303Aspect：
+        该类会对spring mvc 数据校验进行统一的处理
+
+添加自定义AOP ：
+    请参照：common/aspect/JSR303Aspect
+
+
+异常处理：
+    common/handler/ExceptionHandler 该类对所有异常进行统一处理
+

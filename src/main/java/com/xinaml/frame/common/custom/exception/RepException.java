@@ -4,9 +4,9 @@
  * @author lgq
  * @date 2018/4/15
  **/
-package com.xinaml.frame.common.exception;
+package com.xinaml.frame.common.custom.exception;
 
-import com.xinaml.frame.common.types.RepExceptionType;
+import com.xinaml.frame.common.custom.types.RepExceptionType;
 
 public class RepException extends Exception {
 

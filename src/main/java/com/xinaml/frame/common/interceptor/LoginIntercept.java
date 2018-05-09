@@ -1,9 +1,9 @@
-package com.xinaml.frame.common.Interceptor;
+package com.xinaml.frame.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.xinaml.frame.common.annotation.Login;
-import com.xinaml.frame.common.http.ResponseContext;
-import com.xinaml.frame.common.result.ActResult;
+import com.xinaml.frame.common.custom.annotation.Login;
+import com.xinaml.frame.common.custom.result.ActResult;
+import com.xinaml.frame.common.utils.ResponseUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -13,6 +13,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+
 /**
  * 登录拦截
  *
@@ -60,7 +61,7 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
                 result.setCode(403);
                 result.setMsg("请先登录!");
                 response.setStatus(200);
-                ResponseContext.writeData(JSON.toJSONString(result));
+                ResponseUtil.writeData(JSON.toJSONString(result));
                 return false;
             }
         } catch (Exception e) {
