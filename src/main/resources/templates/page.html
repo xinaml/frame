@@ -5,10 +5,13 @@
     <title>test</title>
     <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="../bootstrap/css/bootstrap-table.min.css"/>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap-datepicker.css">
     <script src="../js/jquery-3.2.1.min.js"></script>
     <script src="../bootstrap/js/bootstrap.min.js"></script>
     <script src="../bootstrap/js/bootstrap-table.min.js"></script>
     <script src="../bootstrap/js/bootstrap-table-zh-CN.js"></script>
+    <script src="../bootstrap/js/bootstrap-datepicker.js"></script>
+    <script src="../bootstrap/js/bootstrap-datepicker.zh-CN.js"></script>
 </head>
 <body>
 <ul class="nav nav-tabs">
@@ -31,8 +34,7 @@
     <li><a href="#">C</a></li>
 </ul>
 
-<table id="test_table" >
-
+<table id="test_table"   >
 </table>
 <div class="content" >
     <div id="toolbar" class="btn-group pull-right" style="margin-right: 20px;">
@@ -42,11 +44,53 @@
         <button id="btn_delete" type="button" class="btn btn-default" onclick="delRows()" >
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
         </button>
-        <button id="btn_add" type="button" class="btn btn-default">
+        <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal"  data-target="#addUser">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
         </button>
     </div>
 </div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                   添加
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id="addFrom">
+                    <div class="form-group">
+                        <label>username:</label>
+                        <input style="width: 50%" type="username" class="form-control"  name="username" placeholder="Enter username">
+                        <label for="email">Email:</label>
+                        <input style="width: 50%" type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label >phone:</label>
+                        <input style="width: 50%" class="form-control" name="phone" placeholder="Enter phone">
+                        <label >birthday:</label>
+                        <input style="width: 50%"  type="text"class="form-control form_datetime_2"  id="birthday" name="birthday"  placeholder="Enter birthday"/>
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+                <button type="button" class="btn btn-primary" onclick="addUser()">
+                    提交更改
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
 </body>
 <script>
     $(function () {
@@ -62,13 +106,13 @@
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                       //初始化加载第一页，默认第一页
             pageSize: 10,                       //每页的记录行数（*）
-            pageList: [10, 20, 50, 100],        //可供选择的每页的行数（*）
+            pageList: [ 10, 20, 50],        //可供选择的每页的行数（*）
             clickToSelect: true,
             singleSelect: false,
             selectItemName: "custonSelectItem",
             striped: true,
             maintainSelected: false,
-            height: 460,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            height: 530,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
             cardView: false,                    //是否显示详细视图
             detailView: false,
             queryParamsType : "undefined",
@@ -109,28 +153,8 @@
             }, {
                 field: 'birthday',
                 title: '生日'
-            }],
-            onEditableSave: function (field, row, oldValue, $el) {
-                $.ajax({
-                    type: "post",
-                    url: "/user/edit",
-                    data: row,
-                    dataType: 'JSON',
-                    success: function (data, status) {
-                        if (status == "success") {
-                            alert('提交数据成功');
-                        }
-                    },
-                    error: function () {
-                        alert('编辑失败');
-                    },
-                    complete: function () {
-
-                    }
-
-                });   }
+            }]
             ,
-
             queryParams:function queryParams(params) {   //设置查询参数
                 var param = {
                     page: params.pageNumber,
@@ -147,6 +171,42 @@
         var rows = $('#test_table').bootstrapTable("getSelections");
         $(".success.selected").remove()
         $(".selected").remove()
+    }
+
+    $("#birthday").datepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        todayHighlight: true,
+        showMeridian: true,
+        defaultDate:'2018-03-10',//默认日期
+        pickerPosition: "bottom-left",
+        language: 'zh-CN',//中文，需要引用zh-CN.js包
+        startView: 2,//月视图
+        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+    });
+
+    function addUser() {
+        var data=$('#addFrom').serialize();
+        var submitData=decodeURIComponent(data,true);
+        $.ajax({
+            type:'POST',
+            url:'/user/add',
+            data:submitData,
+            cache:false,//false是不缓存，true为缓存
+            async:true,//true为异步，false为同步
+            beforeSend:function(){
+                //请求前
+            },
+            success:function(result){
+               if(result.code==0){
+                   $('#addUser').modal('hide');
+               }
+            },
+            error:function(){
+                //请求失败时
+            }
+        })
     }
 </script>
 </html>
