@@ -9,6 +9,7 @@ import com.xinaml.frame.base.entity.BaseEntity;
 import com.xinaml.frame.common.custom.exception.SerException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 基础业务接口
@@ -34,7 +35,7 @@ public interface Ser<BE extends BaseEntity, BD extends BaseDTO> {
      * @return
      * @throws SerException
      */
-    default List<BE> findByPage(BD dto) throws SerException {
+    default Map<String,Object> findByPage(BD dto) throws SerException {
         return null;
     }
 
@@ -60,18 +61,7 @@ public interface Ser<BE extends BaseEntity, BD extends BaseDTO> {
         return null;
     }
 
-    /**
-     * 根据条件询对象列表
-     * 是否分页
-     *
-     * @param dto
-     * @param page 分页
-     * @return
-     * @throws SerException
-     */
-    default List<BE> findByRTS(BD dto, Boolean page) throws SerException {
-        return null;
-    }
+
 
     /**
      * 根据条件询对象列表
@@ -111,10 +101,10 @@ public interface Ser<BE extends BaseEntity, BD extends BaseDTO> {
     /**
      * 通过id删除对象
      *
-     * @param id
+     * @param ids
      * @throws SerException
      */
-    default void remove(String id) throws SerException {
+    default void remove(String ... ids) throws SerException {
 
     }
 

@@ -1,0 +1,15 @@
+包名:user
+类名:UserDetail
+作者:lgq
+描述:用户详情
+
+#参数[变量类型  变量名 ]
+#parameter--------------
+
+(
+User user 所属用户;
+String address 住址;
+Integer height 身高;
+Boolean is_married 是否已婚;
+Double asset 资产;
+)

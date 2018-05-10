@@ -6,17 +6,14 @@
  **/
 package com.xinaml.frame.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.xinaml.frame.base.entity.BaseEntity;
 import com.xinaml.frame.types.SexType;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_user")

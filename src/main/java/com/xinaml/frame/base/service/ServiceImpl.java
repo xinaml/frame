@@ -14,6 +14,7 @@ import com.xinaml.frame.common.custom.exception.RepException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import javax.persistence.EntityManager;
@@ -26,10 +27,9 @@ import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-@SuppressWarnings({ "rawtypes", "unchecked" })
+import java.util.*;
+
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements Ser<BE, BD>, Serializable {
     @Autowired(required = false)
     protected JapRep<BE, BD> rep;
@@ -51,11 +51,15 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
     }
 
     @Override
-    public List<BE> findByPage(BD dto) throws SerException {
+    public  Map<String,Object> findByPage(BD dto) throws SerException {
         try {
             JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
             PageRequest page = jpaSpec.getPageRequest(dto);
-            return rep.findAll(jpaSpec, page).getContent();
+            Page<BE> rs = rep.findAll(jpaSpec, page);
+            Map map = new HashMap<BE, Long>(2);
+            map.put("rows", rs.getContent());
+            map.put("total", rs.getTotalElements());
+            return map;
         } catch (Exception e) {
             throw new SerException(e.getMessage());
         }
@@ -84,20 +88,6 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
         return null != list && list.size() > 0 ? list.get(0) : null;
     }
 
-    @Override
-    public List<BE> findByRTS(BD dto, Boolean page) throws SerException {
-        try {
-            if (page) {
-                return this.findByPage(dto);
-            } else {
-                return this.findByRTS(dto);
-            }
-
-        } catch (Exception e) {
-            throw new SerException(e.getMessage());
-        }
-
-    }
 
     @Override
     public List<BE> findByRTS(BD dto) throws SerException {
@@ -129,12 +119,21 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
     }
 
     @Override
-    public void remove(String id) throws SerException {
-        try {
-            rep.deleteById(id);
-        } catch (Exception e) {
-            throw new SerException(e.getMessage());
+    public void remove(String... ids) throws SerException {
+
+        if (null != ids) {
+            try {
+                for (String id : ids) {
+                    rep.deleteById(id);
+                }
+            } catch (Exception e) {
+                throw new SerException(e.getMessage());
+            }
+        } else {
+            throw new SerException("id 不能为空");
         }
+
+
     }
 
     @Override

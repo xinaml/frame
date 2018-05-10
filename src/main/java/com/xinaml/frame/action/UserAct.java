@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.base.atction.BaseAct;
 import com.xinaml.frame.base.dto.RT;
 import com.xinaml.frame.base.entity.ADD;
+import com.xinaml.frame.base.entity.EDIT;
 import com.xinaml.frame.common.custom.exception.ActException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.custom.result.ActResult;
@@ -20,11 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -50,11 +49,7 @@ public class UserAct extends BaseAct {
     @GetMapping("maps")
     public String maps(UserDTO dto) throws ActException {
         try {
-            List<User> rows = userSer.findByPage(dto);
-            long total = userSer.count(dto);
-            Map<String,Object> maps = new HashMap<>(1);
-            maps.put("rows",rows);
-            maps.put("total",total);
+            Map<String,Object> maps = userSer.findByPage(dto);
             return JSON.toJSONString(maps);
         } catch (SerException e) {
             throw new ActException(e.getMessage());
@@ -91,5 +86,30 @@ public class UserAct extends BaseAct {
         }
     }
 
+    //TODO DeleteMapping 这种方式接收不到数组参数
+    @ResponseBody
+    @PostMapping("del")
+    public Result del(String[] ids) throws ActException {
+        try {
+            userSer.remove(ids);
+            return new ActResult("success");
+        } catch (Exception e) {
+            throw new ActException(e.getMessage());
+        }
+    }
+
+    @ResponseBody
+    @PutMapping("edit")
+    public Result edit(@Validated(EDIT.class) UserTO to , BindingResult rs) throws ActException {
+        try {
+            to.setExpired(true);
+            User user = userSer.findById(to.getId());
+            BeanUtils.copyProperties(to,user);
+            userSer.update(user);
+            return new ActResult("success");
+        } catch (Exception e) {
+            throw new ActException(e.getMessage());
+        }
+    }
 
 }
