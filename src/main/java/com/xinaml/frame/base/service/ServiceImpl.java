@@ -56,7 +56,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
             PageRequest page = jpaSpec.getPageRequest(dto);
             Page<BE> rs = rep.findAll(jpaSpec, page);
-            Map map = new HashMap<BE, Long>(2);
+            Map map = new HashMap<String, Object>(2);
             map.put("rows", rs.getContent());
             map.put("total", rs.getTotalElements());
             return map;
