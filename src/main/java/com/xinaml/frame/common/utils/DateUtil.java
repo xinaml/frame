@@ -1,13 +1,15 @@
 package com.xinaml.frame.common.utils;
 
+import com.xinaml.frame.common.custom.constant.CommonConst;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 public class DateUtil {
-    private static final DateTimeFormatter DATETIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private static final DateTimeFormatter DATETIME = DateTimeFormatter.ofPattern(CommonConst.DATETIME);
+    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern(CommonConst.DATE);
+    private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern(CommonConst.TIME);
     private static Calendar calendar = null;
 
     /**

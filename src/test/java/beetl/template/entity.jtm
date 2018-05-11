@@ -1,0 +1,44 @@
+package ${dir}.entity.${package};
+
+import ${dir}.entity.BaseEntity;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * ${des}
+ *
+ * @Author:	[${author}]
+ * @Date: [${date(),dateFormat="yyyy-MM-dd HH:mm:ss"}]
+ * @Description: [${des}]
+ * @Version: [${version}]
+ * @Copy: [${dir}]
+ */
+@Entity
+@Table(name = "${tableName}")
+public class ${className} extends BaseEntity {
+
+<%
+	for(m in list){
+%>
+    /**
+     * ${m.des}
+     */
+    @Column(columnDefinition = "VARCHAR(255) COMMENT '${m.des}' ")
+ 	private ${m.type} ${m.name};
+<%}%>
+
+<%
+	for(m in list){
+%>
+ 	public ${m.type} ${m.getMethod} () {
+		return ${m.fieldName};
+	}
+	public void ${m.setMethod} (${m.type} ${m.name}) {
+		this.${m.fieldName} =${m.fieldName};
+	}
+
+<%}%>
+
+
+}

@@ -23,10 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Api(value = "UserAPI", tags = {"用户接口"})
@@ -36,7 +33,6 @@ public class UserAct extends BaseAct {
 
     @Autowired
     private UserSer userSer;
-
 
 
     @GetMapping("page")
@@ -49,7 +45,7 @@ public class UserAct extends BaseAct {
     @GetMapping("maps")
     public String maps(UserDTO dto) throws ActException {
         try {
-            Map<String,Object> maps = userSer.findByPage(dto);
+            Map<String, Object> maps = userSer.findByPage(dto);
             return JSON.toJSONString(maps);
         } catch (SerException e) {
             throw new ActException(e.getMessage());
@@ -69,7 +65,6 @@ public class UserAct extends BaseAct {
     }
 
 
-
     @ApiOperation(value = "添加")
     @ApiImplicitParam(dataTypeClass = UserTO.class)
     @ResponseBody
@@ -86,7 +81,7 @@ public class UserAct extends BaseAct {
         }
     }
 
-    //TODO DeleteMapping 这种方式接收不到数组参数
+    // DeleteMapping 这种方式接收不到数组参数，见下一方法，必须用过url来传参
     @ResponseBody
     @PostMapping("del")
     public Result del(String[] ids) throws ActException {
@@ -98,13 +93,31 @@ public class UserAct extends BaseAct {
         }
     }
 
+    /**
+     * Restful 规范
+     * @param id
+     * @return
+     * @throws ActException
+     */
+    @ResponseBody
+    @DeleteMapping("del/{id}")
+    public Result del(@PathVariable String id) throws ActException {
+        try {
+            userSer.remove(id);
+            return new ActResult("success");
+        } catch (Exception e) {
+            throw new ActException(e.getMessage());
+        }
+    }
+
+
     @ResponseBody
     @PutMapping("edit")
-    public Result edit(@Validated(EDIT.class) UserTO to , BindingResult rs) throws ActException {
+    public Result edit(@Validated(EDIT.class) UserTO to, BindingResult rs) throws ActException {
         try {
             to.setExpired(true);
             User user = userSer.findById(to.getId());
-            BeanUtils.copyProperties(to,user);
+            BeanUtils.copyProperties(to, user);
             userSer.update(user);
             return new ActResult("success");
         } catch (Exception e) {

@@ -4,6 +4,7 @@ import com.xinaml.frame.base.entity.ADD;
 import com.xinaml.frame.base.entity.DEL;
 import com.xinaml.frame.base.entity.EDIT;
 import com.xinaml.frame.base.entity.GET;
+import com.xinaml.frame.common.custom.constant.CommonConst;
 import com.xinaml.frame.types.SexType;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,14 +27,15 @@ public class UserTO {
     @Email
     @NotBlank(groups = {ADD.class, EDIT.class}, message = "邮箱不能为空！")
     private String email;
+
     @NotBlank(groups = {GET.class, DEL.class, EDIT.class}, message = "id不能为空！")
     private String id;
 
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")  //格式化接收前端传过来的日期
+    @DateTimeFormat(pattern = CommonConst.DATE)  //格式化接收前端传过来的日期
     private LocalDate birthday;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//格式化接收前端传过来的日期时间
+    @DateTimeFormat(pattern = CommonConst.DATETIME)//格式化接收前端传过来的日期时间
     private LocalDateTime createTime;
 
     private Integer age;

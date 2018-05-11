@@ -7,6 +7,7 @@
 package com.xinaml.frame.base.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.xinaml.frame.common.custom.constant.CommonConst;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -40,7 +41,7 @@ public abstract class BaseEntity implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss") //json 转换时日期处理
+    @JsonFormat(pattern= CommonConst.DATETIME) //json 转换时日期处理
     public LocalDateTime getCreateDate() {
         return createDate;
     }

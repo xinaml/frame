@@ -21,4 +21,28 @@ public class StringUtil {
         }
         return false;
     }
+
+    /**
+     * 首字母大写
+     * @param string
+     * @return
+     */
+    public static String toUpperFirst(String string) {
+        char[] charArray = string.toCharArray();
+        charArray[0] -= 32;
+        return String.valueOf(charArray);
+    }
+
+    /**
+     * 首字母小写
+     * @param string
+     * @return
+     */
+    public static String toLowerFirst(String string) {
+        char[] charArray = string.toCharArray();
+        charArray[0] += 32;
+        return String.valueOf(charArray);
+    }
+
+
 }

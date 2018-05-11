@@ -10,6 +10,7 @@ import com.xinaml.frame.base.dto.BaseDTO;
 import com.xinaml.frame.base.entity.BaseEntity;
 import com.xinaml.frame.base.rep.JapRep;
 import com.xinaml.frame.base.rep.JpaSpec;
+import com.xinaml.frame.common.custom.constant.CommonConst;
 import com.xinaml.frame.common.custom.exception.RepException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import org.apache.commons.lang3.StringUtils;
@@ -36,9 +37,9 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
     @Autowired
     protected EntityManager entityManager;
 
-    private static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern(CommonConst.DATETIME);
+    private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern(CommonConst.TIME);
+    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern(CommonConst.DATE);
 
     @Override
     public List<BE> findAll() throws SerException {
