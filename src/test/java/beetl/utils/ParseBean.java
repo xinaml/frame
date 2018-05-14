@@ -8,7 +8,6 @@ import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
 import org.beetl.core.resource.FileResourceLoader;
-import org.springframework.data.domain.Page;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -20,10 +19,9 @@ import java.util.stream.Collectors;
  * 解析bean 信息
  */
 public class ParseBean {
-    public static String rootPath = System.getProperty("user.dir") + "/src/main/java/"; //模板目录
+    public static String rootPath = null; //模板目录
     public static String tmpPath = System.getProperty("user.dir") + "/src/test/java/beetl/Bean"; //模板目录
     public static String jtmPath = System.getProperty("user.dir") + "/src/test/java/beetl/template";//模板文件目录
-
     public static ClazzInfo clazzInfo; //类信息
     public static List<ClazzField> fields; //字段信息
     public static String[] info = new String[]{"dir", "packages", "className", "author", "des", "version"};//类信息
@@ -54,11 +52,24 @@ public class ParseBean {
                     fields.add(clazzField);
                 }
             }
+            int i = 0;
+            String tableName = StringUtil.toLowerFirst(clazzInfo.getClassName());
+            while (i < tableName.length()) {
+                char chr = tableName.charAt(i++);
+                if (Character.isUpperCase(chr)) {
+                    char old = chr;
+                    chr += 32;
+                    tableName = tableName.replace(String.valueOf(old), "_" + String.valueOf(chr));
+                }
+            }
+            //设置表名
+            clazzInfo.setTableName(clazzInfo.getPackages() + "_" + tableName);
+
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        rootPath = rootPath + clazzInfo.getDir().replaceAll("\\.", "/") + "/";
+        rootPath = System.getProperty("user.dir") + "/src/main/java/" + clazzInfo.getDir().replaceAll("\\.", "/") + "/";
         createFile(rootPath, clazzInfo.getPackages()); //创建目录及文件
     }
 
@@ -72,6 +83,12 @@ public class ParseBean {
         try {
             // 创建entity
             createModuleAndClazz(path, "entity", packages);
+            createModuleAndClazz(path, "dto", packages);
+            createModuleAndClazz(path, "rep", packages);
+            createModuleAndClazz(path, "ser", packages);
+            createModuleAndClazz(path, "serImp", packages);
+            //  createModuleAndClazz(path, "to", packages);
+            //  createModuleAndClazz(path, "action", packages);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,7 +96,11 @@ public class ParseBean {
     }
 
     private static void createModuleAndClazz(String path, String module, String packages) throws IOException {
-        File moduleDir = new File(path + "/" + module); //模块目录 dao dto entity vo service 等。。。
+        String pathModule =module;
+        if(module.equals("serImp")){
+            pathModule="ser";
+        }
+        File moduleDir = new File(path + "/" + pathModule); //模块目录 dao dto entity vo service 等。。。
         if (!moduleDir.exists()) {
             moduleDir.mkdirs();
         }
@@ -94,23 +115,48 @@ public class ParseBean {
         Template template = gt.getTemplate(module + ".jtm");
         template.binding("package", clazzInfo.getPackages());
         template.binding("className", clazzInfo.getClassName());
-        template.binding("tableName", clazzInfo.getTableName());
         template.binding("author", clazzInfo.getAuthor());
         template.binding("des", clazzInfo.getDes());
         template.binding("dir", clazzInfo.getDir());
         template.binding("version", clazzInfo.getVersion());
+        template.binding("tableName", clazzInfo.getTableName());
+        template.binding("list", fields);
         List<String> importPackage = initImportPackage();
         template.binding("importPackage", importPackage);
-        template.binding("list", fields);
         //写入文件
-        File file = new File(packagesDir + "/" + clazzInfo.getClassName() + ".java");
-        FileWriter fw = new FileWriter(file);
-        fw.write(template.render());
-        fw.close();
+        String fileName = null;
+        try {
+            switch (module) {
+                case "entity":
+                    fileName = packagesDir + "/" + clazzInfo.getClassName() + ".java";
+                    writeToFile(template, fileName);
+                    break;
+                case "rep":
+                    fileName = packagesDir + "/" + clazzInfo.getClassName() + "Rep.java";
+                    writeToFile(template, fileName);
+                    break;
+                case "dto":
+                    fileName = packagesDir + "/" + clazzInfo.getClassName() + "DTO.java";
+                    writeToFile(template, fileName);
+                    break;
+                case "ser":
+                    fileName = packagesDir + "/" + clazzInfo.getClassName() + "Ser.java";
+                    writeToFile(template, fileName);
+                    break;
+                case "serImp":
+                    fileName = packagesDir + "/" + clazzInfo.getClassName() + "SerImp.java";
+                    writeToFile(template, fileName);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     /**
-     * 其他java类型导入包
+     * 处理除基本类型外，其他java类型导入包，及属性注解
      *
      * @return
      */
@@ -139,28 +185,34 @@ public class ParseBean {
                         String dir = rootPath + "entity";
                         String filePath = searchFile(new File(dir).listFiles(), fieldType);
                         if (StringUtils.isNotBlank(filePath)) {
-                            filePath =StringUtils.substringAfter(filePath,"main/java");
+                            filePath = StringUtils.substringAfter(filePath, "main/java");
                             filePath = filePath.replaceAll("/", "\\.");
                             filePath = filePath.replaceAll("\\\\", "\\.");
-                            filePath =filePath.substring(1,filePath.length()-5);
-                            importPackage.add("import "+filePath+";");
+                            filePath = filePath.substring(1, filePath.length() - 5);
+                            importPackage.add("import " + filePath + ";");
                             //添加注解
-                            String annotation="@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)\n" +
-                                    "    @JoinColumn(name = \""+ StringUtil.toLowerFirst(fieldType)+"_id\", columnDefinition = \"VARCHAR(36) COMMENT '"+field.getDes()+"' \")";
+                            String annotation = "@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)\n" +
+                                    "    @JoinColumn(name = \"" + StringUtil.toLowerFirst(fieldType) + "_id\", columnDefinition = \"VARCHAR(36) COMMENT '" + field.getDes() + "' \")";
                             field.setAnnotation(annotation);
                         }
 
                     }
                 }
             }
-            if(null==field.getAnnotation()){ //添加注解
-                field.setAnnotation("@Column(columnDefinition = \"VARCHAR(50) COMMENT '"+field.getDes()+"' \")");
+            if (null == field.getAnnotation()) { //添加注解
+                field.setAnnotation("@Column(columnDefinition = \"VARCHAR(50) COMMENT '" + field.getDes() + "' \")");
             }
         }
         return importPackage;
     }
 
-
+    /**
+     * 搜索类
+     *
+     * @param files
+     * @param fieldType
+     * @return
+     */
     private static String searchFile(File[] files, String fieldType) {
         String path = null;
         while (files != null && files.length > 0) {
@@ -171,7 +223,7 @@ public class ParseBean {
                 } else {
                     if (f.isDirectory()) {
                         path = searchFile(f.listFiles(), fieldType);
-                        if(null!=path){
+                        if (null != path) {
                             return path;
                         }
                     } else if (f.isFile() && files.length == 1) {
@@ -182,5 +234,12 @@ public class ParseBean {
 
         }
         return path;
+    }
+
+    private static void writeToFile(Template template, String fileName) throws Exception {
+        File file = new File(fileName);
+        FileWriter fw = new FileWriter(file);
+        fw.write(template.render());
+        fw.close();
     }
 }

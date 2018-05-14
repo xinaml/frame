@@ -1,7 +1,5 @@
 package beetl.entity;
 
-import com.xinaml.frame.common.utils.StringUtil;
-
 public class ClazzInfo {
     private String dir; //目录
     private String packages; //类所在包
@@ -60,10 +58,10 @@ public class ClazzInfo {
     }
 
     public String getTableName() {
-        return tableName;
+        return this.tableName;
     }
 
     public void setTableName(String tableName) {
-        this.tableName = packages+"_"+ StringUtil.toLowerFirst(tableName);
+        this.tableName = tableName;
     }
 }
