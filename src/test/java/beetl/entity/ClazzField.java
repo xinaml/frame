@@ -6,7 +6,7 @@ public class ClazzField {
     private String type; //类型
     private String name; //属性名
     private String des; //属性描述
-
+    private String annotation;
     private String getMethod;
     private String setMethod;
 
@@ -55,5 +55,17 @@ public class ClazzField {
 
     public void setSetMethod(String setMethod) {
         this.setMethod = setMethod;
+    }
+
+    public String getAnnotation() {
+        return annotation;
+    }
+
+    public void setAnnotation(String annotation) {
+        this.annotation = annotation;
+    }
+
+    public void setGetMethod(String getMethod) {
+        this.getMethod = getMethod;
     }
 }

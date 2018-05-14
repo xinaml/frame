@@ -1,9 +1,12 @@
 package ${dir}.entity.${package};
 
-import ${dir}.entity.BaseEntity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import ${dir}.base.entity.BaseEntity;
+import javax.persistence.*;
+<%
+	for(p in importPackage){
+%>
+${p}
+<%}%>
 
 /**
  * ${des}
@@ -24,7 +27,7 @@ public class ${className} extends BaseEntity {
     /**
      * ${m.des}
      */
-    @Column(columnDefinition = "VARCHAR(255) COMMENT '${m.des}' ")
+    ${m.annotation}
  	private ${m.type} ${m.name};
 <%}%>
 
@@ -32,10 +35,11 @@ public class ${className} extends BaseEntity {
 	for(m in list){
 %>
  	public ${m.type} ${m.getMethod} () {
-		return ${m.fieldName};
+		return ${m.name};
 	}
+
 	public void ${m.setMethod} (${m.type} ${m.name}) {
-		this.${m.fieldName} =${m.fieldName};
+		this.${m.name} =${m.name};
 	}
 
 <%}%>
