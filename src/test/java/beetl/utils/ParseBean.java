@@ -87,7 +87,7 @@ public class ParseBean {
             createModuleAndClazz(path, "rep", packages);
             createModuleAndClazz(path, "ser", packages);
             createModuleAndClazz(path, "serImp", packages);
-            //  createModuleAndClazz(path, "to", packages);
+            createModuleAndClazz(path, "to", packages);
             //  createModuleAndClazz(path, "action", packages);
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,6 +137,10 @@ public class ParseBean {
                     break;
                 case "dto":
                     fileName = packagesDir + "/" + clazzInfo.getClassName() + "DTO.java";
+                    writeToFile(template, fileName);
+                    break;
+                    case "to":
+                    fileName = packagesDir + "/" + clazzInfo.getClassName() + "TO.java";
                     writeToFile(template, fileName);
                     break;
                 case "ser":

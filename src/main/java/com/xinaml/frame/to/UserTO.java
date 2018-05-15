@@ -4,6 +4,7 @@ import com.xinaml.frame.base.entity.ADD;
 import com.xinaml.frame.base.entity.DEL;
 import com.xinaml.frame.base.entity.EDIT;
 import com.xinaml.frame.base.entity.GET;
+import com.xinaml.frame.base.to.BaseTO;
 import com.xinaml.frame.common.custom.constant.CommonConst;
 import com.xinaml.frame.types.SexType;
 import io.swagger.annotations.ApiModelProperty;
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class UserTO {
+public class UserTO extends BaseTO{
     @NotBlank(groups = {ADD.class, EDIT.class}, message = "用户名不能为空！")
     @ApiModelProperty(value = "用户名", name = "username", required = true)
     private String username;

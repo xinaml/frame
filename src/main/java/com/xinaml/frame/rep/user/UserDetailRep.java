@@ -6,7 +6,7 @@ import com.xinaml.frame.base.rep.JapRep;
  * 用户详情持久化接口
  *
  * @Author:	[lgq]
- * @Date: [2018-05-14 18:23:27]
+ * @Date: [2018-05-15 09:24:19]
  * @Description: [用户详情]
  * @Version: [0.0.1]
  * @Copy: [com.xinaml.frame]

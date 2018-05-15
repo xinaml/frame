@@ -10,7 +10,7 @@ import java.time.LocalDate;
  * 用户详情
  *
  * @Author:	[lgq]
- * @Date: [2018-05-14 18:23:27]
+ * @Date: [2018-05-15 09:24:19]
  * @Description: [用户详情]
  * @Version: [0.0.1]
  * @Copy: [com.xinaml.frame]
