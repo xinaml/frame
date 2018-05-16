@@ -27,7 +27,7 @@ public class ParseBean {
     public static String[] info = new String[]{"dir", "packages", "className", "author", "des", "version"};//类信息
     public static String[] types = new String[]{"Integer", "String", "Double", "Float", "Byte", "Character", "Boolean"};//类信息
 
-    static {
+    public static void build() {
         try {
             File f = new File(tmpPath);
             BufferedReader reader = new BufferedReader(new FileReader(f));
@@ -88,17 +88,18 @@ public class ParseBean {
             createModuleAndClazz(path, "ser", packages);
             createModuleAndClazz(path, "serImp", packages);
             createModuleAndClazz(path, "to", packages);
-            //  createModuleAndClazz(path, "action", packages);
+            createModuleAndClazz(path, "action", packages);
+            System.out.println("create class success.");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ;
+
     }
 
     private static void createModuleAndClazz(String path, String module, String packages) throws IOException {
-        String pathModule =module;
-        if(module.equals("serImp")){
-            pathModule="ser";
+        String pathModule = module;
+        if (module.equals("serImp")) {
+            pathModule = "ser";
         }
         File moduleDir = new File(path + "/" + pathModule); //模块目录 dao dto entity vo service 等。。。
         if (!moduleDir.exists()) {
@@ -120,6 +121,7 @@ public class ParseBean {
         template.binding("dir", clazzInfo.getDir());
         template.binding("version", clazzInfo.getVersion());
         template.binding("tableName", clazzInfo.getTableName());
+        template.binding("objName", clazzInfo.getObjName());
         template.binding("list", fields);
         List<String> importPackage = initImportPackage();
         template.binding("importPackage", importPackage);
@@ -139,7 +141,7 @@ public class ParseBean {
                     fileName = packagesDir + "/" + clazzInfo.getClassName() + "DTO.java";
                     writeToFile(template, fileName);
                     break;
-                    case "to":
+                case "to":
                     fileName = packagesDir + "/" + clazzInfo.getClassName() + "TO.java";
                     writeToFile(template, fileName);
                     break;
@@ -149,6 +151,10 @@ public class ParseBean {
                     break;
                 case "serImp":
                     fileName = packagesDir + "/" + clazzInfo.getClassName() + "SerImp.java";
+                    writeToFile(template, fileName);
+                    break;
+                case "action":
+                    fileName = packagesDir + "/" + clazzInfo.getClassName() + "Act.java";
                     writeToFile(template, fileName);
                     break;
             }
@@ -204,7 +210,11 @@ public class ParseBean {
                 }
             }
             if (null == field.getAnnotation()) { //添加注解
-                field.setAnnotation("@Column(columnDefinition = \"VARCHAR(50) COMMENT '" + field.getDes() + "' \")");
+                String name="name=\""+field.getName()+"\"";
+                if(field.getType().equals("Boolean")){
+                    name="name=\""+"is_"+field.getName()+"\"";
+                }
+                field.setAnnotation("@Column("+name+",columnDefinition = \"VARCHAR(50) COMMENT '" + field.getDes() + "' \")");
             }
         }
         return importPackage;

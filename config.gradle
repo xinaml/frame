@@ -11,7 +11,10 @@ allprojects {
     sourceCompatibility = 1.8
 
     repositories {
-        mavenCentral()
+        //mavenCentral()
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
         mavenLocal()
     }
 
@@ -25,5 +28,6 @@ allprojects {
         log4j2_v='2.0.1.RELEASE'
         thymeleaf_v='2.0.1.RELEASE'
         nekohtml_v='1.9.22'
+        beelt_v='2.8.1'
     }
 }

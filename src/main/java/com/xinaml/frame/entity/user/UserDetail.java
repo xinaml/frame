@@ -10,7 +10,7 @@ import java.time.LocalDate;
  * 用户详情
  *
  * @Author:	[lgq]
- * @Date: [2018-05-15 09:24:19]
+ * @Date: [2018-05-16 16:54:18]
  * @Description: [用户详情]
  * @Version: [0.0.1]
  * @Copy: [com.xinaml.frame]
@@ -28,32 +28,32 @@ public class UserDetail extends BaseEntity {
     /**
      * 住址
      */
-    @Column(columnDefinition = "VARCHAR(50) COMMENT '住址' ")
+    @Column(name="address",columnDefinition = "VARCHAR(50) COMMENT '住址' ")
  	private String address;
     /**
      * 身高
      */
-    @Column(columnDefinition = "VARCHAR(50) COMMENT '身高' ")
+    @Column(name="height",columnDefinition = "VARCHAR(50) COMMENT '身高' ")
  	private Integer height;
     /**
      * 是否已婚
      */
-    @Column(columnDefinition = "VARCHAR(50) COMMENT '是否已婚' ")
- 	private Boolean is_married;
+    @Column(name="is_married",columnDefinition = "VARCHAR(50) COMMENT '是否已婚' ")
+ 	private Boolean married;
     /**
      * 资产
      */
-    @Column(columnDefinition = "VARCHAR(50) COMMENT '资产' ")
+    @Column(name="asset",columnDefinition = "VARCHAR(50) COMMENT '资产' ")
  	private Double asset;
     /**
      * 时间
      */
-    @Column(columnDefinition = "VARCHAR(50) COMMENT '时间' ")
+    @Column(name="time",columnDefinition = "VARCHAR(50) COMMENT '时间' ")
  	private LocalTime time;
     /**
      * 日期
      */
-    @Column(columnDefinition = "VARCHAR(50) COMMENT '日期' ")
+    @Column(name="date",columnDefinition = "VARCHAR(50) COMMENT '日期' ")
  	private LocalDate date;
 
  	public User getUser () {
@@ -80,12 +80,12 @@ public class UserDetail extends BaseEntity {
 		this.height =height;
 	}
 
- 	public Boolean getIs_married () {
-		return is_married;
+ 	public Boolean getMarried () {
+		return married;
 	}
 
-	public void setIs_married (Boolean is_married) {
-		this.is_married =is_married;
+	public void setMarried (Boolean married) {
+		this.married =married;
 	}
 
  	public Double getAsset () {

@@ -1,7 +1,9 @@
 package ${dir}.ser.${package};
+
 import ${dir}.base.service.Ser;
 import ${dir}.entity.${package}.${className};
 import ${dir}.dto.${package}.${className}DTO;
+
 /**
  * ${des}业务接口
  *

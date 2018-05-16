@@ -1,5 +1,7 @@
 package beetl.entity;
 
+import com.xinaml.frame.common.utils.StringUtil;
+
 public class ClazzInfo {
     private String dir; //目录
     private String packages; //类所在包
@@ -8,6 +10,7 @@ public class ClazzInfo {
     private String des;//描述
     private String version;//版本
     private String tableName; //表名
+    private String objName; //对象名
 
     public String getDir() {
         return dir;
@@ -63,5 +66,13 @@ public class ClazzInfo {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public String getObjName() {
+        return StringUtil.toLowerFirst(this.className);
+    }
+
+    public void setObjName(String objName) {
+        this.objName = objName;
     }
 }

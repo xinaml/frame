@@ -1,6 +1,7 @@
 package ${dir}.dto.${package};
 
 import ${dir}.base.dto.BaseDTO;
+
 /**
  * ${des}查询传输对象
  *

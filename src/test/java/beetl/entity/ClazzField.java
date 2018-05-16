@@ -9,6 +9,7 @@ public class ClazzField {
     private String annotation;
     private String getMethod;
     private String setMethod;
+    private Boolean notNull;
 
     public ClazzField() {
     }
@@ -67,5 +68,13 @@ public class ClazzField {
 
     public void setGetMethod(String getMethod) {
         this.getMethod = getMethod;
+    }
+
+    public Boolean getNotNull() {
+        return notNull;
+    }
+
+    public void setNotNull(Boolean notNull) {
+        this.notNull = notNull;
     }
 }

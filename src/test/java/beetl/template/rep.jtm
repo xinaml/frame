@@ -1,7 +1,9 @@
 package ${dir}.rep.${package};
+
 import ${dir}.entity.${package}.${className};
 import ${dir}.dto.${package}.${className}DTO;
 import com.xinaml.frame.base.rep.JapRep;
+
 /**
  * ${des}持久化接口
  *

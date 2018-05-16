@@ -4,6 +4,7 @@ import ${dir}.base.service.ServiceImpl;
 import ${dir}.dto.${package}.${className}DTO;
 import ${dir}.entity.${package}.${className};
 import org.springframework.stereotype.Service;
+
 /**
  * ${des}业务接口实现
  *

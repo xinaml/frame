@@ -1,50 +1,46 @@
-package ${dir}.to;
+package ${dir}.to.${package};
 
-import ${dir}.base.entity.DEL;
-import ${dir}.base.entity.EDIT;
-import ${dir}.base.entity.GET;
-import ${dir}.frame.base.to.BaseTO;
+import ${dir}.base.to.BaseTO;
 <%
 	for(p in importPackage){
 %>
 ${p}
 <%}%>
-import javax.validation.constraints.NotBlank;
-import org.springframework.format.annotation.DateTimeFormat;
-import ${dir}.common.custom.constant.CommonConst;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
+/**
+ * ${des}添加修改实体传输对象
+ *
+ * @Author:	[${author}]
+ * @Date: [${date(),dateFormat="yyyy-MM-dd HH:mm:ss"}]
+ * @Description: [${des}]
+ * @Version: [${version}]
+ * @Copy: [${dir}]
+ */
 public class ${className}TO extends BaseTO{
 
 <%
 	for(m in list){
 	if(m.name!="id"){
 %>
-
-       /**
-         * ${m.des}
-         */
-     	private ${m.type} ${m.name};
-
-
+    /**
+      * ${m.des}
+      */
+    private ${m.type} ${m.name};
 <%}}%>
 
 <%
 	for(m in list){
+	if(m.name!="id"){
 %>
-    if(m.name!="id"){
-        public ${m.type} ${m.getMethod} () {
-            return ${m.name};
-        }
-
-        public void ${m.setMethod} (${m.type} ${m.name}) {
-            this.${m.name} =${m.name};
-        }
+    public ${m.type} ${m.getMethod}() {
+        return ${m.name};
     }
 
+    public void ${m.setMethod}(${m.type} ${m.name}) {
+        this.${m.name} = ${m.name};
+    }
 
-<%}%>
+<%}}%>
 
 
 }
