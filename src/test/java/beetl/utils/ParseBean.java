@@ -20,12 +20,14 @@ import java.util.stream.Collectors;
  */
 public class ParseBean {
     public static String rootPath = null; //模板目录
-    public static String tmpPath = System.getProperty("user.dir") + "/src/test/java/beetl/Bean"; //模板目录
+    public static String tmpPath = System.getProperty("user.dir") + "/src/test/java/beetl/Bean.txt"; //模板目录
     public static String jtmPath = System.getProperty("user.dir") + "/src/test/java/beetl/template";//模板文件目录
     public static ClazzInfo clazzInfo; //类信息
     public static List<ClazzField> fields; //字段信息
     public static String[] info = new String[]{"dir", "packages", "className", "author", "des", "version"};//类信息
     public static String[] types = new String[]{"Integer", "String", "Double", "Float", "Byte", "Character", "Boolean"};//类信息
+    private static String[] excludes = null;
+    private static String[] files = new String[]{"entity", "dto", "to", "rep", "ser", "serImp", "action"};
 
     public static void build() {
         try {
@@ -48,7 +50,7 @@ public class ParseBean {
                 }
                 if (line.trim().length() > 2 && !isInfo) {
                     String[] field = line.split(" ");
-                    ClazzField clazzField = new ClazzField(field[0], field[1], field[2]);
+                    ClazzField clazzField = new ClazzField(field[0].trim(), field[1].trim(), field[2].trim());
                     fields.add(clazzField);
                 }
             }
@@ -81,14 +83,19 @@ public class ParseBean {
      */
     private static void createFile(String path, String packages) {
         try {
-            // 创建entity
-            createModuleAndClazz(path, "entity", packages);
-            createModuleAndClazz(path, "dto", packages);
-            createModuleAndClazz(path, "rep", packages);
-            createModuleAndClazz(path, "ser", packages);
-            createModuleAndClazz(path, "serImp", packages);
-            createModuleAndClazz(path, "to", packages);
-            createModuleAndClazz(path, "action", packages);
+            for (String file : files) {
+                boolean exists = false;
+                for (String ex : excludes) {
+                    if (file.equals(ex)) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (exists) {
+                    break;
+                }
+                createModuleAndClazz(path, file, packages);
+            }
             System.out.println("create class success.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,15 +217,25 @@ public class ParseBean {
                 }
             }
             if (null == field.getAnnotation()) { //添加注解
-                String name="name=\""+field.getName()+"\"";
-                if(field.getType().equals("Boolean")){
-                    name="name=\""+"is_"+field.getName()+"\"";
+                String name = "name=\"" + field.getName() + "\"";
+                if (field.getType().equals("Boolean")) {
+                    name = "name=\"" + "is_" + field.getName() + "\"";
                 }
-                field.setAnnotation("@Column("+name+",columnDefinition = \"VARCHAR(50) COMMENT '" + field.getDes() + "' \")");
+                field.setAnnotation("@Column(" + name + ",columnDefinition = \"VARCHAR(50) COMMENT '" + field.getDes() + "' \")");
             }
         }
         return importPackage;
     }
+
+    /**
+     * 过滤
+     *
+     * @param excludes
+     */
+    public static void excludes(String[] excludes) {
+        ParseBean.excludes = null == excludes ? new String[0] : excludes;
+    }
+
 
     /**
      * 搜索类
@@ -256,4 +273,6 @@ public class ParseBean {
         fw.write(template.render());
         fw.close();
     }
+
+
 }

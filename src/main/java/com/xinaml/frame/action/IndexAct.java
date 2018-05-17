@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @author lgq
  */
 @Controller
-public class Index {
+public class IndexAct {
 
     @GetMapping("/")
     public String index(String data) {
