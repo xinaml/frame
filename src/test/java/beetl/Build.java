@@ -11,7 +11,6 @@ public class Build {
         String[] excludes = new String[]{}; //过滤创建的文件
         ParseBean.excludes(excludes);
         ParseBean.build();
-
     }
 
 
