@@ -42,6 +42,7 @@ public class ExceptionHandler extends AbstractHandlerExceptionResolver {
                 rs.setCode(1);
             }
             httpServletResponse.setStatus(SUCCESS_STATUS);
+
         } else {
             httpServletResponse.setStatus(EXCEPTION_STATUS);
             rs.setCode(EXCEPTION_CODE);

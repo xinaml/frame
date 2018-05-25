@@ -26,9 +26,8 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String url = request.getRequestURI();
         if (!handler.getClass().isAssignableFrom(HandlerMethod.class)) {
-            return validateLogin(request, response);
+            return true; //不拦截未知 action
         }
         Method method = ((HandlerMethod) handler).getMethod();
         Class<?> clazz = method.getDeclaringClass();

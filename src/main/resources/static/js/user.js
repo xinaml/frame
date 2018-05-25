@@ -76,7 +76,7 @@ var User = (function () {
             }
         });
 
-        $(".form_datetime").datepicker({
+        $(".form_datetime").datetimepicker({
             format: "yyyy-mm-dd",
             autoclose: true,
             todayBtn: true,
