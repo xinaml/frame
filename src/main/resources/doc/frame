@@ -22,4 +22,7 @@ AOP切面:
 
 异常处理：
     common/handler/ExceptionHandler 该类对所有异常进行统一处理
-
+    异常编码： 500： code ：-1 系统异常
+             200： code ： 1 业务抛出异常
+             200： code ： 403 未登陆异常
+             200： code ： 0 正常数据

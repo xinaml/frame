@@ -1,10 +1,11 @@
-package com.xinaml.frame.action;
+package com.xinaml.frame.action.user;
 
 import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.base.atction.BaseAct;
 import com.xinaml.frame.base.dto.RT;
 import com.xinaml.frame.base.entity.ADD;
 import com.xinaml.frame.base.entity.EDIT;
+import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.exception.ActException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.custom.result.ActResult;
@@ -34,17 +35,18 @@ public class UserAct extends BaseAct {
     @Autowired
     private UserSer userSer;
 
-
-    @GetMapping("page")
-    public String page(UserDTO dto) throws ActException {
-        return "page";
+    @GetMapping("/")
+    public String user(UserDTO dto) throws ActException {
+        return "user/user";
     }
 
 
+    @Login
     @ResponseBody
     @GetMapping("maps")
     public String maps(UserDTO dto) throws ActException {
         try {
+            int i=9/0;
             Map<String, Object> maps = userSer.findByPage(dto);
             return JSON.toJSONString(maps);
         } catch (SerException e) {
@@ -95,6 +97,7 @@ public class UserAct extends BaseAct {
 
     /**
      * Restful 规范
+     *
      * @param id
      * @return
      * @throws ActException

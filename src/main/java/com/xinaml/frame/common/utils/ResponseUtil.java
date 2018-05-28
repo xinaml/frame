@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author lgq
  * @date 2018/4/15
  **/
-public class ResponseUtil {
+public final class ResponseUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResponseUtil.class);
 
     private ResponseUtil() {

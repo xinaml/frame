@@ -12,7 +12,7 @@ import java.time.LocalTime;
  * @author lgq
  * @date 2018/4/15
  **/
-public class ClazzTypeUtil {
+public final class ClazzTypeUtil {
 
     public static final Class[] PRIMITIVES = new Class[]{
             String.class,

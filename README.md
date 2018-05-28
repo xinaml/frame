@@ -47,6 +47,7 @@
             11.5-- logback.properties     日志配置文件参数
             11.6-- logback.xml            日志主配置文件
         
+  详见 doc/frame
 `打包：
     gradle build -xtest`
     

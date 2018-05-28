@@ -66,6 +66,14 @@ var User = (function () {
                 title: '生日'
             }]
             ,
+            onLoadSuccess: function (data) {  //加载成功时执行
+               if(data.code==403){
+                   window.location.href="/login"
+               }
+            },
+            onLoadError: function (data) {  //加载失败时执行
+                alert("服务器错误");
+            },
             queryParams: function queryParams(params) {   //设置查询参数
                 var param = {
                     page: params.pageNumber,
@@ -142,7 +150,7 @@ var User = (function () {
         if (arg) { //添加按钮跟提交按钮均进入此方法，提交按钮不传递参数
             $("#myModalLabel").html("添加");
             $('#modalUser').modal('show');
-            $("#opt").attr("onclick","$user.addUser()")
+            $("#opt").attr("onclick", "$user.addUser()")
 
         } else {
             var data = $('#userFrom').serialize();
@@ -180,8 +188,8 @@ var User = (function () {
                 $("#email").val(obj.email);
                 $("#phone").val(obj.phone);
                 $("#id").val(obj.id);
-                $("#birthday").datepicker('setDate',obj.birthday);
-                $("#opt").attr("onclick","$user.editUser()")
+                $("#birthday").datepicker('setDate', obj.birthday);
+                $("#opt").attr("onclick", "$user.editUser()")
 
             } else {
                 var data = $('#userFrom').serialize();
@@ -202,7 +210,7 @@ var User = (function () {
                 })
             }
 
-        }else {
+        } else {
 
         }
 

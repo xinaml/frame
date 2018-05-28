@@ -3,7 +3,7 @@ package com.xinaml.frame.common.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringUtil {
+public final class StringUtil {
     private static final String REG = "[\u4e00-\u9fa5]";
 
     /**
