@@ -35,7 +35,7 @@ public class UserAct extends BaseAct {
     @Autowired
     private UserSer userSer;
 
-    @GetMapping("/")
+    @GetMapping({"/",""})
     public String user(UserDTO dto) throws ActException {
         return "user/user";
     }
@@ -46,7 +46,6 @@ public class UserAct extends BaseAct {
     @GetMapping("maps")
     public String maps(UserDTO dto) throws ActException {
         try {
-            int i=9/0;
             Map<String, Object> maps = userSer.findByPage(dto);
             return JSON.toJSONString(maps);
         } catch (SerException e) {

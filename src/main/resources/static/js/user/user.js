@@ -74,11 +74,14 @@ var User = (function () {
             onLoadError: function (data) {  //加载失败时执行
                 alert("服务器错误");
             },
+              ajaxOptions:{
+                    headers: {"token":localStorage.token}
+            },
             queryParams: function queryParams(params) {   //设置查询参数
                 var param = {
                     page: params.pageNumber,
                     limit: params.pageSize,
-                    sorts: "createDate"
+                    sorts: "createDate",
                 };
                 return param;
             }

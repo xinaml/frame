@@ -1,6 +1,7 @@
 package com.xinaml.frame.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.xinaml.frame.common.constant.FinalConstant;
 import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.result.ActResult;
 import com.xinaml.frame.common.utils.ResponseUtil;
@@ -53,7 +54,7 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
 
     private boolean validateLogin(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String token = request.getHeader("token");
+            String token = request.getHeader(FinalConstant.TOKEN);
             if (StringUtils.isNotBlank(token)) {
                 return true;  // 查询是否已登录
             } else {
