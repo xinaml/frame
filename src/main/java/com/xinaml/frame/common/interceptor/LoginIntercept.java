@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.common.constant.FinalConstant;
 import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.result.ActResult;
+import com.xinaml.frame.common.session.UserSession;
 import com.xinaml.frame.common.utils.ResponseUtil;
+import com.xinaml.frame.common.utils.UserUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -55,7 +57,7 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
     private boolean validateLogin(HttpServletRequest request, HttpServletResponse response) {
         try {
             String token = request.getHeader(FinalConstant.TOKEN);
-            if (StringUtils.isNotBlank(token)) {
+            if (UserUtil.isLogin(token)) {
                 return true;  // 查询是否已登录
             } else {
                 ActResult result = new ActResult();

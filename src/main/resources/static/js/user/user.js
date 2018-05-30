@@ -66,8 +66,8 @@ var User = (function () {
                 title: '生日'
             }]
             ,
-            onLoadSuccess: function (data) {  //加载成功时执行
-               if(data.code==403){
+            onLoadSuccess: function (rs) {  //加载成功时执行
+               if(rs.code==403){
                    window.location.href="/login"
                }
             },
@@ -112,8 +112,8 @@ var User = (function () {
             url: '/user/del',
             traditional: true,
             data: {ids: ids},
-            success: function (result) {
-                if (result.code == 0) {
+            success: function (rs) {
+                if (rs.code == 0) {
                     $(".success.selected").remove();
                     $(".selected").remove()
                 }
@@ -136,8 +136,8 @@ var User = (function () {
             url: '/user/del',
             traditional: true,
             data: {ids: ids},
-            success: function (result) {
-                if (result.code == 0) {
+            success: function (rs) {
+                if (rs.code == 0) {
                     $(".success.selected").remove();
                     $(".selected").remove()
                 }
@@ -167,8 +167,8 @@ var User = (function () {
                 beforeSend: function () {
                     //请求前
                 },
-                success: function (result) {
-                    if (result.code == 0) {
+                success: function (rs) {
+                    if (rs.code == 0) {
                         $('#modalUser').modal('hide');
                         $('#user_table').bootstrapTable('refresh')
                     }
@@ -201,8 +201,8 @@ var User = (function () {
                     type: 'PUT',
                     url: '/user/edit',
                     data: submitData,
-                    success: function (result) {
-                        if (result.code == 0) {
+                    success: function (rs) {
+                        if (rs.code == 0) {
                             $('#modalUser').modal('hide');
                             $('#user_table').bootstrapTable('refresh')
                         }
@@ -218,7 +218,5 @@ var User = (function () {
         }
 
     };
-
-
     return User;
 })();

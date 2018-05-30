@@ -23,9 +23,11 @@ var Login = (function () {
             url: "/login" ,
             data: formData,
             success: function (rs) {
-                if(rs.msg=="success"){
+                if(rs.code==0){
                     localStorage.setItem("token",rs.data.token)
                     window.location.href=prevUrl; //跳转到上一个未登陆页
+                }else {
+                    $("#msg").text(rs.msg);
                 }
             },
             error : function() {

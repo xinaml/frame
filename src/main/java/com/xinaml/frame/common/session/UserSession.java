@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 public class UserSession {
-    private static Logger logger = LoggerFactory.getLogger(UserSession.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(UserSession.class);
     private static final RuntimeException TOKEN_NOT_NULL = new RuntimeException("token令牌不能为空");
 
     private static final LoadingCache<String, String> AUTH_CODE_SESSION = CacheBuilder.newBuilder()
@@ -18,7 +18,7 @@ public class UserSession {
             .removalListener(new RemovalListener<String, String>() {
                 @Override
                 public void onRemoval(RemovalNotification<String, String> notification) {
-                    logger.info("remove:" + notification.getCause().name());
+                    LOGGER.info("remove:" + notification.getCause().name());
                 }
             })
             .build(new CacheLoader<String, String>() {
