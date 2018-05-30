@@ -1,8 +1,10 @@
 package com.xinaml.frame.action.user;
 
 import com.xinaml.frame.common.custom.exception.ActException;
+import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.custom.result.ActResult;
 import com.xinaml.frame.common.custom.result.Result;
+import com.xinaml.frame.common.session.UserSession;
 import com.xinaml.frame.common.utils.UserUtil;
 import com.xinaml.frame.to.UserTO;
 import org.apache.commons.lang3.StringUtils;
@@ -31,16 +33,23 @@ public class LoginAct {
                 url="/";
             }
             model.addAttribute("prevUrl",url);//上一个未登陆页
-            return "redirect:user/login";
+            return "user/login";
         }
     }
 
     @ResponseBody
     @PostMapping("/login")
     public Result login(UserTO userTO, HttpServletRequest request) throws ActException {
-        String token="123456";
+
         Map<String,String> maps = new HashMap<>(1);
-        maps.put("token",token);
+        try {
+            String token="123456";
+            UserSession.put(token,"userInfo");
+            maps.put("token",token);
+
+        }catch (SerException e){
+            throw  new ActException(e.getMessage());
+        }
         return new ActResult("success",maps) ;
     }
 
