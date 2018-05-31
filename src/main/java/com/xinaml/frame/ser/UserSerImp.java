@@ -10,6 +10,7 @@ import com.xinaml.frame.common.utils.TokenUtil;
 import com.xinaml.frame.dto.UserDTO;
 import com.xinaml.frame.entity.User;
 import com.xinaml.frame.to.LoginTO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,13 @@ public class UserSerImp extends ServiceImpl<User, UserDTO> implements UserSer {
         } else {
             throw new SerException("账号或密码错误");
         }
+    }
+
+    @Override
+    public Boolean logout(String token) throws SerException {
+        if (StringUtils.isNotBlank(token)) {
+            UserSession.remove(token);
+        }
+        return true;
     }
 }

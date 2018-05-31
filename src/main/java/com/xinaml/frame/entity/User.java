@@ -22,7 +22,7 @@ public class User extends BaseEntity {
     @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(25) COMMENT '用户名'")
     private String username;
 
-    @Column( nullable = false, columnDefinition = "VARCHAR(125) COMMENT '密码'")
+    @Column( nullable = false, columnDefinition = "VARCHAR(56) COMMENT '密码'")
     private String password;
 
     @Column(unique = true, nullable = false, length = 20, columnDefinition = "VARCHAR(25) COMMENT '邮件'")

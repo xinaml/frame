@@ -7,7 +7,6 @@
     <link href="../css/user/login.css" rel="stylesheet" type="text/css"/>
     <script src="../js/jquery-3.2.1.min.js"></script>
     <script src="../js/user/login.js"></script>
-
 </head>
 <body>
 
@@ -22,7 +21,6 @@
             <input name="username" style="font-size:20px;" type="text" placeholder="用户名">
             <input name="password" type="password" style="font-size:20px;" placeholder="密码">
             <input type="hidden" id="prevUrl" th:value="${prevUrl}">
-            <input type="hidden" name="origin" value="1">
             <input value="登录" style="width:100%;" type="submit"  onclick="$login.checkOn()">
         </form>
         <div id="msg" style="color: red;font-size: 16px;text-align: center;width: 100%;padding-top: 4px"></div>

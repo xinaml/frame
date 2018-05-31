@@ -9,4 +9,5 @@ import com.xinaml.frame.to.LoginTO;
 public interface UserSer extends Ser<User,UserDTO> {
 
      String login(LoginTO loginTO)throws SerException;
+     Boolean logout(String token)throws SerException;
 }

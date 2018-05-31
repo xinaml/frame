@@ -14,6 +14,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
@@ -45,7 +46,6 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
-        //调用完UserFilter才会调用此方法
     }
 
     @Override
@@ -56,8 +56,8 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
 
     private boolean validateLogin(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String token = request.getHeader(FinalConstant.TOKEN);
-            if (UserUtil.isLogin(token)) {
+            //前后端分离用header取token更符合规范
+            if (UserUtil.isLogin(request)) {
                 return true;  // 查询是否已登录
             } else {
                 ActResult result = new ActResult();
