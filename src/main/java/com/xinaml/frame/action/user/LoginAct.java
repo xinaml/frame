@@ -75,7 +75,7 @@ public class LoginAct {
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
             }
-            return "redirect:/";
+            return "redirect:/login";
 
         } catch (SerException e) {
             throw new ActException(e.getMessage());
