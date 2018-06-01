@@ -10,6 +10,7 @@ import com.xinaml.frame.common.custom.exception.ActException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.custom.result.ActResult;
 import com.xinaml.frame.common.custom.result.Result;
+import com.xinaml.frame.common.utils.PassWordUtil;
 import com.xinaml.frame.dto.UserDTO;
 import com.xinaml.frame.entity.User;
 import com.xinaml.frame.ser.UserSer;
@@ -74,6 +75,11 @@ public class UserAct extends BaseAct {
         try {
             User user = new User();
             BeanUtils.copyProperties(to, user);
+            try {
+                user.setPassword(PassWordUtil.genSaltPwd("123456"));
+            }catch (Exception e){
+                throw new ActException(e.getMessage());
+            }
             user.setCreateDate(LocalDateTime.now());
             userSer.save(user);
             return new ActResult("success");

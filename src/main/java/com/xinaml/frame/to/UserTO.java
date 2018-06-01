@@ -29,10 +29,6 @@ public class UserTO extends BaseTO{
     @NotBlank(groups = {ADD.class, EDIT.class}, message = "邮箱不能为空！")
     private String email;
 
-    @NotBlank(groups = {GET.class, DEL.class, EDIT.class}, message = "id不能为空！")
-    private String id;
-
-
     @DateTimeFormat(pattern = CommonConst.DATE)  //格式化接收前端传过来的日期
     private LocalDate birthday;
 
@@ -69,14 +65,6 @@ public class UserTO extends BaseTO{
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Integer getAge() {

@@ -140,6 +140,7 @@ var User = (function () {
                 if (rs.code == 0) {
                     $(".success.selected").remove();
                     $(".selected").remove()
+                    $('#delModal').modal('hide')
                 }
             },
             error: function () {
@@ -191,7 +192,7 @@ var User = (function () {
                 $("#email").val(obj.email);
                 $("#phone").val(obj.phone);
                 $("#id").val(obj.id);
-                $("#birthday").datepicker('setDate', obj.birthday);
+                $("#birthday").datetimepicker('birthday', obj.birthday);
                 $("#opt").attr("onclick", "$user.editUser()")
 
             } else {
