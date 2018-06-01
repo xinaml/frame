@@ -11,4 +11,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Login {
+    String excludes() default ""; //不扫描某个方法，多个逗号隔开
 }

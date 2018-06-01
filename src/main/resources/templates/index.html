@@ -19,6 +19,7 @@
     </div>
     <div id="images" style="max-width: 800px;max-height: 600px;margin-top: 50px"></div>
     <div style="margin-top: 20px"> <a href="/user">用户管理</a></div>
+    <div style="margin-top: 20px"> <a href="/storage/page">文件管理</a></div>
 </div>
 <div id="footer" style="text-align: center"></div>
 </body>
@@ -37,18 +38,7 @@
 
     $(function () {
 
-        $.get("/images/list",function (rs) {
-            if(rs.code==0){
-                var html="";
-                $.each(rs.data,function (index,obj) {
-                    if(-1!=obj.indexOf("jpg")){
-                        html+="<img width='50px' height='50px' style='margin-left: 10px' src='images/read?path="+obj+"'>"
-                    }
-                })
-                $("#images").html("");
-                $("#images").html(html);
-            }
-        })
+
     });
 
 </script>

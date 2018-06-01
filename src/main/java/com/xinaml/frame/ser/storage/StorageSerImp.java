@@ -223,7 +223,7 @@ public class StorageSerImp implements StorageSer {
      * @return 缩略图流
      * @throws SerException
      */
-    public byte[] thumbnails(String path, String width, String height)
+    public byte[] thumbnails(String path, String width, String heigth)
             throws SerException {
         String realPath = getRealPath(path);
         String suffix = StringUtils.substringAfterLast(path, ".");
@@ -236,9 +236,9 @@ public class StorageSerImp implements StorageSer {
         if (exist) {
             int w = 200;
             int h = 160;
-            if (null != width && null != height) {
+            if (null != width && null != heigth) {
                 w = Integer.parseInt(width);
-                h = Integer.parseInt(height);
+                h = Integer.parseInt(heigth);
             }
             try {
                 Thumbnails.Builder<java.io.File> fileBuilder = Thumbnails
@@ -528,7 +528,11 @@ public class StorageSerImp implements StorageSer {
             throw new SerException("【##】为非法字符！");
         }
         String username = UserUtil.getUser().getUsername();
+
         if (StringUtils.isNotBlank(path)) {
+            if(PathCommon.SEPARATOR.equals("\\")){
+                path= path .replaceAll("/", "\\\\");
+            }
             if (path.equals(PathCommon.SEPARATOR)) { // 如果是跟路径
                 path = "";
             } else if (!StringUtils.startsWith(path, PathCommon.SEPARATOR)) { // 如果不是跟路径并且不是/开头
@@ -572,7 +576,7 @@ public class StorageSerImp implements StorageSer {
                 fileVO.setPath(StringUtils.substringAfter(file.getPath(), rootPath));
                 fileVO.setDir(file.isDirectory());
                 fileVO.setName(file.getName());
-                fileVO.setModifyTime(DateUtil.dateToString(new Date(file.lastModified())));
+                fileVO.setModifyTime(DateUtil.dateToString((DateUtil.dateToLocalDateTime(new Date(file.lastModified())))));
                 if (file.isFile()) {
                     fileVO.setSize(FileUtil.getFileSize(file));
                     fileVO.setLength(file.length());
@@ -618,7 +622,7 @@ public class StorageSerImp implements StorageSer {
                         }
                     }
                     vo.setIsParent(isParent);
-                    vo.setModifyTime(DateUtil.dateToString(new Date(file.lastModified())));
+                    vo.setModifyTime(DateUtil.dateToString((DateUtil.dateToLocalDateTime(new Date(file.lastModified())))));
                     folders.add(vo);
                 }
             }

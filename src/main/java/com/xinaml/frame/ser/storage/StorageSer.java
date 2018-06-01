@@ -36,5 +36,5 @@ public interface StorageSer {
 
     Boolean copy(String[] fromPaths, String toPath) throws SerException;
 
-    byte[] thumbnails(String path, String width, String height) throws SerException;
+    byte[] thumbnails(String path, String width, String heigth) throws SerException;
 }

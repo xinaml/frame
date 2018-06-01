@@ -28,10 +28,12 @@ public class UserUtil {
     public static String getToken(HttpServletRequest request) {
         String token = request.getHeader(FinalConstant.TOKEN); //取header的token
         if (StringUtils.isBlank(token)) { //取cookie的token
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals(FinalConstant.TOKEN)) {
-                    token = cookie.getValue();
-                    break;
+            if(null!=request.getCookies()){
+                for (Cookie cookie : request.getCookies()) {
+                    if (cookie.getName().equals(FinalConstant.TOKEN)) {
+                        token = cookie.getValue();
+                        break;
+                    }
                 }
             }
         }

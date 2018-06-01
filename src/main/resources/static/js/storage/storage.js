@@ -46,6 +46,7 @@ var Storage = (function () {
             url: $baseUrl + "/list",
             type: 'GET', //GET
             async: true,    //或false,是否异步
+            dataType: "json",
             data: {
                 'path': encrypt(path)
             },
@@ -53,67 +54,71 @@ var Storage = (function () {
                 xmlHttp.setRequestHeader("If-Modified-Since", "0");
                 xmlHttp.setRequestHeader("Cache-Control", "no-cache");
             },
-            success: function (result) {
-                var data = JSON.parse(result);
-                if (null != data && data.length > 0) {
-                    var gridHtml = ""; // 网格内容
-                    var listHtml = ""; // 列表内容
-                    $.each(data, function (index, obj) { // 网格数据
-                        var gridImg = "";
-                        var listImg = "";
-                        var size = "-";
-                        var fileName = getByNameLen(obj.name);
-                        if (!obj.dir) {
-                            var fileType = obj.fileType;
-                            size = obj.size;
-                            $.each(exts, function (index, ext) {
-                                if (ext[0] == fileType) {
-                                    gridImg = "s_" + ext[1] + ".png";
-                                    listImg = "m_" + ext[1] + ".png";
+            success: function (rs) {
+                if(rs.code==0){
+                    if (null != rs.data && rs.data.length > 0) {
+                        var gridHtml = ""; // 网格内容
+                        var listHtml = ""; // 列表内容
+                        $.each(rs.data, function (index, obj) { // 网格数据
+                            var gridImg = "";
+                            var listImg = "";
+                            var size = "-";
+                            var fileName = getByNameLen(obj.name);
+                            if (!obj.dir) {
+                                var fileType = obj.fileType;
+                                size = obj.size;
+                                $.each(exts, function (index, ext) {
+                                    if (ext[0] == fileType) {
+                                        gridImg = "s_" + ext[1] + ".png";
+                                        listImg = "m_" + ext[1] + ".png";
+                                    }
+                                });
+                                if (gridImg == "") { // 未知文件类型
+                                    gridImg = "s_unknow.png";
+                                    listImg = "m_unknow.png";
                                 }
-                            });
-                            if (gridImg == "") { // 未知文件类型
-                                gridImg = "s_unknow.png";
-                                listImg = "m_unknow.png";
+                            } else {
+                                gridImg = "s_floder.png";
+                                listImg = "m_floder.png";
                             }
-                        } else {
-                            gridImg = "s_floder.png";
-                            listImg = "m_floder.png";
-                        }
-                        var gridImgPath = "<img src='" + '../images/storage/' + gridImg + "'>";
-                        var listImgPath = "<img src='"  + '../images/storage/' + listImg + "'>";
-                        if (fileType == "jpg" || fileType == "png" || fileType == "jpeg" || fileType == "bmp") {
-                            gridImgPath = "<img src='" + $baseUrl + "/thumbnails?path=" + encrypt(obj.path) + "&width=55" + "&heigth=44" + "'>";
-                            listImgPath = "<img src='" + $baseUrl + "/thumbnails?path=" + encrypt(obj.path) + "&width=30" + "&heigth=27" + "'>";
-                        }
-                        if (fileType == "gif") {
-                            gridImgPath = "<img height='44' width='55' src='" + $baseUrl + "/gif?path=" + encodeURI(obj.path) + "'>";
-                            listImgPath = "<img height='30' width='27' src='" + $baseUrl + "/gif?path=" + encodeURI(obj.path) + "'>";
-                        }
+                            var gridImgPath = "<img src='" + '../images/storage/' + gridImg + "'>";
+                            var listImgPath = "<img src='"  + '../images/storage/' + listImg + "'>";
+                            if (fileType == "jpg" || fileType == "png" || fileType == "jpeg" || fileType == "bmp") {
+                                gridImgPath = "<img src='" + $baseUrl + "/thumbnails?path=" + encrypt(obj.path) + "&width=55" + "&heigth=44" + "'>";
+                                listImgPath = "<img src='" + $baseUrl + "/thumbnails?path=" + encrypt(obj.path) + "&width=30" + "&heigth=27" + "'>";
+                            }
+                            if (fileType == "gif") {
+                                gridImgPath = "<img height='44' width='55' src='" + $baseUrl + "/gif?path=" + encodeURI(obj.path) + "'>";
+                                listImgPath = "<img height='30' width='27' src='" + $baseUrl + "/gif?path=" + encodeURI(obj.path) + "'>";
+                            }
 
-                        gridHtml += '<li>' + '<div class="important">' + '<input path="' + obj.path + '" fileType="' + obj.fileType + '" class="ischcked" type="checkbox" index="' + index + '">' +
-                            gridImgPath + '<p class="space" style="cursor: pointer;" title="文&nbsp;件&nbsp;名&nbsp;&nbsp;：' + obj.name + '\n文件大小：' + size + '\n修改日期：' + obj.modifyTime + '">' +
-                            fileName + '</p>' + '<p>' + size + '</p>' + ' <p>' + obj.modifyTime + '</p>' + '</div>' + ' </li>';
-                        listHtml += '<li><div class="countInfo"><div class="one">' + '<input path="' + obj.path + '" fileType="' + obj.fileType + '" style="margin-right:4px" type="checkbox" index="' + index + '" >' +
-                            listImgPath + '<span style="cursor: pointer;" title="文&nbsp;件&nbsp;名&nbsp;&nbsp;：' + obj.name + '\n文件大小：' + size + '\n修改日期：' + obj.modifyTime + '">' + fileName + '</span>' +
-                            '</div><div class="two"> <span>' + size + '</span>' + ' </div><div class="three"><span>' + obj.modifyTime + '</span></div></div> </li>';
-                    });
-                    $("#countCol-content").html('').html(gridHtml);
-                    $("#countRow-content").html('').html(listHtml);
-                    $("#fileNums").html("共" + data.length + "个文件");
-                    $fileNums = data.length;
-                    ishover();
-                    underCheckbox();
-                    initClick();
-                } else {
-                    var notHasFile = '<div class="undefinedCount"><img style="padding-top:30px" src="' +
-                        '../images/storage/wnr.png" alt=""><p>该文件夹是空的~</p> </div>';
-                    $("#fileNums").html("共" + 0 + "个文件");
-                    $("#countCol-content").html(notHasFile);
-                    $("#countRow-content").html(notHasFile);
-                    $fileNums = data.length;
+                            gridHtml += '<li>' + '<div class="important">' + '<input path="' + obj.path + '" fileType="' + obj.fileType + '" class="ischcked" type="checkbox" index="' + index + '">' +
+                                gridImgPath + '<p class="space" style="cursor: pointer;" title="文&nbsp;件&nbsp;名&nbsp;&nbsp;：' + obj.name + '\n文件大小：' + size + '\n修改日期：' + obj.modifyTime + '">' +
+                                fileName + '</p>' + '<p>' + size + '</p>' + ' <p>' + obj.modifyTime + '</p>' + '</div>' + ' </li>';
+                            listHtml += '<li><div class="countInfo"><div class="one">' + '<input path="' + obj.path + '" fileType="' + obj.fileType + '" style="margin-right:4px" type="checkbox" index="' + index + '" >' +
+                                listImgPath + '<span style="cursor: pointer;" title="文&nbsp;件&nbsp;名&nbsp;&nbsp;：' + obj.name + '\n文件大小：' + size + '\n修改日期：' + obj.modifyTime + '">' + fileName + '</span>' +
+                                '</div><div class="two"> <span>' + size + '</span>' + ' </div><div class="three"><span>' + obj.modifyTime + '</span></div></div> </li>';
+                        });
+                        $("#countCol-content").html('').html(gridHtml);
+                        $("#countRow-content").html('').html(listHtml);
+                        $("#fileNums").html("共" + rs.data.length + "个文件");
+                        $fileNums =rs.data.length;
+                        ishover();
+                        underCheckbox();
+                        initClick();
+                    } else {
+                        var notHasFile = '<div class="undefinedCount"><img style="padding-top:30px" src="' +
+                            '../images/storage/wnr.png" alt=""><p>该文件夹是空的~</p> </div>';
+                        $("#fileNums").html("共" + 0 + "个文件");
+                        $("#countCol-content").html(notHasFile);
+                        $("#countRow-content").html(notHasFile);
+                        $fileNums = rs.data.length;
+                    }
+                    initcurrentPath();
+                }else if(rs.code==403){
+                    window.location.href="/login"
                 }
-                initcurrentPath();
+
             },
             error: function (result) {
                 var data = JSON.parse(result);
@@ -439,31 +444,19 @@ var Storage = (function () {
     // 下载
     $('.downFile').click(
         function () {
-            if (listArr.length == 1) {
-                $.ajax({
-                    cache: true,
-                    type: "get",
-                    url: $baseUrl + "/validate/auth",
-                    data: {
-                        'method':"upload"
-                    },
-                    async: true,
-                    success: function (data) {
-                        if(data!="success"){
-                            promptBox(JSON.parse(data).msg,1000);
-                            return;
-                        }else {
-                            var path = $("input[index=" + listArr[0] + "]").attr("path");
-                            var filetype = $("input[index=" + listArr[0] + "]").attr("filetype");
-                            var isFolder = (filetype == "FOLDER");
-                            var a = document.createElement('a')
-                            a.href = $baseUrl + "/download?path=" + encrypt(path) + "&isFolder=" + isFolder;
-                            a.target = '_blank'
-                            document.body.appendChild(a)
-                            a.click()
-                            buttonShowandHide();
-                        }}})
-
+            if(data!="success"){
+                promptBox(JSON.parse(data).msg,1000);
+                return;
+            }else {
+                var path = $("input[index=" + listArr[0] + "]").attr("path");
+                var filetype = $("input[index=" + listArr[0] + "]").attr("filetype");
+                var isFolder = (filetype == "FOLDER");
+                var a = document.createElement('a')
+                a.href = $baseUrl + "/download?path=" + encrypt(path) + "&isFolder=" + isFolder;
+                a.target = '_blank'
+                document.body.appendChild(a)
+                a.click()
+                buttonShowandHide();
             }
 
         });
@@ -920,58 +913,41 @@ var Storage = (function () {
     }
 
     Storage.prototype.initUpload = function (uploader) {
-    
+
         // 当有文件被添加进队列的时候
         uploader.on('fileQueued', function (file) {
-            $.ajax({
-                cache: true,
-                type: "get",
-                url: $baseUrl + "/validate/auth",
-                data: {
-                    'method':"upload"
-                },
-                async: true,
-                success: function (data) {
-                  if(data!="success"){
-                      promptBox(JSON.parse(data).msg,1000);
-                      return;
-                  }else {
-                      var ext = file.ext;
-                      var thumb = "";
-                      $.each(exts, function (index, ext) {
-                          if (ext[0] == ext) {
-                              thumb = "s_" + ext[1] + ".png";
-                          }
-                      });
-                      if (ext == "jpg" || ext == "png" || ext == "jpeg"
-                          || ext == "bmp") {
-                          thumb = "s_png.png";
-                      }
-                      if (thumb == "") {
-                          thumb = "s_unknow.png";
-                      }
-                      var src =  '../images/storage/' + thumb;
-                      var fileName = getByNameLen(file.name);
-                      $('#fileList').append('<div id="' + file.id + '" class="item">'
-                          + '<img style="margin-left: 20px;margin-right: 20px;vertical-align: top;" src="' + src + '" alt=""><h4 class="info" style="vertical-align: top;width: 230px;display:inline-block">'
-                          + '<span style="cursor: pointer;width:80px;" title=' + file.name + '>'
-                          + fileName + '</span><b>文件大小:&nbsp;</b>' + WebUploader.formatSize(file.size, 0, ['B', 'KB', 'MB', 'GB'])
-                          + '<input type="hidden" fileId="' + file.id + '" ></input></h4></div>');
-                      $('.upload').show('slow');
-                      $('#upload_msg').fadeIn('slow');
-                      $("#status").html("加载中");
-                      $('#upload_msg').html(" <div class='titleleft'><span>正在加载验证文件，请稍等...</span></div>");
-                      uploader.options.formData.guid = WebUploader.guid();// 每个文件都附带一个guid，以在服务端确定哪些文件块本来是一个
-                      uploader.md5File(file, 0, 50 * 1024 * 1024).then(function (fileMd5) { // 完成
-                          file.wholeMd5 = fileMd5;// 获取到了md5
-                          uploader.options.formData.md5value = file.wholeMd5;// 每个文件都附带一个md5，便于实现秒传
 
-                          $storage.validateMd5(uploader, file);
-                      });
-                  }
+                var ext = file.ext;
+                var thumb = "";
+                $.each(exts, function (index, ext) {
+                    if (ext[0] == ext) {
+                        thumb = "s_" + ext[1] + ".png";
+                    }
+                });
+                if (ext == "jpg" || ext == "png" || ext == "jpeg"
+                    || ext == "bmp") {
+                    thumb = "s_png.png";
                 }
-            });
-
+                if (thumb == "") {
+                    thumb = "s_unknow.png";
+                }
+                var src =  '../images/storage/' + thumb;
+                var fileName = getByNameLen(file.name);
+                $('#fileList').append('<div id="' + file.id + '" class="item">'
+                    + '<img style="margin-left: 20px;margin-right: 20px;vertical-align: top;" src="' + src + '" alt=""><h4 class="info" style="vertical-align: top;width: 230px;display:inline-block">'
+                    + '<span style="cursor: pointer;width:80px;" title=' + file.name + '>'
+                    + fileName + '</span><b>文件大小:&nbsp;</b>' + WebUploader.formatSize(file.size, 0, ['B', 'KB', 'MB', 'GB'])
+                    + '<input type="hidden" fileId="' + file.id + '" ></input></h4></div>');
+                $('.upload').show('slow');
+                $('#upload_msg').fadeIn('slow');
+                $("#status").html("加载中");
+                $('#upload_msg').html(" <div class='titleleft'><span>正在加载验证文件，请稍等...</span></div>");
+                uploader.options.formData.guid = WebUploader.guid();// 每个文件都附带一个guid，以在服务端确定哪些文件块本来是一个
+                uploader.md5File(file, 0, 50 * 1024 * 1024).then(function (fileMd5) { // 完成
+                    file.wholeMd5 = fileMd5;// 获取到了md5
+                    uploader.options.formData.md5value = file.wholeMd5;// 每个文件都附带一个md5，便于实现秒传
+                    $storage.validateMd5(uploader, file);
+                });
         });
 
         // 文件上传过程中创建进度条实时显示。

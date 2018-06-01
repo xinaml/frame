@@ -1,22 +1,19 @@
 package com.xinaml.frame.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.xinaml.frame.common.constant.FinalConstant;
 import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.result.ActResult;
-import com.xinaml.frame.common.session.UserSession;
 import com.xinaml.frame.common.utils.ResponseUtil;
 import com.xinaml.frame.common.utils.UserUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
@@ -37,6 +34,19 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
         Class<?> clazz = method.getDeclaringClass();
         //该类或者方法上是否有登录安全认证注解
         if (clazz.isAnnotationPresent(Login.class) || method.isAnnotationPresent(Login.class)) {
+            Annotation an = clazz.getAnnotation(Login.class);
+            if (null != an) {
+                String url = StringUtils.substringAfterLast(request.getRequestURI(), "/");
+                String excludes = ((Login) an).excludes();
+                if (null != excludes) {
+                    for (String str : excludes.split(",")) {
+                        if (url.equals(str)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
             return validateLogin(request, response);
         }
         return true;
@@ -60,14 +70,27 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
             if (UserUtil.isLogin(request)) {
                 return true;  // 查询是否已登录
             } else {
-                ActResult result = new ActResult();
-                result.setCode(403);
-                result.setMsg("请先登录!");
-                response.setStatus(200);
-                ResponseUtil.writeData(JSON.toJSONString(result));
+                //前后分离返回json数据
+                String header = request.getHeader("X-Requested-With");
+                if (null!=header && header.equals("XMLHttpRequest")) { //ajax请求
+                    ActResult result = new ActResult();
+                    result.setCode(403);
+                    result.setMsg("请先登录!");
+                    response.setStatus(200);
+                    ResponseUtil.writeData(JSON.toJSONString(result));
+                    return false;
+                } else { //url请求
+                    String url = StringUtils.substringAfterLast(request.getRequestURI(), "/");
+                    if (url.equals("login")) { //如果是登录页请求pass
+                        return true;
+                    }
+                    response.sendRedirect("/login"); //其他未登录请求跳转登录页
+                }
+
                 return false;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }

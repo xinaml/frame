@@ -1,8 +1,11 @@
 package com.xinaml.frame.action.storage;
 
 import com.alibaba.fastjson.JSON;
+import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.exception.ActException;
 import com.xinaml.frame.common.custom.exception.SerException;
+import com.xinaml.frame.common.custom.result.ActResult;
+import com.xinaml.frame.common.custom.result.Result;
 import com.xinaml.frame.common.utils.ASEUtil;
 import com.xinaml.frame.common.utils.FileUtil;
 import com.xinaml.frame.common.utils.ResponseUtil;
@@ -11,7 +14,6 @@ import com.xinaml.frame.vo.storage.FileInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -23,20 +25,20 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RequestMapping(value = "storage")
 @Controller
+@Login(excludes = "page")
 public class StorageAct {
 
     @Autowired
     private StorageSer storageSer;
 
     @RequestMapping(value = "page")
-    public String page(Model model) throws ActException {
+    public String page() throws ActException {
         return "/storage/storage";
     }
+
     /**
      * 文件列表
      * <p>
@@ -46,10 +48,10 @@ public class StorageAct {
      */
     @ResponseBody
     @RequestMapping(value = "list")
-    public String list(HttpServletRequest request) throws ActException {
+    public Result list(HttpServletRequest request) throws ActException {
         try {
             String path = getParameter(request, "path", true);
-            return JSON.toJSONString(storageSer.list(path));
+            return new ActResult(storageSer.list(path));
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }
@@ -124,8 +126,9 @@ public class StorageAct {
      */
     @ResponseBody
     @RequestMapping(value = "exists")
-    public String exist(String path) {
+    public String exist(HttpServletRequest request) {
         try {
+            String path = getParameter(request, "path", true);
             return String.valueOf(storageSer.existsFile(path));
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,7 +163,7 @@ public class StorageAct {
      */
     @ResponseBody
     @RequestMapping(value = "download")
-    public void downLoad(HttpServletResponse response, HttpServletRequest request, boolean isFolder) throws SerException {
+    public void downLoad(HttpServletRequest request, HttpServletResponse response, boolean isFolder) throws SerException {
         try {
             String path = getParameter(request, "path", true);
             File file = storageSer.download(path, isFolder);
@@ -175,7 +178,6 @@ public class StorageAct {
             throw new SerException(e.getMessage());
         }
     }
-
 
 
     /**
@@ -345,7 +347,7 @@ public class StorageAct {
     private String getParameter(HttpServletRequest request, String name, boolean notNull) throws SerException {
         String parameter = request.getParameter(name);
         if (StringUtils.isNotBlank(parameter)) {
-                parameter = ASEUtil.decrypt(parameter);
+            parameter = ASEUtil.decrypt(parameter);
             return parameter;
         } else {
             if (notNull) {
@@ -381,8 +383,7 @@ public class StorageAct {
      * @param info    文件信息
      * @param request
      */
-    private void initFileInfo(FileInfo info, HttpServletRequest request)throws SerException {
-        String path = getParameter(request, "path", true);
+    private void initFileInfo(FileInfo info, HttpServletRequest request) throws SerException {
         String value = request.getParameter("relevanceId");
         Long relevanceId = null;
         if (null != value) {
@@ -402,6 +403,7 @@ public class StorageAct {
             info.setPartName(partName);
         }
         info.setRelevanceId(relevanceId);
+        String path =ASEUtil.decrypt(info.getPath());
         info.setPath(path);
     }
 }

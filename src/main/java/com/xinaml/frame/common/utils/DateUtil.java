@@ -5,6 +5,7 @@ import com.xinaml.frame.common.custom.constant.CommonConst;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 
 public final class DateUtil {
     private static final DateTimeFormatter DATETIME = DateTimeFormatter.ofPattern(CommonConst.DATETIME);
@@ -66,5 +67,9 @@ public final class DateUtil {
         ZoneId zone = ZoneId.systemDefault();
         return LocalDateTime.ofInstant(instant, zone);
     }
-
+    public static  LocalDateTime dateToLocalDateTime(Date date) {
+        Instant instant = date.toInstant();
+        ZoneId zone = ZoneId.systemDefault();
+        return  LocalDateTime.ofInstant(instant, zone);
+    }
 }

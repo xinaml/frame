@@ -23,7 +23,7 @@
 <div id="left">
 
 </div>
-<div id="right">
+<div id="right" style="margin-top: 200px">
     <div id='topflexed'>
         <div class="right-title">
             <div class="title-left">
@@ -157,10 +157,11 @@
 <script>
     var $storage = new Storage();
     var currentPath = $storage.getCookie("currentPath");
-    if(!currentPath || currentPath==null){
-    currentPath=="/"
+
+    if (currentPath =="") {
+        currentPath == "/"
     }
-    $storage.list(currentPath);
+    $storage.list("/");
 
     function biggleBack() {
         // 初始化模态框
