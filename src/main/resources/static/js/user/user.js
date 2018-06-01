@@ -93,7 +93,6 @@ var User = (function () {
             todayBtn: true,
             todayHighlight: true,
             showMeridian: true,
-            defaultDate: '2018-03-10',//默认日期
             pickerPosition: "bottom-left",
             language: 'zh-CN',//中文，需要引用zh-CN.js包
             startView: 2,//月视图
@@ -192,8 +191,7 @@ var User = (function () {
                 $("#email").val(obj.email);
                 $("#phone").val(obj.phone);
                 $("#id").val(obj.id);
-                $("#birthday").datetimepicker('birthday', obj.birthday);
-                $("#opt").attr("onclick", "$user.editUser()")
+                $('#birthday').val(obj.birthday)
 
             } else {
                 var data = $('#userFrom').serialize();
