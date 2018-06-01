@@ -4,7 +4,7 @@ import com.xinaml.frame.base.dto.RT;
 import com.xinaml.frame.common.utils.PassWordUtil;
 import com.xinaml.frame.dto.UserDTO;
 import com.xinaml.frame.entity.User;
-import com.xinaml.frame.ser.UserSer;
+import com.xinaml.frame.ser.user.UserSer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

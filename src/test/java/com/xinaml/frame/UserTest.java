@@ -5,7 +5,7 @@ import com.xinaml.frame.base.dto.RT;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.dto.UserDTO;
 import com.xinaml.frame.entity.User;
-import com.xinaml.frame.ser.UserSer;
+import com.xinaml.frame.ser.user.UserSer;
 import com.xinaml.frame.to.UserTO;
 import org.junit.Before;
 import org.junit.Test;

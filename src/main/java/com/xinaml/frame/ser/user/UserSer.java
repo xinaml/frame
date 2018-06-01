@@ -1,4 +1,4 @@
-package com.xinaml.frame.ser;
+package com.xinaml.frame.ser.user;
 
 import com.xinaml.frame.base.service.Ser;
 import com.xinaml.frame.common.custom.exception.SerException;

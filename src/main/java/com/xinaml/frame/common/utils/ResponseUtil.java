@@ -23,7 +23,7 @@ public final class ResponseUtil {
     }
 
     public static HttpServletResponse get() {
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();//springmvc 自带
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
     }
 
     private static HttpServletResponse init() {

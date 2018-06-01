@@ -13,7 +13,7 @@ import com.xinaml.frame.common.custom.result.Result;
 import com.xinaml.frame.common.utils.PassWordUtil;
 import com.xinaml.frame.dto.UserDTO;
 import com.xinaml.frame.entity.User;
-import com.xinaml.frame.ser.UserSer;
+import com.xinaml.frame.ser.user.UserSer;
 import com.xinaml.frame.to.UserTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

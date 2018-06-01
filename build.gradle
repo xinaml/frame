@@ -27,6 +27,8 @@ dependencies {
     compile group: 'net.sourceforge.nekohtml', name: 'nekohtml', version: "$nekohtml_v" //html 标签闭合
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: "$log4j2_v"
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: '2.0.2.RELEASE'//    cache
+    compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
     runtime group: 'com.ibeetl', name: 'beetl', version: "$beelt_v" //类生成模板
     testCompile('org.springframework.boot:spring-boot-starter-test')
 

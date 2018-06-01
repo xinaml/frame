@@ -8,7 +8,7 @@ import com.xinaml.frame.common.custom.result.ActResult;
 import com.xinaml.frame.common.custom.result.Result;
 import com.xinaml.frame.common.utils.IpUtil;
 import com.xinaml.frame.common.utils.UserUtil;
-import com.xinaml.frame.ser.UserSer;
+import com.xinaml.frame.ser.user.UserSer;
 import com.xinaml.frame.to.LoginTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

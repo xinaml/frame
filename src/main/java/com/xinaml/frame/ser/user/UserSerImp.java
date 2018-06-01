@@ -1,4 +1,4 @@
-package com.xinaml.frame.ser;
+package com.xinaml.frame.ser.user;
 
 import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.base.dto.RT;
@@ -37,7 +37,7 @@ public class UserSerImp extends ServiceImpl<User, UserDTO> implements UserSer {
         }
         if (isPass) {
             token = TokenUtil.create(to.getIp());
-            UserSession.put(token, JSON.toJSONString(user));
+            UserSession.put(token,user);
             return token;
         } else {
             throw new SerException("账号或密码错误");

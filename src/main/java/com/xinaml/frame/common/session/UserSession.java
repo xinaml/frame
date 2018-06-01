@@ -2,6 +2,7 @@ package com.xinaml.frame.common.session;
 
 import com.google.common.cache.*;
 import com.xinaml.frame.common.custom.exception.SerException;
+import com.xinaml.frame.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,34 +13,34 @@ public class UserSession {
     private static Logger LOGGER = LoggerFactory.getLogger(UserSession.class);
     private static final RuntimeException TOKEN_NOT_NULL = new RuntimeException("token令牌不能为空");
 
-    private static final LoadingCache<String, String> AUTH_CODE_SESSION = CacheBuilder.newBuilder()
+    private static final LoadingCache<String, User> AUTH_CODE_SESSION = CacheBuilder.newBuilder()
             .expireAfterWrite(5, TimeUnit.HOURS)
             .maximumSize(1000)
-            .removalListener(new RemovalListener<String, String>() {
+            .removalListener(new RemovalListener<String, User>() {
                 @Override
-                public void onRemoval(RemovalNotification<String, String> notification) {
+                public void onRemoval(RemovalNotification<String, User> notification) {
                     LOGGER.info("remove:" + notification.getCause().name());
                 }
             })
-            .build(new CacheLoader<String, String>() {
+            .build(new CacheLoader<String, User>() {
                 @Override
-                public String load(String key) throws Exception {
+                public User load(String key) throws Exception {
                     return null;
                 }
             });
 
-    public static void put(String account, String code) throws SerException {
-        if (StringUtils.isNotBlank(account)) {
-            AUTH_CODE_SESSION.put(account, code);
+    public static void put(String token, User user) throws SerException {
+        if (StringUtils.isNotBlank(token)) {
+            AUTH_CODE_SESSION.put(token, user);
         } else {
             throw TOKEN_NOT_NULL;
         }
     }
 
 
-    public static void remove(String account) {
-        if (StringUtils.isNotBlank(account)) {
-            AUTH_CODE_SESSION.invalidate(account);
+    public static void remove(String token) {
+        if (StringUtils.isNotBlank(token)) {
+            AUTH_CODE_SESSION.invalidate(token);
         } else {
 
             throw TOKEN_NOT_NULL;
@@ -47,10 +48,10 @@ public class UserSession {
     }
 
 
-    public static String get(String account) {
+    public static User get(String token) {
         try {
-            if (StringUtils.isNotBlank(account)) {
-                return AUTH_CODE_SESSION.get(account);
+            if (StringUtils.isNotBlank(token)) {
+                return AUTH_CODE_SESSION.get(token);
             }
         } catch (Exception e) {
             return null;
