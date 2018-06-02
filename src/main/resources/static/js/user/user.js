@@ -67,9 +67,6 @@ var User = (function () {
             }]
             ,
             onLoadSuccess: function (rs) {  //加载成功时执行
-               if(rs.code==403){
-                   window.location.href="/login"
-               }
             },
             onLoadError: function (data) {  //加载失败时执行
                 alert("服务器错误");

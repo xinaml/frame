@@ -617,6 +617,7 @@ var Storage = (function () {
     });
 
     Array.prototype.indexOf = function (val) {
+        console.info(val)
         for (var i = 0; i < this.length; i++) {
             if (this[i] == val)
                 return i;
@@ -624,6 +625,7 @@ var Storage = (function () {
         return -1;
     };
     Array.prototype.remove = function (val) {
+        console.info(val+"----------")
         var index = this.indexOf(val);
         if (index > -1) {
             this.splice(index, 1);

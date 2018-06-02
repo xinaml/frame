@@ -31,6 +31,7 @@ import java.util.Map;
 @Api(value = "UserAPI", tags = {"用户接口"})
 @Controller
 @RequestMapping("user")
+@Login
 public class UserAct extends BaseAct {
 
     @Autowired
@@ -41,8 +42,6 @@ public class UserAct extends BaseAct {
         return "user/user";
     }
 
-
-    @Login
     @ResponseBody
     @GetMapping("maps")
     public String maps(UserDTO dto) throws ActException {

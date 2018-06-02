@@ -28,7 +28,7 @@ import java.io.PrintWriter;
 
 @RequestMapping(value = "storage")
 @Controller
-@Login(excludes = "page")
+@Login
 public class StorageAct {
 
     @Autowired

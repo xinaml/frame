@@ -3,6 +3,8 @@ package com.xinaml.frame.common.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.result.ActResult;
+import com.xinaml.frame.common.session.UrlSession;
+import com.xinaml.frame.common.session.UserSession;
 import com.xinaml.frame.common.utils.ResponseUtil;
 import com.xinaml.frame.common.utils.UserUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -33,10 +35,10 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
         Method method = ((HandlerMethod) handler).getMethod();
         Class<?> clazz = method.getDeclaringClass();
         //该类或者方法上是否有登录安全认证注解
+        String url = StringUtils.substringAfterLast(request.getRequestURI(), "/");
         if (clazz.isAnnotationPresent(Login.class) || method.isAnnotationPresent(Login.class)) {
             Annotation an = clazz.getAnnotation(Login.class);
             if (null != an) {
-                String url = StringUtils.substringAfterLast(request.getRequestURI(), "/");
                 String excludes = ((Login) an).excludes();
                 if (null != excludes) {
                     for (String str : excludes.split(",")) {
@@ -46,7 +48,6 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
                     }
                 }
             }
-
             return validateLogin(request, response);
         }
         return true;
@@ -80,11 +81,13 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
                     ResponseUtil.writeData(JSON.toJSONString(result));
                     return false;
                 } else { //url请求
-                    String url = StringUtils.substringAfterLast(request.getRequestURI(), "/");
-                    if (url.equals("login")) { //如果是登录页请求pass
-                        return true;
+                    String url = request.getHeader("Referer"); //上次请求页面
+                    if(null==url){ //当前请求页面
+                        url = request.getRequestURI();
                     }
-                    response.sendRedirect("/login"); //其他未登录请求跳转登录页
+                    System.out.println(request.getSession().getId());
+                    UrlSession.put(request.getSession().getId(),url);
+                    response.sendRedirect("/login");
                 }
 
                 return false;
