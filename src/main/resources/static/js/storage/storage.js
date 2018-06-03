@@ -72,7 +72,7 @@ var Storage = (function () {
                                 gridImgPath = "<img height='44' width='55' src='" + $baseUrl + "/gif?path=" + encodeURI(obj.path) + "'>";
                             }
 
-                            gridHtml += '<li   ondblclick="$storage.dblclick(this);onclick="$storage.click(this)"">' + '<div class="important">' + '<input  path="' + obj.path + '" fileType="' + obj.fileType + '" class="ischcked" type="checkbox" index="' + index + '">' +
+                            gridHtml += '<li   ondblclick="$storage.dblclick(this)">' + '<div onclick="$storage.click(this)" class="important">' + '<input  path="' + obj.path + '" fileType="' + obj.fileType + '" class="ischcked" type="checkbox" index="' + index + '">' +
                                 gridImgPath + '<p class="space" style="cursor: pointer;" title="文&nbsp;件&nbsp;名&nbsp;&nbsp;：' + obj.name + '\n文件大小：' + size + '\n修改日期：' + obj.modifyTime + '">' +
                                 fileName + '</p>' + '<p>' + size + '</p>' + ' <p>' + obj.modifyTime + '</p>' + '</div>' + ' </li>';
                         });
@@ -286,6 +286,7 @@ var Storage = (function () {
             $.unique(arrays);
             var zTreeOjb = $.fn.zTree.getZTreeObj("tree"); // ztree的Id zTreeId
             var selectedNodes = zTreeOjb.getSelectedNodes();
+            console.info(arrays)
             if (selectedNodes.length > 0) {
                 $.post($baseUrl + "/copy", {
                     'fromPath': $storage.encrypt(arrays.join("##")),
@@ -481,7 +482,7 @@ var Storage = (function () {
 
     //单击选中
     Storage.prototype.click = function (dom) {
-        $(dom).attr('class','rowstage1');
+        $(dom).parent().attr('class','colstage');
     }
 
 
