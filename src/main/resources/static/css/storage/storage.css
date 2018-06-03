@@ -122,21 +122,13 @@ body {
 	  position: fixed;
 }
 #right {
-    overflow: auto;
-    position: absolute;
-    left:250px;
     right: 0;
     box-sizing: border-box;
-    border-left: 1px solid #cccccc;
     min-width: 900px;
 }
 #topflexed{
-	position: fixed;
-	top: 100px;
-	left:250px;
     right: 0;
     background:#fff;
-    z-index:9;
     border-bottom: 1px solid #ccc;}
 #right .title-left {
     display: inline-block;
@@ -179,7 +171,6 @@ body {
 	margin-left:20px;
 }
 .btn-group button{
-    display: none;
     color: #00cdff;
     margin-right: 0!important;
     border-radius: 0!important;
@@ -692,8 +683,11 @@ display:none;
       	left:0;
       }
       #topflexed{
-      	left:0;
-      }
+          position: fixed;
+          right: 0;
+          background:#fff;
+          z-index:9;
+          border-bottom: 1px solid #ccc;}
 }
 
 

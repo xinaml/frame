@@ -85,7 +85,6 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
                     if(null==url){ //当前请求页面
                         url = request.getRequestURI();
                     }
-                    System.out.println(request.getSession().getId());
                     UrlSession.put(request.getSession().getId(),url);
                     response.sendRedirect("/login");
                 }

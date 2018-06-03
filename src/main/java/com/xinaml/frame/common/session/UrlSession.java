@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class UrlSession {
     private static Logger LOGGER = LoggerFactory.getLogger(UrlSession.class);
 
-    private static final LoadingCache<String, String> AUTH_CODE_SESSION = CacheBuilder.newBuilder()
+    private static final LoadingCache<String, String>URL_SESSION = CacheBuilder.newBuilder()
             .expireAfterWrite(20, TimeUnit.MINUTES)
             .maximumSize(1000)
             .removalListener(new RemovalListener<String, String>() {
@@ -29,14 +29,14 @@ public class UrlSession {
 
     public static void put(String sid, String url) throws SerException {
         if (StringUtils.isNotBlank(sid)) {
-            AUTH_CODE_SESSION.put(sid, url);
+            URL_SESSION.put(sid, url);
         }
     } public static String get(String sid) throws SerException {
         if (StringUtils.isNotBlank(sid)) {
             try {
-                return AUTH_CODE_SESSION.get(sid );
+                return URL_SESSION.get(sid );
             }catch (Exception e){
-                e.printStackTrace();
+                LOGGER.info("没有找到上次页面缓存");
             }
         }
         return null;
@@ -45,7 +45,7 @@ public class UrlSession {
 
     public static void remove(String sid) {
         if (StringUtils.isNotBlank(sid)) {
-            AUTH_CODE_SESSION.invalidate(sid);
+            URL_SESSION.invalidate(sid);
         }
     }
 

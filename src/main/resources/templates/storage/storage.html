@@ -23,7 +23,7 @@
 <div id="left">
 
 </div>
-<div id="right" style="margin-top: 200px">
+<div id="right" >
     <div id='topflexed'>
         <div class="right-title">
             <div class="title-left">
@@ -36,19 +36,19 @@
                                                                           multiple="multiple">
                         </div>
                     </div>
-                    <button class="titleTwo">&nbsp;&nbsp;&nbsp;&nbsp;新建文件夹</button>
+                    <button class="titleTwo" onclick="$storage.newFloder()">&nbsp;&nbsp;&nbsp;&nbsp;新建文件夹</button>
                     <div class="btn-group" role="group">
-                        <button type="button" class="downFile btn btn-default">下载</button>
-                        <button type="button" class="delFile btn btn-default">删除</button>
-                        <button type="button" class="copyFile btn btn-default">&nbsp;&nbsp;&nbsp;复制到</button>
-                        <button type="button" class="moveFile btn btn-default">&nbsp;&nbsp;&nbsp;移动到</button>
-                        <button type="button" class="renameFile btn btn-default isdisabled">&nbsp;&nbsp;重命名</button>
+                        <button type="button" onclick="$storage.downFile()" class="downFile btn btn-default">下载</button>
+                        <button type="button" onclick="$storage.delFile()" class="delFile btn btn-default">删除</button>
+                        <button type="button" onclick="$storage.copyFile()" class="copyFile btn btn-default">&nbsp;&nbsp;&nbsp;复制到</button>
+                        <button type="button" onclick="$storage.moveFile()" class="moveFile btn btn-default">&nbsp;&nbsp;&nbsp;移动到</button>
+                        <button type="button" onclick="$storage.renameFile()" class="renameFile btn btn-default isdisabled">&nbsp;&nbsp;重命名</button>
                     </div>
                     <div class="searchright">
                         <input id="searchText" type="search" placeholder="搜索">
-                        <div onclick="$storage.search(this)" class="search"><img
+                        <div onclick="$storage.search(this)" class="search"><img style="padding-left: 30px"
                                 src="../images/storage/ss_1.png" alt=""></div>
-                        <button class="change" :focus{outline:0;}></button>
+                        <button style="display: none" class="change" :focus{outline:0;}></button>
                     </div>
                 </div>
             </div>
@@ -73,9 +73,9 @@
         </div>
     </div>
     <!--列表-->
-    <div class="countRow" style="display: none;margin-top:141px">
-        <div class="rowInfo danxuan">
-            <li class="" style="list-style: none;">
+    <div class="countRow" style="display: none;">
+        <div class="rowInfo danxuan" >
+            <li class="" sty le="list-style: none;">
                 <div class="countInfo" style="padding-top:13px;padding-bottom:10px;  ">
                     <div class="one" style="padding-left:74px;">文件名</div>
                     <div class="two"><span>大小</span></div>
@@ -88,7 +88,7 @@
         </div>
     </div>
     <!--网格-->
-    <div class="countCol" style="margin-top:141px">
+    <div class="countCol" >
         <div class="colInfo danxuan">
             <ul id="countCol-content">
                 <!-- content -->
@@ -157,60 +157,10 @@
 <script>
     var $storage = new Storage();
     var currentPath = $storage.getCookie("currentPath");
-
     if (currentPath =="") {
         currentPath == "/"
     }
     $storage.list("/");
-
-    function biggleBack() {
-        // 初始化模态框
-        function modal() {
-            $("#myModal").modal({
-                backdrop: false, // 相当于data-backdrop
-                keyboard: false, // 相当于data-keyboard
-                show: true, // 相当于data-show
-                remote: "" // 相当于a标签作为触发器的href
-            });
-        }
-
-        $("#myModal").on("hidden.bs.modal", function () {
-            var mymodal = '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" style="max-width: 600px;margin:0 auto;"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">复制到</h4></div><div class="modal-body"><!--ztree插件--><ul id="tree" class="ztree"></ul></div><div class="modal-footer"><button type="button" class="btn btn-primary">确定</button><button type="button" class="btn btn-default" data-dismiss="modal">取消</button></div></div></div></div>';
-            $("#myModal").remove();
-            $('body').prepend(mymodal);
-        });
-
-        $('.btn-group button').hide();
-        $('.countTitle').find('input').prop("checked", false);
-        var images = ['../images/storage/wj_wxz.png', '../images/storage/wj_wxz.png'];
-        $(this).addClass('actives').siblings('li').removeClass('actives');
-        $('.left-info li').each(function (index, ele) {
-            if ($(this).attr("class") == "actives") {
-                $(this).find('img').attr("src", images[1]);
-                $(this).find('span').css({color: '#00cdff'});
-            } else {
-                $(this).find('img').attr("src", images[0]);
-                $(this).find('span').css({color: '#313131'});
-            }
-        });
-    }
-
-    // 初始化模态框
-    function modal() {
-        $("#myModal").modal({
-            backdrop: false, // 相当于data-backdrop
-            keyboard: false, // 相当于data-keyboard
-            show: true, // 相当于data-show
-            remote: "" // 相当于a标签作为触发器的href
-        });
-    }
-
-    $("#myModal").on("hidden.bs.modal", function () {
-        var mymodal = '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" style="max-width: 600px;margin:0 auto;"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">复制到</h4></div><div class="modal-body"><!--ztree插件--><ul id="tree" class="ztree"></ul></div><div class="modal-footer"><button type="button" class="btn btn-primary">确定</button><button type="button" class="btn btn-default" data-dismiss="modal">取消</button></div></div></div></div>';
-        $("#myModal").remove();
-        $('body').prepend(mymodal);
-    });
-
     var uploader = WebUploader.create({
         auto: false,
         swf: '../' + "webuploader/Uploader.swf",
@@ -237,34 +187,12 @@
                 $("#imgPreview").fadeOut();
         }
     });
+    $("#myModal").on("hidden.bs.modal", function () {
+        var mymodal = '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" style="max-width: 600px;margin:0 auto;"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">复制到</h4></div><div class="modal-body"><!--ztree插件--><ul id="tree" class="ztree"></ul></div><div class="modal-footer"><button type="button" class="btn btn-primary">确定</button><button type="button" class="btn btn-default" data-dismiss="modal">取消</button></div></div></div></div>';
+        $("#myModal").remove();
+        $('body').prepend(mymodal);
+    });
 
-    function encrypt(word) {
-        var key = CryptoJS.enc.Utf8.parse("abcdefgabcdefg12");
-        var srcs = CryptoJS.enc.Utf8.parse(word);
-        var encrypted = CryptoJS.AES.encrypt(srcs, key, {mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
-        return encrypted.toString();
-    }
 
-    function promptBox(strName, speed) {
-        if (speed == null) {
-            $('.prompt_box').fadeIn();
-            $('.prompt_boxbody span').text('');
-            $('.prompt_boxbody span').text(strName);
-            setTimeout(function () {
-                $('.prompt_box').fadeOut();
-            }, 2000);
-        } else {
-            $('.prompt_box').fadeIn();
-            $('.prompt_boxbody span').text('');
-            $('.prompt_boxbody span').text(strName);
-            var timer = setTimeout(function () {
-                $('.prompt_boxbody span').text(strName);
-                setTimeout(function () {
-                    $('.prompt_box').fadeOut();
-                }, speed);
-
-            }, speed);
-        }
-    }
 </script>
 </html>

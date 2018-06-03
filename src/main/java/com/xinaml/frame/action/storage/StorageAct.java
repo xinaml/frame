@@ -347,6 +347,9 @@ public class StorageAct {
     private String getParameter(HttpServletRequest request, String name, boolean notNull) throws SerException {
         String parameter = request.getParameter(name);
         if (StringUtils.isNotBlank(parameter)) {
+            if(StringUtils.isNumeric(parameter)){
+                return parameter;
+            }
             parameter = ASEUtil.decrypt(parameter);
             return parameter;
         } else {

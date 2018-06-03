@@ -9,13 +9,15 @@ import javax.annotation.PostConstruct;
 public class PathCommon {
     @Value("${storage.path}")
     private String rootPath;
+
     @PostConstruct
-    public void initPath(){
-        PathCommon.ROOT_PATH=rootPath;
+    public void initPath() {
+        PathCommon.ROOT_PATH = rootPath;
     }
-    public static final String SEPARATOR=System.getProperty("file.separator");
+
+    public static final String SEPARATOR = System.getProperty("file.separator");
     public static String ROOT_PATH;
-    public static final String TMP_PATH ="/tmp";
+    public static final String TMP_PATH = "/tmp";
 
 
 }
