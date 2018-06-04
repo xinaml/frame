@@ -1,17 +1,18 @@
 package com.xinaml.frame.common.utils;
 
-import com.xinaml.frame.common.custom.constant.CommonConst;
+import com.xinaml.frame.common.constant.CommonConst;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * 日期工具
+ */
 public final class DateUtil {
     private static final DateTimeFormatter DATETIME = DateTimeFormatter.ofPattern(CommonConst.DATETIME);
     private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern(CommonConst.DATE);
     private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern(CommonConst.TIME);
-    private static Calendar calendar = null;
 
     /**
      * 日期时间转换
@@ -61,15 +62,26 @@ public final class DateUtil {
         }
     }
 
-
-    public static LocalDateTime parseTime(long time) {
+    /**
+     * long 转 LocalDateTime
+     *
+     * @param time
+     * @return
+     */
+    public static LocalDateTime longToLocalDateTime(long time) {
         Instant instant = Instant.ofEpochMilli(time);
         ZoneId zone = ZoneId.systemDefault();
         return LocalDateTime.ofInstant(instant, zone);
     }
-    public static  LocalDateTime dateToLocalDateTime(Date date) {
+
+    /**
+     * @param date 转 LocalDateTime
+     * @return
+     */
+    public static LocalDateTime dateToLocalDateTime(Date date) {
         Instant instant = date.toInstant();
         ZoneId zone = ZoneId.systemDefault();
-        return  LocalDateTime.ofInstant(instant, zone);
+        return LocalDateTime.ofInstant(instant, zone);
     }
+
 }

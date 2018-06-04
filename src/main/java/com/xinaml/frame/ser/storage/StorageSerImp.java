@@ -1,7 +1,7 @@
 package com.xinaml.frame.ser.storage;
 
 import com.google.common.io.Files;
-import com.xinaml.frame.common.constant.PathCommon;
+import com.xinaml.frame.common.constant.PathConst;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.thread.CopyFileThread;
 import com.xinaml.frame.common.utils.DateUtil;
@@ -54,7 +54,7 @@ public class StorageSerImp implements StorageSer {
         String realPath = getRealPath(path);
         java.io.File dir = new java.io.File(realPath);
         java.io.File[] files = dir.listFiles();
-        boolean isRoot = path.equals(PathCommon.SEPARATOR);
+        boolean isRoot = path.equals(PathConst.SEPARATOR);
         return getTreeVO(files, isRoot);
     }
 
@@ -77,7 +77,7 @@ public class StorageSerImp implements StorageSer {
         try {
             int index = 0;
             for (MultipartFile mfile : mFiles) {
-                File file = new File(realPath + PathCommon.SEPARATOR
+                File file = new File(realPath + PathConst.SEPARATOR
                         + mfile.getOriginalFilename());
                 if (file.exists()) { // 文件存在，不覆盖
                     file = handleSameFile(file);
@@ -104,11 +104,11 @@ public class StorageSerImp implements StorageSer {
      * @throws SerException
      */
     public void mkDir(String path, String dir) throws SerException {
-        if (dir.equals(PathCommon.SEPARATOR)) {
+        if (dir.equals(PathConst.SEPARATOR)) {
             throw new SerException("非法的文件夹名！");
         }
         String realPath = getRealPath(path);
-        java.io.File file = new java.io.File(realPath + PathCommon.SEPARATOR
+        java.io.File file = new java.io.File(realPath + PathConst.SEPARATOR
                 + dir);
         if (!file.exists()) {
             file.mkdirs();
@@ -161,12 +161,12 @@ public class StorageSerImp implements StorageSer {
     public File rename(String path, String oldName, String newName)
             throws SerException {
         if (path.startsWith("/")) {
-            if (PathCommon.SEPARATOR.equals("\\")) {
+            if (PathConst.SEPARATOR.equals("\\")) {
                 path = path.replaceAll("/", "\\\\");
             }
         }
-        String oldPath = getRealPath((path + PathCommon.SEPARATOR + oldName));
-        String newPath = getRealPath((path + PathCommon.SEPARATOR + newName));
+        String oldPath = getRealPath((path + PathConst.SEPARATOR + oldName));
+        String newPath = getRealPath((path + PathConst.SEPARATOR + newName));
         if (!oldName.equals(newName)) {// 新的文件名和以前文件名不同时,才有必要进行重命名
             java.io.File oldFile = new java.io.File(oldPath);
             java.io.File newFile = new java.io.File(newPath);
@@ -197,10 +197,10 @@ public class StorageSerImp implements StorageSer {
             String savePath = getRealPath(path);
             try {
                 String zipSavePath = StringUtils.substringBeforeLast(savePath,
-                        PathCommon.SEPARATOR)
-                        + PathCommon.SEPARATOR
+                        PathConst.SEPARATOR)
+                        + PathConst.SEPARATOR
                         + StringUtils.substringAfterLast(path,
-                        PathCommon.SEPARATOR) + ".zip";
+                        PathConst.SEPARATOR) + ".zip";
                 file = new File(zipSavePath); // 创建压缩文件
                 FileOutputStream outputStream = null;
                 outputStream = new FileOutputStream(file);
@@ -282,7 +282,7 @@ public class StorageSerImp implements StorageSer {
     @Transactional
     public Boolean move(String[] fromPath, String toPath)
             throws SerException {
-        String basePath = getRealPath(PathCommon.SEPARATOR);
+        String basePath = getRealPath(PathConst.SEPARATOR);
         String to = basePath + toPath;
         if (fromPath.length > 1) {
             Set<String> tSet = new HashSet<String>(Arrays.asList(fromPath));
@@ -324,7 +324,7 @@ public class StorageSerImp implements StorageSer {
     @Transactional
     public Boolean copy(String[] fromPath, String toPath)
             throws SerException {
-        String basePath = getRealPath(PathCommon.SEPARATOR);
+        String basePath = getRealPath(PathConst.SEPARATOR);
         String to = basePath + toPath;
         if (fromPath.length > 1) {
             Set<String> tSet = new HashSet<String>(Arrays.asList(fromPath));
@@ -332,7 +332,7 @@ public class StorageSerImp implements StorageSer {
         }
         for (String from : fromPath) {
             String fp = basePath + from;
-            if (from.startsWith(PathCommon.ROOT_PATH)) { //如果传入的是全路径，则不处理
+            if (from.startsWith(PathConst.ROOT_PATH)) { //如果传入的是全路径，则不处理
                 fp = from;
             }
             java.io.File fromFile = new java.io.File(fp);
@@ -341,7 +341,7 @@ public class StorageSerImp implements StorageSer {
                 throw new SerException("不允许复制文件或文件夹到文件下！");
             } else {
                 if (fromFile.length() > 200000000) { // 超过200m的文件
-                    File f = new File(toFile.getPath() + PathCommon.SEPARATOR
+                    File f = new File(toFile.getPath() + PathConst.SEPARATOR
                             + fromFile.getName()); // 目标目录是否有相同文件名
                     if (f.exists()) {
                         toFile = handleSameFile(f);
@@ -352,7 +352,7 @@ public class StorageSerImp implements StorageSer {
                     try {
                         if (fromFile.isFile()) {
                             File f = new File(toFile.getPath()
-                                    + PathCommon.SEPARATOR + fromFile.getName()); // 目标目录是否有相同文件名
+                                    + PathConst.SEPARATOR + fromFile.getName()); // 目标目录是否有相同文件名
                             if (f.exists()) {
                                 toFile = handleSameFile(f);
                                 Files.copy(fromFile, toFile);
@@ -362,8 +362,8 @@ public class StorageSerImp implements StorageSer {
                             }
                         } else {
                             String lastDir = StringUtils.substringAfterLast(
-                                    from, PathCommon.SEPARATOR);
-                            if (new File(toFile + PathCommon.SEPARATOR
+                                    from, PathConst.SEPARATOR);
+                            if (new File(toFile + PathConst.SEPARATOR
                                     + lastDir).exists()) {
                                 throw new SerException("复制文件夹失败，" + "["
                                         + toPath + "]" + "目录下已存在相同的文件夹！");
@@ -387,9 +387,9 @@ public class StorageSerImp implements StorageSer {
      * @throws Exception
      */
     public Boolean savePartFile(FileInfo info) throws SerException {
-        String savePath = PathCommon.TMP_PATH + PathCommon.SEPARATOR
+        String savePath = PathConst.TMP_PATH + PathConst.SEPARATOR
                 + info.getGuid();// 以文件名创建一个临时保存目录
-        File uploadFile = new File(savePath + PathCommon.SEPARATOR
+        File uploadFile = new File(savePath + PathConst.SEPARATOR
                 + info.getPartName());
         File fileDirectory = new File(savePath);
         synchronized (fileDirectory) { // 判断文件夹是否存在，不存在就创建一个
@@ -427,7 +427,7 @@ public class StorageSerImp implements StorageSer {
         if (allUploaded) { // 已上传完整
             mergeFile(f);// 合并文件
             File file = new File(getRealPath(f.getPath())
-                    + PathCommon.SEPARATOR + f.getName());
+                    + PathConst.SEPARATOR + f.getName());
             if (file.exists()) {
                 // saveFileToDb(file, f.getMd5value());
             }
@@ -481,8 +481,8 @@ public class StorageSerImp implements StorageSer {
     private void mergeFile(FileInfo info) throws SerException {
         /* 合并输入流 */
         String uploadPath = getRealPath(info.getPath());
-        String mergePath = PathCommon.TMP_PATH + PathCommon.SEPARATOR + info.getGuid()
-                + PathCommon.SEPARATOR;
+        String mergePath = PathConst.TMP_PATH + PathConst.SEPARATOR + info.getGuid()
+                + PathConst.SEPARATOR;
 
         SequenceInputStream s;
         int chunksNumber = Integer.parseInt(info.getChunks());
@@ -494,7 +494,7 @@ public class StorageSerImp implements StorageSer {
                 InputStream s3 = new FileInputStream(mergePath + i + info.getExt());
                 s = new SequenceInputStream(s, s3);
             }
-            File f = new File(uploadPath + PathCommon.SEPARATOR + info.getName());
+            File f = new File(uploadPath + PathConst.SEPARATOR + info.getName());
             if (f.exists()) {
                 f = handleSameFile(f);
             }
@@ -530,15 +530,15 @@ public class StorageSerImp implements StorageSer {
         String username = UserUtil.getUser().getUsername();
 
         if (StringUtils.isNotBlank(path)) {
-            if(PathCommon.SEPARATOR.equals("\\")){
+            if(PathConst.SEPARATOR.equals("\\")){
                 path= path .replaceAll("/", "\\\\");
             }
-            if (path.equals(PathCommon.SEPARATOR)) { // 如果是跟路径
+            if (path.equals(PathConst.SEPARATOR)) { // 如果是跟路径
                 path = "";
-            } else if (!StringUtils.startsWith(path, PathCommon.SEPARATOR)) { // 如果不是跟路径并且不是/开头
-                path = PathCommon.SEPARATOR + path;
+            } else if (!StringUtils.startsWith(path, PathConst.SEPARATOR)) { // 如果不是跟路径并且不是/开头
+                path = PathConst.SEPARATOR + path;
             }
-            path = PathCommon.ROOT_PATH + PathCommon.SEPARATOR + username + path;
+            path = PathConst.ROOT_PATH + PathConst.SEPARATOR + username + path;
 
         } else {
             throw new SerException("path 不能为空!");
@@ -554,7 +554,7 @@ public class StorageSerImp implements StorageSer {
      */
     private String getDbFilePath(java.io.File file) {
         User u = UserUtil.getUser();
-        return PathCommon.SEPARATOR + StringUtils.substringAfterLast(file.getPath(), PathCommon.ROOT_PATH + PathCommon.SEPARATOR + u.getUsername() + PathCommon.SEPARATOR);
+        return PathConst.SEPARATOR + StringUtils.substringAfterLast(file.getPath(), PathConst.ROOT_PATH + PathConst.SEPARATOR + u.getUsername() + PathConst.SEPARATOR);
     }
 
     /**
@@ -565,7 +565,7 @@ public class StorageSerImp implements StorageSer {
      */
     private List<FileVO> getFileVO(java.io.File[] files)
             throws SerException {
-        String rootPath = getRealPath(PathCommon.SEPARATOR);
+        String rootPath = getRealPath(PathConst.SEPARATOR);
         if (null != files) {
             List<FileVO> floders = new ArrayList<FileVO>(0);// 文件夹
             List<FileVO> fileVOS = new ArrayList<FileVO>(files.length);
@@ -655,17 +655,17 @@ public class StorageSerImp implements StorageSer {
                 count += 1;
             }
         }
-        String basePath = StringUtils.substringBeforeLast(file.getPath(), PathCommon.SEPARATOR);
+        String basePath = StringUtils.substringBeforeLast(file.getPath(), PathConst.SEPARATOR);
         String path = basePath;
         if (StringUtils.isNotBlank(ext)) {
             ext = "." + ext;
         }
-        path += (PathCommon.SEPARATOR + simpleName + "(" + count + ")" + ext);
+        path += (PathConst.SEPARATOR + simpleName + "(" + count + ")" + ext);
         File f = new File(path);
         while (f.exists()) {
             count += 1;
             path = basePath;
-            path += (PathCommon.SEPARATOR + simpleName + "(" + count + ")" + ext);
+            path += (PathConst.SEPARATOR + simpleName + "(" + count + ")" + ext);
             f = new File(path);
         }
         return f;

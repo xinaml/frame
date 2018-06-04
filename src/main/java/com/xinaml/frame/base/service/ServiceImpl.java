@@ -10,7 +10,7 @@ import com.xinaml.frame.base.dto.BaseDTO;
 import com.xinaml.frame.base.entity.BaseEntity;
 import com.xinaml.frame.base.rep.JapRep;
 import com.xinaml.frame.base.rep.JpaSpec;
-import com.xinaml.frame.common.custom.constant.CommonConst;
+import com.xinaml.frame.common.constant.CommonConst;
 import com.xinaml.frame.common.custom.exception.RepException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import org.apache.commons.lang3.StringUtils;

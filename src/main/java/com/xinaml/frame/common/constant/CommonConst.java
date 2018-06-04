@@ -1,4 +1,4 @@
-package com.xinaml.frame.common.custom.constant;
+package com.xinaml.frame.common.constant;
 
 /**
  * 常用常量类

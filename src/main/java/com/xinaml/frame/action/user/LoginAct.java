@@ -1,7 +1,8 @@
 package com.xinaml.frame.action.user;
 
 import com.xinaml.frame.base.entity.ADD;
-import com.xinaml.frame.common.constant.FinalConstant;
+import com.xinaml.frame.common.constant.FinalConst;
+import com.xinaml.frame.common.constant.PathConst;
 import com.xinaml.frame.common.custom.exception.ActException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.custom.result.ActResult;
@@ -40,19 +41,19 @@ public class LoginAct {
     @GetMapping("/login")
     public String login(Model model, HttpServletRequest request) throws ActException {
         try {
-            Object url = request.getSession().getAttribute("prevUrl");
+            Object prevUrl = request.getSession().getAttribute(PathConst.PREV_URL);//获取上次请求页
             if (UserUtil.isLogin(request)) {
-                if (null != url) {
-                    return "redirect:" + url;
+                if (null != prevUrl) {
+                    return "redirect:" + prevUrl;
                 }
                 return "redirect:/";
             } else {
-                model.addAttribute("prevUrl", url);
-                return "user/login";
+                model.addAttribute(PathConst.PREV_URL, prevUrl);
+                return "user/login"; //跳转登录页
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "user/login";
+            return "user/login";//跳转登录页
         }
     }
 
@@ -72,12 +73,12 @@ public class LoginAct {
             to.setIp(IpUtil.getIp(request));
             String token = userSer.login(to);
             Map<String, String> maps = new HashMap<>(1);
-            maps.put(FinalConstant.TOKEN, token);
-            Cookie cookie = new Cookie(FinalConstant.TOKEN, token);
+            maps.put(FinalConst.TOKEN, token);
+            Cookie cookie = new Cookie(FinalConst.TOKEN, token);
             cookie.setMaxAge(60 * 60 * 24); //token 有效期为一天
             response.addCookie(cookie);
             request.getSession().invalidate();
-            return new ActResult(FinalConstant.SUCCESS, maps);
+            return new ActResult(FinalConst.SUCCESS, maps);
 
         } catch (SerException e) {
             throw new ActException(e.getMessage());
@@ -98,7 +99,7 @@ public class LoginAct {
             String token = UserUtil.getToken(request);
             boolean isOut = userSer.logout(token);
             if (isOut) {
-                Cookie cookie = new Cookie(FinalConstant.TOKEN, token);
+                Cookie cookie = new Cookie(FinalConst.TOKEN, token);
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
             }

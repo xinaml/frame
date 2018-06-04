@@ -22,7 +22,7 @@ public class WebConf implements WebMvcConfigurer {
 
     private void registryLogin(InterceptorRegistry registry){
         String[] loginExcludes =loginExclude.split(",");
-        for(int i=0;i<loginExcludes.length;i++){
+        for(int i=0;i<loginExcludes.length;i++){ //过滤设置无需登录url
             loginExcludes[i]="/"+loginExcludes[i].trim()+"/**";
         }
         registry.addInterceptor(new LoginIntercept()).addPathPatterns("/**").

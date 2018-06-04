@@ -1,6 +1,9 @@
 package com.xinaml.frame.common.constant;
 
-public class FinalConstant {
+/**
+ * 常用的静态常量
+ */
+public class FinalConst {
     public static  final String TOKEN="token";
     public static  final String SUCCESS="success";
 }

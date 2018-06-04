@@ -7,7 +7,7 @@
 package com.xinaml.frame.base.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.xinaml.frame.common.custom.constant.CommonConst;
+import com.xinaml.frame.common.constant.CommonConst;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;

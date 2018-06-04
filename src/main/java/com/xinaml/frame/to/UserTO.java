@@ -1,11 +1,9 @@
 package com.xinaml.frame.to;
 
 import com.xinaml.frame.base.entity.ADD;
-import com.xinaml.frame.base.entity.DEL;
 import com.xinaml.frame.base.entity.EDIT;
-import com.xinaml.frame.base.entity.GET;
 import com.xinaml.frame.base.to.BaseTO;
-import com.xinaml.frame.common.custom.constant.CommonConst;
+import com.xinaml.frame.common.constant.CommonConst;
 import com.xinaml.frame.types.SexType;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;

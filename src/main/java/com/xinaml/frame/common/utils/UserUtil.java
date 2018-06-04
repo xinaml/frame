@@ -1,6 +1,6 @@
 package com.xinaml.frame.common.utils;
 
-import com.xinaml.frame.common.constant.FinalConstant;
+import com.xinaml.frame.common.constant.FinalConst;
 import com.xinaml.frame.common.session.UserSession;
 import com.xinaml.frame.entity.User;
 import org.apache.commons.lang3.StringUtils;
@@ -26,11 +26,11 @@ public class UserUtil {
     }
 
     public static String getToken(HttpServletRequest request) {
-        String token = request.getHeader(FinalConstant.TOKEN); //取header的token
+        String token = request.getHeader(FinalConst.TOKEN); //取header的token
         if (StringUtils.isBlank(token)) { //取cookie的token
             if(null!=request.getCookies()){
                 for (Cookie cookie : request.getCookies()) {
-                    if (cookie.getName().equals(FinalConstant.TOKEN)) {
+                    if (cookie.getName().equals(FinalConst.TOKEN)) {
                         token = cookie.getValue();
                         break;
                     }

@@ -1,6 +1,7 @@
 package com.xinaml.frame.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.xinaml.frame.common.constant.PathConst;
 import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.result.ActResult;
 import com.xinaml.frame.common.utils.ResponseUtil;
@@ -27,7 +28,7 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!handler.getClass().isAssignableFrom(HandlerMethod.class)) {
-            return true; //不拦截未知 action
+            return true; //不拦截未知 action（404页面）
         }
         Method method = ((HandlerMethod) handler).getMethod();
         Class<?> clazz = method.getDeclaringClass();
@@ -35,7 +36,7 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
         String url = StringUtils.substringAfterLast(request.getRequestURI(), "/");
         if (clazz.isAnnotationPresent(Login.class) || method.isAnnotationPresent(Login.class)) {
             Annotation an = clazz.getAnnotation(Login.class);
-            if (null != an) {
+            if (null != an) { //过滤登录方法
                 String excludes = ((Login) an).excludes();
                 if (null != excludes) {
                     for (String str : excludes.split(",")) {
@@ -61,7 +62,12 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
 
     }
 
-
+    /**
+     * 登录校验
+     * @param request
+     * @param response
+     * @return
+     */
     private boolean validateLogin(HttpServletRequest request, HttpServletResponse response) {
         try {
             //前后端分离用header取token更符合规范
@@ -82,7 +88,7 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
                     if (null == url) { //当前请求页面
                         url = request.getRequestURI();
                     }
-                    request.getSession().setAttribute("prevUrl", url); //30分钟过期
+                    request.getSession().setAttribute(PathConst.PREV_URL, url); //30分钟过期
                     response.sendRedirect("/login");
                 }
 
