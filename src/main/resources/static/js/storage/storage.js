@@ -108,35 +108,29 @@ var Storage = (function () {
             arrays.pop();
         }
         var html = "";
-        if (arrays.length == 2) {
-            html = "<span>" + arrays[1] + "</span>";
-            $("#back_level").hide();
-            $("#back_level").next().hide();
-        } else {
-            $("#back_level").show();
-            $("#back_level").next().show();
-            var path = "/";
-            $.each(arrays, function (index, obj) { // 网格数据
-                if (index != 0) {
-                    if (index == arrays.length - 1) {
-                        html += "<span>" + arrays[index] + "</span>";
-                    } else {
-                        path += (arrays[index] + "/");
-                        html += "<a href='#' onclick=$storage.list('" + path + "')>" + arrays[index] + "</a>&nbsp;<font color='#969696'>></font> ";
-                    }
+        $("#back_level").show();
+        $("#back_level").next().show();
+        var path = "/";
+        $.each(arrays, function (index, obj) { // 网格数据
+            if (index != 0) {
+                if (index == arrays.length - 1) {
+                    html += "<span>" + arrays[index] + "</span>";
+                } else {
+                    path += (arrays[index] + "/");
+                    html += "<a href='#' onclick=$storage.list('" + path + "')>" + arrays[index] + "</a>&nbsp;<font color='#969696'>></font> ";
                 }
-            });
-        }
+            }
+        });
         $("#currentPath").html(html);
     }
 
     Storage.prototype.goback = function () {
         var arrays = $currentPath.split("\/");
-        if (arrays.length > 1) {
+        if (arrays.length >= 1) {
             arrays.pop();
             var path = arrays.join("/");
             if (path == "") {
-                return;
+                path="/";
             }
             $storage.list(path);
         }
@@ -428,7 +422,7 @@ var Storage = (function () {
 
 
     // 新建文件夹
-    Storage.prototype.newFloder = function () {
+    Storage.prototype.mkdir = function () {
         // 网格
         var rowHtml = '<li><div class="important"><img src="'
             + '../images/storage/wjj_d.png" alt=""><p class="space"><input class="spaceInput" type="text" placeholder="新建文件夹">&nbsp;&nbsp;<button class="istrue"></button>&nbsp;&nbsp;<button class="isfalse"></button></p></div></li>';
@@ -449,7 +443,7 @@ var Storage = (function () {
         var $spaceInout = $('.spaceInput');
         $('.titleTwo').removeAttr("disabled");
         newValue = $spaceInout.val();
-        var rowText = '<li onclick="$storage.singleClick()"><div class="important"><input path="' + $currentPath + '/' + newValue + '" filetype="FOLDER" class="ischcked" type="checkbox" index="'
+        var rowText = '<li  ondblclick="$storage.dblclick(this)"><div onclick="$storage.click()" class="important"><input path="' + $currentPath + '/' + newValue + '" filetype="FOLDER" class="ischcked" type="checkbox" index="'
             + ($fileNums + 1) + '"><img src="' + '../images/storage/wjj_d.png" alt=""><p class="space">' + newValue + '</p><p>-</p><p>' + getDate() + '</p></div></li>';
         $.get($baseUrl + "/exists", {
             'path': $currentPath + "/" + newValue
@@ -482,7 +476,16 @@ var Storage = (function () {
 
     //单击选中
     Storage.prototype.click = function (dom) {
-        $(dom).parent().attr('class','colstage');
+        if($(dom).parent().hasClass('colstage')){
+            $(dom).parent().attr('class', '');
+            $(dom).find('input').hide();
+            $(dom).find('input').prop("checked", false);
+        }else {
+            $(dom).parent().attr('class', 'colstage');
+            $(dom).find('input').show();
+            $(dom).find('input').prop("checked", true);
+        }
+
     }
 
 

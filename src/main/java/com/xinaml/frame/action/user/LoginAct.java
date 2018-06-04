@@ -6,7 +6,6 @@ import com.xinaml.frame.common.custom.exception.ActException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.custom.result.ActResult;
 import com.xinaml.frame.common.custom.result.Result;
-import com.xinaml.frame.common.session.UrlSession;
 import com.xinaml.frame.common.utils.IpUtil;
 import com.xinaml.frame.common.utils.UserUtil;
 import com.xinaml.frame.ser.user.UserSer;
@@ -30,18 +29,24 @@ public class LoginAct {
     @Autowired
     private UserSer userSer;
 
+    /**
+     * 转登录页
+     *
+     * @param model
+     * @param request
+     * @return
+     * @throws ActException
+     */
     @GetMapping("/login")
     public String login(Model model, HttpServletRequest request) throws ActException {
         try {
+            Object url = request.getSession().getAttribute("prevUrl");
             if (UserUtil.isLogin(request)) {
-                String url = UrlSession.get(request.getSession().getId());
-                if(null!=url){
-                    return "redirect:"+url;
+                if (null != url) {
+                    return "redirect:" + url;
                 }
                 return "redirect:/";
             } else {
-
-                String url = UrlSession.get(request.getSession().getId());
                 model.addAttribute("prevUrl", url);
                 return "user/login";
             }
@@ -51,6 +56,15 @@ public class LoginAct {
         }
     }
 
+    /**
+     * 用户登录
+     *
+     * @param to
+     * @param request
+     * @param response
+     * @return
+     * @throws ActException
+     */
     @ResponseBody
     @PostMapping("/login")
     public Result login(@Validated(ADD.class) LoginTO to, HttpServletRequest request, HttpServletResponse response) throws ActException {
@@ -60,9 +74,9 @@ public class LoginAct {
             Map<String, String> maps = new HashMap<>(1);
             maps.put(FinalConstant.TOKEN, token);
             Cookie cookie = new Cookie(FinalConstant.TOKEN, token);
-            cookie.setMaxAge(60 * 60 * 24);
+            cookie.setMaxAge(60 * 60 * 24); //token 有效期为一天
             response.addCookie(cookie);
-            UrlSession.remove(request.getSession().getId());
+            request.getSession().invalidate();
             return new ActResult(FinalConstant.SUCCESS, maps);
 
         } catch (SerException e) {
@@ -70,6 +84,14 @@ public class LoginAct {
         }
     }
 
+    /**
+     * 退出登录
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws ActException
+     */
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) throws ActException {
         try {

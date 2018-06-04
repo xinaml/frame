@@ -3,8 +3,6 @@ package com.xinaml.frame.common.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.result.ActResult;
-import com.xinaml.frame.common.session.UrlSession;
-import com.xinaml.frame.common.session.UserSession;
 import com.xinaml.frame.common.utils.ResponseUtil;
 import com.xinaml.frame.common.utils.UserUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
@@ -73,7 +70,7 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
             } else {
                 //前后分离返回json数据
                 String header = request.getHeader("X-Requested-With");
-                if (null!=header && header.equals("XMLHttpRequest")) { //ajax请求
+                if (null != header && header.equals("XMLHttpRequest")) { //ajax请求
                     ActResult result = new ActResult();
                     result.setCode(403);
                     result.setMsg("请先登录!");
@@ -82,10 +79,10 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
                     return false;
                 } else { //url请求
                     String url = request.getHeader("Referer"); //上次请求页面
-                    if(null==url){ //当前请求页面
+                    if (null == url) { //当前请求页面
                         url = request.getRequestURI();
                     }
-                    UrlSession.put(request.getSession().getId(),url);
+                    request.getSession().setAttribute("prevUrl", url); //30分钟过期
                     response.sendRedirect("/login");
                 }
 
