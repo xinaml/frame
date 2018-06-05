@@ -4,7 +4,7 @@
  * @author lgq
  * @date 2018/4/15
  **/
-package com.xinaml.frame.dto;
+package com.xinaml.frame.dto.user;
 
 import com.xinaml.frame.base.dto.BaseDTO;
 

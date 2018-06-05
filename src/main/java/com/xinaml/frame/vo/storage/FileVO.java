@@ -1,6 +1,7 @@
 package com.xinaml.frame.vo.storage;
 
-public class FileVO {
+
+public class FileVO implements Comparable<FileVO> {
 
     /**
      * 文件名
@@ -146,4 +147,8 @@ public class FileVO {
         this.modifyTime = modifyTime;
     }
 
+    @Override
+    public int compareTo(FileVO o) {
+        return this.getModifyTime().compareTo(o.getModifyTime());
+    }
 }

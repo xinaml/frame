@@ -1,33 +1,44 @@
 package com.xinaml.frame.ser.storage;
 
 import com.google.common.io.Files;
+import com.xinaml.frame.base.dto.RT;
+import com.xinaml.frame.base.service.ServiceImpl;
 import com.xinaml.frame.common.constant.PathConst;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.thread.CopyFileThread;
 import com.xinaml.frame.common.utils.DateUtil;
 import com.xinaml.frame.common.utils.FileUtil;
 import com.xinaml.frame.common.utils.UserUtil;
-import com.xinaml.frame.entity.User;
-import com.xinaml.frame.vo.storage.FileInfo;
+import com.xinaml.frame.dto.storage.StorageDTO;
+import com.xinaml.frame.entity.storage.Storage;
+import com.xinaml.frame.entity.user.User;
+import com.xinaml.frame.ser.user.UserSer;
+import com.xinaml.frame.to.storage.FileInfo;
 import com.xinaml.frame.vo.storage.FileVO;
 import com.xinaml.frame.vo.storage.TreeVO;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.io.*;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-public class StorageSerImp implements StorageSer {
+public class StorageSerImp extends ServiceImpl<Storage, StorageDTO> implements StorageSer {
 
     private static final String[] IMAGE_SUFFIX = new String[]{"jpg", "png",
             "jpeg", "bmp", "gif"}; // 缩略图支持类型
     private static Map<String, Integer> uploadInfoList = new HashMap<String, Integer>(); // 上传文件分片缓存信息
+
+    @Autowired
+    private UserSer userSer;
 
     /**
      * 文件信息列表
@@ -54,8 +65,7 @@ public class StorageSerImp implements StorageSer {
         String realPath = getRealPath(path);
         java.io.File dir = new java.io.File(realPath);
         java.io.File[] files = dir.listFiles();
-        boolean isRoot = path.equals(PathConst.SEPARATOR);
-        return getTreeVO(files, isRoot);
+        return getTreeVO(files);
     }
 
     /**
@@ -134,7 +144,7 @@ public class StorageSerImp implements StorageSer {
             java.io.File file = new java.io.File(savePath);
             if (file.exists()) {
                 if (file.isFile()) {
-                    file.delete();
+                    file.delete(); //删除db文件
                 } else {// 删除目录及目录下的所有文件
                     try {
                         FileUtils.deleteDirectory(file);
@@ -223,7 +233,7 @@ public class StorageSerImp implements StorageSer {
      * @return 缩略图流
      * @throws SerException
      */
-    public byte[] thumbnails(String path, String width, String heigth)
+    public byte[] thumbnails(String path, String width, String height)
             throws SerException {
         String realPath = getRealPath(path);
         String suffix = StringUtils.substringAfterLast(path, ".");
@@ -236,9 +246,9 @@ public class StorageSerImp implements StorageSer {
         if (exist) {
             int w = 200;
             int h = 160;
-            if (null != width && null != heigth) {
+            if (null != width && null != height) {
                 w = Integer.parseInt(width);
-                h = Integer.parseInt(heigth);
+                h = Integer.parseInt(height);
             }
             try {
                 Thumbnails.Builder<java.io.File> fileBuilder = Thumbnails
@@ -285,7 +295,7 @@ public class StorageSerImp implements StorageSer {
         String basePath = getRealPath(PathConst.SEPARATOR);
         String to = basePath + toPath;
         if (fromPath.length > 1) {
-            Set<String> tSet = new HashSet<String>(Arrays.asList(fromPath));
+            Set<String> tSet = new HashSet<>(Arrays.asList(fromPath));
             fromPath = tSet.toArray(new String[]{});
         }
         for (String from : fromPath) {
@@ -429,7 +439,7 @@ public class StorageSerImp implements StorageSer {
             File file = new File(getRealPath(f.getPath())
                     + PathConst.SEPARATOR + f.getName());
             if (file.exists()) {
-                // saveFileToDb(file, f.getMd5value());
+                saveFileToDb(file, f.getMd5value());
             }
         }
     }
@@ -442,9 +452,23 @@ public class StorageSerImp implements StorageSer {
      * @return
      */
     @Transactional
-    public Boolean md5Exist(String md5, String toPath, String fileName) {
+    public Boolean md5Exist(String md5, String toPath, String fileName, boolean save) throws SerException {
         //查询数据库
-        return false;
+        StorageDTO dto = new StorageDTO();
+        dto.addRT(RT.eq("md5", md5));
+        List<Storage> list = super.findByRTS(dto);
+        if (0 > list.size() && save) {
+            User u = userSer.findById(list.get(0).getId());
+            String path = PathConst.ROOT_PATH + PathConst.SEPARATOR + u.getUsername() + list.get(0).getPath();
+            copy(new String[]{path}, toPath);
+            String name = StringUtils.substringAfterLast(list.get(0)
+                    .getPath(), PathConst.SEPARATOR);
+            if (!name.equals(fileName)) {
+                File file = rename(toPath, name, fileName);
+                saveFileToDb(file, md5);
+            }
+        }
+        return list.size() > 0;
     }
 
     /**
@@ -530,8 +554,8 @@ public class StorageSerImp implements StorageSer {
         String username = UserUtil.getUser().getUsername();
 
         if (StringUtils.isNotBlank(path)) {
-            if(PathConst.SEPARATOR.equals("\\")){
-                path= path .replaceAll("/", "\\\\");
+            if (PathConst.SEPARATOR.equals("\\")) {
+                path = path.replaceAll("/", "\\\\");
             }
             if (path.equals(PathConst.SEPARATOR)) { // 如果是跟路径
                 path = "";
@@ -585,26 +609,18 @@ public class StorageSerImp implements StorageSer {
                     floders.add(fileVO);
                 }
             }
-            Collections.sort(fileVOS, new Comparator<FileVO>() { // 排序文件
-                public int compare(FileVO o1, FileVO o2) {
-                    return o1.getModifyTime().compareTo(o2.getModifyTime());
-                }
-            });
-            Collections.sort(floders, new Comparator<FileVO>() { // 排序文件夹
-                public int compare(FileVO o1, FileVO o2) {
-                    return o1.getModifyTime().compareTo(o2.getModifyTime());
-                }
-            });
+            Collections.sort(fileVOS);
+            Collections.sort(floders);
             fileVOS.addAll(0, floders);
             return fileVOS;
         }
-        return new ArrayList<FileVO>(0);
+        return new ArrayList<>(0);
     }
 
     /**
      * 通过文件列表获取文件夹树的详细信息
      */
-    private List<TreeVO> getTreeVO(java.io.File[] files, boolean isRoot) {
+    private List<TreeVO> getTreeVO(java.io.File[] files) {
         List<TreeVO> folders = new ArrayList<TreeVO>(0);// 文件夹
 
         if (null != files) {
@@ -669,6 +685,17 @@ public class StorageSerImp implements StorageSer {
             f = new File(path);
         }
         return f;
+    }
+
+    private void saveFileToDb(File file, String md5) throws SerException {
+        User user = UserUtil.getUser();
+        Storage storage = new Storage();
+        storage.setUser(user);
+        storage.setMd5(md5);
+        storage.setPath(StringUtils.substringAfterLast(file.getPath(), PathConst.ROOT_PATH+PathConst.SEPARATOR+user.getUsername()));
+        storage.setFileName(file.getName());
+        storage.setCreateDate(LocalDateTime.now());
+        super.save(storage);
     }
 
 }

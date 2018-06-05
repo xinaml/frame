@@ -2,10 +2,6 @@
 <html lang="en">
 <body>
 
-<script src="../js/jquery-3.2.1.min.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css"/>
-
 <div id="top" style="height: 50px;float: right;padding-top: 10px;padding-right: 20px"><button class="btn-primary" onclick="javaScript:$('#logout').modal('show')">退出</button></div>
 <ul class="nav nav-tabs">
     <li class="active"><a href="#">Home</a></li>
@@ -51,14 +47,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<script type="text/javascript">
-    function logout() {
-        var a = document.createElement('a')
-        a.href = '/logout'
-        a.target = '_blank'
-        document.body.appendChild(a)
-        a.click()
-    }
-</script>
+
 </body>
 </html>

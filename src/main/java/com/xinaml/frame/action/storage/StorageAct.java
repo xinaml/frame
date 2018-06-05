@@ -10,7 +10,7 @@ import com.xinaml.frame.common.utils.ASEUtil;
 import com.xinaml.frame.common.utils.FileUtil;
 import com.xinaml.frame.common.utils.ResponseUtil;
 import com.xinaml.frame.ser.storage.StorageSer;
-import com.xinaml.frame.vo.storage.FileInfo;
+import com.xinaml.frame.to.storage.FileInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -146,7 +146,7 @@ public class StorageAct {
             String fileMd5 = getParameter(request, "fileMd5", true);
             String toPath = getParameter(request, "toPath", true);
             String fileName = getParameter(request, "fileName", true);
-            return String.valueOf(storageSer.md5Exist(fileMd5, toPath, fileName));
+            return String.valueOf(storageSer.md5Exist(fileMd5, toPath, fileName,true));
         } catch (Exception e) {
             e.printStackTrace();
             return "false";

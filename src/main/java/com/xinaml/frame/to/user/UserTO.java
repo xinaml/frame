@@ -1,4 +1,4 @@
-package com.xinaml.frame.to;
+package com.xinaml.frame.to.user;
 
 import com.xinaml.frame.base.entity.ADD;
 import com.xinaml.frame.base.entity.EDIT;

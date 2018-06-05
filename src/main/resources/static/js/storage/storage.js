@@ -7,6 +7,7 @@ var Storage = (function () {
     var $danxuan = $('.danxuan input');
     var listArr = [];// 存储数据数组
     function Storage() {
+
     }
 
     $('#right').css({
@@ -66,7 +67,7 @@ var Storage = (function () {
                             }
                             var gridImgPath = "<img src='" + '../images/storage/' + gridImg + "'>";
                             if (fileType == "jpg" || fileType == "png" || fileType == "jpeg" || fileType == "bmp") {
-                                gridImgPath = "<img src='" + $baseUrl + "/thumbnails?path=" + $storage.encrypt(obj.path) + "&width=55" + "&heigth=44" + "'>";
+                                gridImgPath = "<img src='" + $baseUrl + "/thumbnails?path=" + $storage.encrypt(obj.path) + "&width=55" + "&height=44" + "'>";
                             }
                             if (fileType == "gif") {
                                 gridImgPath = "<img height='44' width='55' src='" + $baseUrl + "/gif?path=" + encodeURI(obj.path) + "'>";
@@ -188,6 +189,7 @@ var Storage = (function () {
         $("input[index=" + listArr[0] + "]").siblings('.space').text('').append(rename);
         $('.rename').val(textInput).focus();
         $("input[type='checkbox']").attr('disabled', "false");
+        console.info($danxuan)
         $danxuan.attr('disabled', "false");
         // 取消
         $('.isfalse').click(function () {
@@ -224,7 +226,6 @@ var Storage = (function () {
      * 移动文件
      */
     Storage.prototype.moveFile = function () {
-        $('.countCol').load();
         modal();
         loadTree();
         var myModalLabelText = $(this).text();
@@ -247,7 +248,7 @@ var Storage = (function () {
                 }, function (result) {
                     if (result == "success") {
                         promptBox("移动文件成功!", 1000);
-                        list($currentPath);
+                        $storage.list($currentPath);
                     } else {
                         var data = JSON.parse(result);
                         promptBox(data.msg);
@@ -287,7 +288,7 @@ var Storage = (function () {
                     'toPath': $storage.encrypt(selectedNodes[0].id)
                 }, function (result) {
                     if (result == "success") {
-                        list($currentPath);
+                        $storage.list($currentPath);
                         promptBox("复制文件成功!", 1000);
                     } else {
                         var data = JSON.parse(result);
@@ -304,11 +305,10 @@ var Storage = (function () {
         uploader.options.formData.path = $storage.encrypt($currentPath);// 参数添加
         uploader.options.formData.relevanceId = relevanceId; // 关联id
         uploader.upload();// 上传
-        $('.countCol').load();
     };
 
     Storage.prototype.reLoad = function () {
-        list($currentPath);
+        $storage.list($currentPath);
     };
 
     // md5验证
@@ -331,14 +331,14 @@ var Storage = (function () {
                     var html = ' <div style="width:220px;display:inline-block;height:30px; padding-top:10px;" class="progress progress-striped active"><div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%;">100%</div></div>';
                     $('#' + file.id).append(html);
                     $("#status").html("上传完成");
-                    list($currentPath);
+                    $storage.list($currentPath);
                     $('#upload_msg').html(
                         " <div class='title-left' style='text-align:center'><span >"
                         + $('.item').length + "个文件上传成功</span>").fadeIn('slow');
                 } else {
                     uploader.options.formData.md5value = file.wholeMd5;// 每个文件都附带一个md5，便于实现秒传
                     $storage.upload(uploader);
-//							console.log("秒传失败！");
+					console.log("秒传失败！");
                 }
             }
         });
@@ -485,6 +485,17 @@ var Storage = (function () {
             $(dom).find('input').show();
             $(dom).find('input').prop("checked", true);
         }
+        var list =$("#countCol-content").find('li');
+        var exists = false;
+        $.each(list,function (index ,li) {
+            if($(li).hasClass('colstage')){
+                $('#btn-group').show();
+                exists =true;
+            }
+        })
+        if(!exists){
+            $('#btn-group').hide();
+        }
 
     }
 
@@ -509,17 +520,6 @@ var Storage = (function () {
         }
     }
 
-    $('.top-right').click(function () {
-        $('.upload').fadeOut();
-        $('#imgPreview').fadeOut();
-        $('#upload_msg').html("");
-        $(".item").each(function (index, dom) {
-            $(dom).remove();
-        });
-    });
-    $('.titleright').click(function () {
-        $('.title').fadeOut();
-    });
 
     Storage.prototype.initUpload = function (uploader) {
 
@@ -608,8 +608,6 @@ var Storage = (function () {
 
         uploader.on('uploadFinished', function () {
 //			 alert("所有文件上传完毕");
-            $('.countRow').load();
-            $('.countCol').load();
             initmodal();
             $storage.reLoad();
             uploader.reset();

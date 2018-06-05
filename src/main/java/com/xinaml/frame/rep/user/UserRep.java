@@ -4,11 +4,11 @@
  * @author lgq
  * @date 2018/4/15
  **/
-package com.xinaml.frame.rep;
+package com.xinaml.frame.rep.user;
 
 import com.xinaml.frame.base.rep.JapRep;
-import com.xinaml.frame.dto.UserDTO;
-import com.xinaml.frame.entity.User;
+import com.xinaml.frame.dto.user.UserDTO;
+import com.xinaml.frame.entity.user.User;
 
 public interface UserRep extends JapRep<User, UserDTO> {
 }

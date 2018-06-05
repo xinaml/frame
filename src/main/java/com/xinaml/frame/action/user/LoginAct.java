@@ -10,7 +10,7 @@ import com.xinaml.frame.common.custom.result.Result;
 import com.xinaml.frame.common.utils.IpUtil;
 import com.xinaml.frame.common.utils.UserUtil;
 import com.xinaml.frame.ser.user.UserSer;
-import com.xinaml.frame.to.LoginTO;
+import com.xinaml.frame.to.user.LoginTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

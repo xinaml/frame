@@ -2,21 +2,35 @@ package com.xinaml.frame.common.utils;
 
 import com.xinaml.frame.common.constant.FinalConst;
 import com.xinaml.frame.common.session.UserSession;
-import com.xinaml.frame.entity.User;
+import com.xinaml.frame.entity.user.User;
+import com.xinaml.frame.ser.user.UserSer;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * test
+ * 用户工具，（定时器请勿从此处获取）
  */
 public class UserUtil {
+    public static UserSer userSer;
 
+    /**
+     * 是否已登录
+     *
+     * @param token
+     * @return
+     */
     public static boolean isLogin(String token) {
         return StringUtils.isNotBlank(token);
     }
 
+    /**
+     * 是否已登录
+     *
+     * @param request
+     * @return
+     */
     public static boolean isLogin(HttpServletRequest request) {
         String token = getToken(request);
         if (StringUtils.isNotBlank(token) && null != (UserSession.get(token))) {
@@ -25,10 +39,16 @@ public class UserUtil {
         return false;
     }
 
+    /**
+     * 获取当前用户token
+     *
+     * @param request
+     * @return
+     */
     public static String getToken(HttpServletRequest request) {
         String token = request.getHeader(FinalConst.TOKEN); //取header的token
         if (StringUtils.isBlank(token)) { //取cookie的token
-            if(null!=request.getCookies()){
+            if (null != request.getCookies()) {
                 for (Cookie cookie : request.getCookies()) {
                     if (cookie.getName().equals(FinalConst.TOKEN)) {
                         token = cookie.getValue();
@@ -40,6 +60,11 @@ public class UserUtil {
         return token;
     }
 
+    /**
+     * 获取当前用户
+     *
+     * @return
+     */
     public static User getUser() {
         HttpServletRequest request = RequestUtil.get();
         String token = getToken(request);
@@ -49,6 +74,31 @@ public class UserUtil {
         return null;
     }
 
+    /**
+     * 获取当前用户
+     *
+     * @param cache 是否从缓存拿
+     * @return
+     */
+    public static User getUser(boolean cache) {
+        if (cache) {
+            return getUser();
+        } else {
+            User u = getUser();
+            try {
+                return userSer.findById(u.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    /**
+     * 通过token获取当前用户
+     * @param token
+     * @return
+     */
     public static User getUser(String token) {
         if (StringUtils.isNotBlank(token)) {
             return UserSession.get(token);

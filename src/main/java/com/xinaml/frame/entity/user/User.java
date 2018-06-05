@@ -4,7 +4,7 @@
  * @author lgq
  * @date 2018/4/15
  **/
-package com.xinaml.frame.entity;
+package com.xinaml.frame.entity.user;
 
 import com.xinaml.frame.base.entity.BaseEntity;
 import com.xinaml.frame.types.SexType;

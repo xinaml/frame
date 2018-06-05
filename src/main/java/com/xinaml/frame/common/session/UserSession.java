@@ -2,7 +2,7 @@ package com.xinaml.frame.common.session;
 
 import com.google.common.cache.*;
 import com.xinaml.frame.common.custom.exception.SerException;
-import com.xinaml.frame.entity.User;
+import com.xinaml.frame.entity.user.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

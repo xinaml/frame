@@ -1,4 +1,4 @@
-package com.xinaml.frame.vo.storage;
+package com.xinaml.frame.to.storage;
 
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,15 +1,14 @@
 package com.xinaml.frame.ser.user;
 
-import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.base.dto.RT;
 import com.xinaml.frame.base.service.ServiceImpl;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.session.UserSession;
 import com.xinaml.frame.common.utils.PassWordUtil;
 import com.xinaml.frame.common.utils.TokenUtil;
-import com.xinaml.frame.dto.UserDTO;
-import com.xinaml.frame.entity.User;
-import com.xinaml.frame.to.LoginTO;
+import com.xinaml.frame.dto.user.UserDTO;
+import com.xinaml.frame.entity.user.User;
+import com.xinaml.frame.to.user.LoginTO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
