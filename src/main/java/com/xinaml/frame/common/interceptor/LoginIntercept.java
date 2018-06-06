@@ -85,7 +85,9 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
                     return false;
                 } else { //url请求
                     String url = request.getHeader("Referer"); //上次请求页面
-                    if (null == url) { //当前请求页面
+                    url = request.getRequestURI();
+
+                    if (null == url || StringUtils.isBlank(StringUtils.substringAfterLast(url,"/"))) { //当前请求页面
                         url = request.getRequestURI();
                     }
                     request.getSession().setAttribute(PathConst.PREV_URL, url); //30分钟过期

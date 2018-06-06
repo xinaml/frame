@@ -35,6 +35,12 @@ var Login = (function () {
             }
         });
     }
-
+    Login.prototype.checkOn = function() {
+        var a = document.createElement('a')
+        a.href = '/register'
+        a.target = '_self'
+        document.body.appendChild(a)
+        a.click()
+    }
     return Login;
 })();
