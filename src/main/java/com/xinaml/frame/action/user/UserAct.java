@@ -46,6 +46,7 @@ public class UserAct extends BaseAct {
     @GetMapping("maps")
     public String maps(UserDTO dto) throws ActException {
         try {
+            dto.setId("1");
             Map<String, Object> maps = userSer.findByPage(dto);
             return JSON.toJSONString(maps);
         } catch (SerException e) {

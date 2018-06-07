@@ -10,9 +10,13 @@ import com.xinaml.frame.dto.user.UserDTO;
 import com.xinaml.frame.entity.user.User;
 import com.xinaml.frame.to.user.LoginTO;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class UserSerImp extends ServiceImpl<User, UserDTO> implements UserSer {
@@ -50,4 +54,11 @@ public class UserSerImp extends ServiceImpl<User, UserDTO> implements UserSer {
         }
         return true;
     }
+
+    @Cacheable(value="users",key = "#dto.id")
+    @Override
+    public Map<String, Object> findByPage(UserDTO dto) throws SerException {
+        return super.findByPage(dto);
+    }
+
 }
