@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class IndexAct {
 
+
     @GetMapping("/")
     public String index(String data) {
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();

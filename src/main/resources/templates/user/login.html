@@ -22,7 +22,7 @@
             <input name="password" type="password" style="font-size:20px;" placeholder="密码">
             <input type="hidden" id="prevUrl" th:value="${prevUrl}">
             <input value="登录" style="width:47%;" type="submit"  onclick="$login.checkOn()">
-            <input value="注册" style="width:47%;float: right " onclick="$login.jumpRegister()">
+            <input value="注册" style="width:47%;float: right " type="submit" onclick="$login.jumpRegister()">
         </form>
         <a href="#" style="float: right;padding: 5px">忘记密码？</a>
         <div id="msg" style="color: red;font-size: 16px;text-align: center;width: 100%;padding-top: 4px"></div>

@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  * @param <BE> 实体
  * @param <BD> 数据传输实体
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({ "rawtypes", "unchecked","deprecation" })
 public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Specification<BE> {
     private BD dto;
 

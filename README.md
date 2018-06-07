@@ -15,6 +15,10 @@
 
 ``api : swagger``
 
+``缓存 : redis``
+
+``文件上传 : webuploader``
+
 ``目录结构：``
 
 

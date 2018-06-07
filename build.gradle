@@ -26,10 +26,12 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: "$thymeleaf_v" //模板
     compile group: 'net.sourceforge.nekohtml', name: 'nekohtml', version: "$nekohtml_v" //html 标签闭合
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: "$log4j2_v"
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: '2.0.2.RELEASE'//    cache
-    compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: "$cache_v"//    cache
+    compile group: 'net.coobird', name: 'thumbnailator', version: "$thumbnailator_v"
+    compile group: 'commons-io', name: 'commons-io', version: "$commonsIo_v"
     runtime group: 'com.ibeetl', name: 'beetl', version: "$beelt_v" //类生成模板
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-redis', version: '1.4.3.RELEASE'
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
 

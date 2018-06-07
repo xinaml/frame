@@ -35,7 +35,7 @@ var Login = (function () {
             }
         });
     }
-    Login.prototype.checkOn = function() {
+    Login.prototype.jumpRegister = function() {
         var a = document.createElement('a')
         a.href = '/register'
         a.target = '_self'
