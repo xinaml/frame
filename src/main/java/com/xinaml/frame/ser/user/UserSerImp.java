@@ -55,7 +55,7 @@ public class UserSerImp extends ServiceImpl<User, UserDTO> implements UserSer {
         return true;
     }
 
-    @Cacheable(value="users",key = "#dto.id")
+    @Cacheable(value="users",key = "#dto.serId")
     @Override
     public Map<String, Object> findByPage(UserDTO dto) throws SerException {
         return super.findByPage(dto);

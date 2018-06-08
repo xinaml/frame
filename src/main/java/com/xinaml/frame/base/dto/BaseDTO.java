@@ -29,6 +29,9 @@ public abstract class BaseDTO extends PageDTO implements Serializable {
      * 类搜索条件Json {"field":"name","restrict":"EQ","value":"liguiqin"}
      * 多条件Json [{"field":"name","restrict":"EQ","value":"liguiqin"},{"field":"name","restrict":"IN","value":["liguiqin1","liguiqin2"]}]
      */
+
+    protected String serId;
+
     protected String restrictsJson;
 
     public List<String> getSorts() {
@@ -78,5 +81,11 @@ public abstract class BaseDTO extends PageDTO implements Serializable {
     public void addSort(String... sorts) {
         this.sorts.addAll(Arrays.asList(sorts));
     }
+
+    public String getSerId() {
+        System.out.println(JSON.toJSONString(this.restricts));
+        return JSON.toJSONString(this.restricts);
+    }
+
 
 }
