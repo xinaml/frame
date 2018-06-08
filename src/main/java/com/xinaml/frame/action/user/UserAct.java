@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -87,6 +88,7 @@ public class UserAct extends BaseAct {
             throw new ActException(e.getMessage());
         }
     }
+
 
     // DeleteMapping 这种方式接收不到数组参数，见下一方法，必须用过url来传参
     @ResponseBody

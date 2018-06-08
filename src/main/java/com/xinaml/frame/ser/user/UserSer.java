@@ -22,4 +22,5 @@ public interface UserSer extends Ser<User, UserDTO> {
      * @throws SerException
      */
     Boolean logout(String token) throws SerException;
+
 }

@@ -97,58 +97,44 @@ var User = (function () {
         });
     };
 
-    User.prototype.delUser = function () {
+    User.prototype.delUser = function (arg) {
         var rows = $('#user_table').bootstrapTable("getSelections");
-        var ids = new Array();
-        $.each(rows, function (index, obj) {
-            ids.push(obj.id);
-        })
-        $.ajax({
-            type: 'POST',
-            url: '/user/del',
-            traditional: true,
-            data: {ids: ids},
-            success: function (rs) {
-                if (rs.code == 0) {
-                    $(".success.selected").remove();
-                    $(".selected").remove()
-                }
-            },
-            error: function () {
-                //请求失败时
+        if(arg){
+            if(rows.length>0){
+                $('#delModal').modal('show');
             }
-        })
+        }else{
+            var ids = new Array();
+            $.each(rows, function (index, obj) {
+                ids.push(obj.id);
+            })
+            if(rows.length>0){
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/del',
+                    traditional: true,
+                    data: {ids: ids},
+                    success: function (rs) {
+                        if (rs.code == 0) {
+                            $(".success.selected").remove();
+                            $(".selected").remove()
+                            $('#delModal').modal('hide');
+                        }
+                    },
+                    error: function () {
+                        //请求失败时
+                    }
+                })
+            }
+        }
+
 
     };
 
-    User.prototype.delUser = function () {
-        var rows = $('#user_table').bootstrapTable("getSelections");
-        var ids = new Array();
-        $.each(rows, function (index, obj) {
-            ids.push(obj.id);
-        })
-        $.ajax({
-            type: 'POST',
-            url: '/user/del',
-            traditional: true,
-            data: {ids: ids},
-            success: function (rs) {
-                if (rs.code == 0) {
-                    $(".success.selected").remove();
-                    $(".selected").remove()
-                    $('#delModal').modal('hide')
-                }
-            },
-            error: function () {
-                //请求失败时
-            }
-        })
-
-    };
 
     User.prototype.addUser = function (arg) {
         if (arg) { //添加按钮跟提交按钮均进入此方法，提交按钮不传递参数
-            $("#myModalLabel").html("添加");
+            $("#modalUserLabel").html("添加");
             $('#modalUser').modal('show');
             $("#opt").attr("onclick", "$user.addUser()")
 
@@ -182,13 +168,14 @@ var User = (function () {
         if (rows.length == 1) {
             var obj = rows[0];
             if (arg) { //添加按钮跟提交按钮均进入此方法，提交按钮不传递参数
-                $("#myModalLabel").html("编辑");
+                $("#modalUserLabel").html("编辑");
                 $('#modalUser').modal('show');
                 $("#username").val(obj.username);
                 $("#email").val(obj.email);
                 $("#phone").val(obj.phone);
                 $("#id").val(obj.id);
                 $('#birthday').val(obj.birthday)
+                $("#opt").attr("onclick", "$user.editUser()")
 
             } else {
                 var data = $('#userFrom').serialize();
