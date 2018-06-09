@@ -20,7 +20,7 @@ public class JRedis {
      * @param key
      * @param value
      */
-    public void set(String key, String value) {
+    public void put(String key, String value) {
         ValueOperations<String, String> ops = template.opsForValue();
         ops.set(key, value);
     }
@@ -33,7 +33,7 @@ public class JRedis {
      * @param timeOut
      * @param timeUnit
      */
-    public void set(String key, String value, long timeOut, TimeUnit timeUnit) {
+    public void put(String key, String value, long timeOut, TimeUnit timeUnit) {
         ValueOperations<String, String> ops = template.opsForValue();
         ops.set(key, value, timeOut, timeUnit);
     }

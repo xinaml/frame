@@ -79,7 +79,6 @@ public class LoginAct {
             response.addCookie(cookie);
             request.getSession().invalidate();
             return new ActResult(FinalConst.SUCCESS, maps);
-
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }

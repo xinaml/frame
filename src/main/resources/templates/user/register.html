@@ -1,10 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>用户注册</title>
+    <link href="../css/user/login.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/user/login.js"></script>
 </head>
 <body>
-注册页
+
+<div class="login_box">
+    <div class="login_l_img"><img src="../images/user/login-img.png"></div>
+    <div class="login">
+        <div class="login_logo"><a href="#"><img src="../images/user/login_logo.png"></a></div>
+        <div class="login_name">
+            <p>用户注册</p>
+        </div>
+        <form id="login_form" method="post" onsubmit="return false">
+            <input name="username" style="font-size:20px;" type="text" placeholder="用户名">
+            <input name="password" type="password" style="font-size:20px;" placeholder="密码">
+            <input name="rePassword" type="password" style="font-size:20px;" placeholder="重复密码">
+            <input type="hidden" id="prevUrl" th:value="${prevUrl}">
+            <input value="注册" style="width:47%;float: right " type="submit" onclick="$login.jumpRegister()">
+        </form>
+        <div id="msg" style="color: red;font-size: 16px;text-align: center;width: 100%;padding-top: 4px"></div>
+    </div>
+    <div class="copyright">某某有限公司 版权所有©2016-2018 技术支持电话：000-00000000</div>
+</div>
 </body>
+<script  th:inline="javascript">
+
+</script>
 </html>
