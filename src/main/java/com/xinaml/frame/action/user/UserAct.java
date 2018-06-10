@@ -83,7 +83,7 @@ public class UserAct extends BaseAct {
             }
             user.setCreateDate(LocalDateTime.now());
             userSer.save(user);
-            return new ActResult("success");
+            return new ActResult(SUCCESS);
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }
@@ -96,7 +96,7 @@ public class UserAct extends BaseAct {
     public Result del(String[] ids) throws ActException {
         try {
             userSer.remove(ids);
-            return new ActResult("success");
+            return new ActResult(SUCCESS);
         } catch (Exception e) {
             throw new ActException(e.getMessage());
         }
@@ -114,7 +114,7 @@ public class UserAct extends BaseAct {
     public Result del(@PathVariable String id) throws ActException {
         try {
             userSer.remove(id);
-            return new ActResult("success");
+            return new ActResult(SUCCESS);
         } catch (Exception e) {
             throw new ActException(e.getMessage());
         }
@@ -129,7 +129,7 @@ public class UserAct extends BaseAct {
             User user = userSer.findById(to.getId());
             BeanUtils.copyProperties(to, user);
             userSer.update(user);
-            return new ActResult("success");
+            return new ActResult(SUCCESS);
         } catch (Exception e) {
             throw new ActException(e.getMessage());
         }

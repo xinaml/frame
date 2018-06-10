@@ -8,15 +8,6 @@ var Login = (function () {
     Login.prototype.checkOn = function() {
         var prevUrl = $("#prevUrl").val();
         var formData = $("#login_form").serialize();
-        var username = $("input[name=username]").val().trim();
-        var password = $("input[name=password]").val().trim();
-        if(username==""){
-            $("#msg").text("请输入用户名")
-            return;
-        }if(password==""){
-            $("#msg").text("请输入密码")
-            return;
-        }
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -34,13 +25,6 @@ var Login = (function () {
                 alert("异常！");
             }
         });
-    }
-    Login.prototype.jumpRegister = function() {
-        var a = document.createElement('a')
-        a.href = '/register'
-        a.target = '_self'
-        document.body.appendChild(a)
-        a.click()
     }
     return Login;
 })();

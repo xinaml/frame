@@ -1,5 +1,6 @@
 package com.xinaml.frame.action.user;
 
+import com.xinaml.frame.base.atction.BaseAct;
 import com.xinaml.frame.base.entity.ADD;
 import com.xinaml.frame.common.constant.FinalConst;
 import com.xinaml.frame.common.constant.PathConst;
@@ -26,10 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class LoginAct {
+public class LoginAct extends BaseAct{
     @Autowired
     private UserSer userSer;
-
     /**
      * 转登录页
      *
@@ -49,11 +49,11 @@ public class LoginAct {
                 return "redirect:/";
             } else {
                 model.addAttribute(PathConst.PREV_URL, prevUrl);
-                return "user/login"; //跳转登录页
+                return "/login"; //跳转登录页
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "user/login";//跳转登录页
+            return "/login";//跳转登录页
         }
     }
 
@@ -78,7 +78,7 @@ public class LoginAct {
             cookie.setMaxAge(60 * 60 * 24); //token 有效期为一天
             response.addCookie(cookie);
             request.getSession().invalidate();
-            return new ActResult(FinalConst.SUCCESS, maps);
+            return new ActResult(SUCCESS, maps);
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }

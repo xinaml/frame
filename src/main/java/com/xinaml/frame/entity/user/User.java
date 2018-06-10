@@ -22,14 +22,14 @@ public class User extends BaseEntity {
     @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(25) COMMENT '用户名'")
     private String username;
 
-    @Column( nullable = false, columnDefinition = "VARCHAR(56) COMMENT '密码'")
+    @Column(nullable = false, columnDefinition = "VARCHAR(56) COMMENT '密码'")
     private String password;
 
-    @Column(unique = true, nullable = false, length = 20, columnDefinition = "VARCHAR(25) COMMENT '邮件'")
+    @Column(unique = true, length = 20, columnDefinition = "VARCHAR(25) COMMENT '邮件'")
     private String email;
 
     //常用类型 ：String
-    @Column(unique = true, nullable = false, length = 20, columnDefinition = "VARCHAR(25) COMMENT '手机号'")
+    @Column(unique = true, length = 20, columnDefinition = "VARCHAR(25) COMMENT '手机号'")
     private String phone;
 
     //常用类型 ：Integer

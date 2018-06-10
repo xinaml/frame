@@ -11,4 +11,5 @@ import com.xinaml.frame.dto.user.UserDTO;
 import com.xinaml.frame.entity.user.User;
 
 public interface UserRep extends JapRep<User, UserDTO> {
+    User findByUsername(String username);
 }

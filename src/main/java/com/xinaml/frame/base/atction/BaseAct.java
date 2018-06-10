@@ -9,4 +9,5 @@ import java.io.Serializable;
  * @date 2018/4/15
  **/
 public  abstract class BaseAct implements Serializable{
+    public static  final String SUCCESS="success";
 }
