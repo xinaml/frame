@@ -10,7 +10,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
-configurations {  //过滤spring boot 自带的日志
+configurations {  //过滤spring boot 自带的日志 logback
     compile.exclude module: 'spring-boot-starter-logging'
 }
 dependencies {
@@ -18,6 +18,11 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-jdbc')
     compile('org.springframework.boot:spring-boot-starter-data-redis')
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    compile('org.springframework.boot:spring-boot-starter-log4j2')
+    compile('org.springframework.boot:spring-boot-starter-cache')
+
 
     runtime('mysql:mysql-connector-java')
     compile group: 'com.alibaba', name: 'druid-spring-boot-starter', version: "$druid_v" //连接池
@@ -25,10 +30,7 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: "$lang3_v"
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: "$swaggerUI_v"//api ui
     compile group: 'io.springfox', name: 'springfox-swagger2', version: "$swagger2_v" //api
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: "$thymeleaf_v" //模板
     compile group: 'net.sourceforge.nekohtml', name: 'nekohtml', version: "$nekohtml_v" //html 标签闭合
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: "$log4j2_v"
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: "$cache_v"//    cache
     compile group: 'net.coobird', name: 'thumbnailator', version: "$thumbnailator_v"
     compile group: 'commons-io', name: 'commons-io', version: "$commonsIo_v"
     runtime group: 'com.ibeetl', name: 'beetl', version: "$beelt_v" //类生成模板
