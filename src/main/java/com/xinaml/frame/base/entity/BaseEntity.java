@@ -7,6 +7,7 @@
 package com.xinaml.frame.base.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.xinaml.frame.common.constant.CommonConst;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 /**
  * 实体基类
  */
+@JsonInclude(JsonInclude.Include.NON_NULL) //jackson忽略空字段
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class BaseEntity implements Serializable {
@@ -31,6 +33,7 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "id", nullable = false, length = 36, updatable = false, insertable = false)
     private String id;
 
+    @JsonFormat(pattern= CommonConst.DATETIME) //json 转换时日期处理
     @Column(nullable = false, columnDefinition = "DATETIME  COMMENT '创建时间'")
     private LocalDateTime createDate;
 
@@ -41,7 +44,7 @@ public abstract class BaseEntity implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
-    @JsonFormat(pattern= CommonConst.DATETIME) //json 转换时日期处理
+
     public LocalDateTime getCreateDate() {
         return createDate;
     }

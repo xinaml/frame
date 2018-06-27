@@ -1,4 +1,4 @@
-package com.xinaml.frame.common.redis;
+package com.xinaml.frame.base.rep;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @Component
-public class JRedis {
+public class RedisRep {
     @Autowired
     private StringRedisTemplate template;
 

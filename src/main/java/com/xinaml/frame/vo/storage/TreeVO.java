@@ -1,6 +1,8 @@
 package com.xinaml.frame.vo.storage;
 
-public class TreeVO {
+import com.xinaml.frame.base.vo.BaseVO;
+
+public class TreeVO extends BaseVO {
     private String id;
     private String name;
     private Boolean isParent;

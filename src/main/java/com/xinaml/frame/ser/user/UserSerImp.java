@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.base.dto.RT;
 import com.xinaml.frame.base.service.ServiceImpl;
 import com.xinaml.frame.common.custom.exception.SerException;
-import com.xinaml.frame.common.redis.JRedis;
+import com.xinaml.frame.base.rep.RedisRep;
 import com.xinaml.frame.common.utils.PassWordUtil;
 import com.xinaml.frame.common.utils.TokenUtil;
 import com.xinaml.frame.dto.user.UserDTO;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class UserSerImp extends ServiceImpl<User, UserDTO> implements UserSer {
     private static Logger LOGGER = LoggerFactory.getLogger(UserSerImp.class);
     @Autowired
-    private JRedis jRedis;
+    private RedisRep jRedis;
     @Autowired
     private UserRep userRep;
 

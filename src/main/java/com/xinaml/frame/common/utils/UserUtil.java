@@ -2,7 +2,7 @@ package com.xinaml.frame.common.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.common.constant.FinalConst;
-import com.xinaml.frame.common.redis.JRedis;
+import com.xinaml.frame.base.rep.RedisRep;
 import com.xinaml.frame.entity.user.User;
 import com.xinaml.frame.ser.user.UserSer;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class UserUtil {
     public static UserSer userSer;
-    public static JRedis jRedis;
+    public static RedisRep redisRep;
 
     /**
      * 是否已登录
@@ -35,7 +35,7 @@ public class UserUtil {
      */
     public static boolean isLogin(HttpServletRequest request) {
         String token = getToken(request);
-        if (StringUtils.isNotBlank(token) && null != (jRedis.get(token))) {
+        if (StringUtils.isNotBlank(token) && null != (redisRep.get(token))) {
             return true;
         }
         return false;
@@ -71,7 +71,7 @@ public class UserUtil {
         HttpServletRequest request = RequestUtil.get();
         String token = getToken(request);
         if (StringUtils.isNotBlank(token)) {
-            String userJson = jRedis.get(token);
+            String userJson = redisRep.get(token);
             if (StringUtils.isNoneBlank(userJson)) {
                 return JSON.parseObject(userJson, User.class);
             }
@@ -107,7 +107,7 @@ public class UserUtil {
      */
     public static User getUser(String token) {
         if (StringUtils.isNotBlank(token)) {
-            String userJson = jRedis.get(token);
+            String userJson = redisRep.get(token);
             if (StringUtils.isNoneBlank(userJson)) {
                 return JSON.parseObject(userJson, User.class);
             }

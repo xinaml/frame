@@ -3,7 +3,6 @@ package com.xinaml.frame.to.user;
 import com.xinaml.frame.base.entity.ADD;
 import com.xinaml.frame.base.entity.EDIT;
 import com.xinaml.frame.base.to.BaseTO;
-import com.xinaml.frame.common.constant.CommonConst;
 import com.xinaml.frame.types.SexType;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class UserTO extends BaseTO{
+public class UserTO extends BaseTO {
     @NotBlank(groups = {ADD.class, EDIT.class}, message = "用户名不能为空！")
     @ApiModelProperty(value = "用户名", name = "username", required = true)
     private String username;
@@ -27,10 +26,10 @@ public class UserTO extends BaseTO{
     @NotBlank(groups = {ADD.class, EDIT.class}, message = "邮箱不能为空！")
     private String email;
 
-    @DateTimeFormat(pattern = CommonConst.DATE)  //格式化接收前端传过来的日期
+    @DateTimeFormat(pattern = DATE)  //格式化接收前端传过来的日期
     private LocalDate birthday;
 
-    @DateTimeFormat(pattern = CommonConst.DATETIME)//格式化接收前端传过来的日期时间
+    @DateTimeFormat(pattern = DATETIME)//格式化接收前端传过来的日期时间
     private LocalDateTime createTime;
 
     private Integer age;

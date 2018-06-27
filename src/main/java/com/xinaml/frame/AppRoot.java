@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
@@ -22,7 +21,8 @@ import javax.servlet.MultipartConfigElement;
 @EnableAutoConfiguration // 自动装备
 @ComponentScan(basePackages = {"com.xinaml.frame"}) //spring 扫描
 @EnableJpaRepositories(basePackages = {"com.xinaml.frame.rep"}) //持久化接口
-@EntityScan(basePackages = {"com.xinaml.frame.entity"}, basePackageClasses = Jsr310JpaConverters.class)//扫描实体映射类，Jsr310JpaConverters：对日期的转换处理
+@EntityScan(basePackages = {"com.xinaml.frame.entity"}, basePackageClasses = Jsr310JpaConverters.class)
+//扫描实体映射类，Jsr310JpaConverters：对日期的转换处理
 @PropertySource({"classpath:config.properties"}) //加载配置文件
 @EnableTransactionManagement //开启事务
 @EnableSwagger2 //Swagger api文档开启
@@ -36,6 +36,7 @@ public class AppRoot {
 
     /**
      * 文件上传大小
+     *
      * @return
      */
     @Bean
@@ -47,4 +48,6 @@ public class AppRoot {
         factory.setMaxRequestSize("200MB");
         return factory.createMultipartConfig();
     }
+
+
 }

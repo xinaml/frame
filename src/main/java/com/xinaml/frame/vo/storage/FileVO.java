@@ -1,7 +1,9 @@
 package com.xinaml.frame.vo.storage;
 
 
-public class FileVO implements Comparable<FileVO> {
+import com.xinaml.frame.base.vo.BaseVO;
+
+public class FileVO extends BaseVO implements Comparable<FileVO> {
 
     /**
      * 文件名

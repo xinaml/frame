@@ -2,6 +2,7 @@ package com.xinaml.frame.common.config;
 
 import com.xinaml.frame.common.interceptor.LoginIntercept;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -28,5 +29,7 @@ public class WebConf implements WebMvcConfigurer {
         registry.addInterceptor(new LoginIntercept()).addPathPatterns("/**").
                 excludePathPatterns(loginExcludes);
     }
+
+
 
 }
