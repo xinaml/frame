@@ -197,7 +197,8 @@ var User = (function () {
             }
 
         } else {
-
+            toastr.warning('只能选择一行进行编辑');
+            return;
         }
 
     };
