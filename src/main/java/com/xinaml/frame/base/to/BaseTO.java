@@ -9,10 +9,6 @@ import java.io.Serializable;
 
 public abstract class BaseTO implements Serializable {
 
-    public static final String DATETIME = "yyyy-MM-dd HH:mm:ss";
-    public static final String DATE = "yyyy-MM-dd";
-    public static final String TIME = "HH:mm:ss";
-
     @NotBlank(groups = {GET.class, DEL.class, EDIT.class}, message = "id不能为空！")
     public String id;
 
