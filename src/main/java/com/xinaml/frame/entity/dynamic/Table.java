@@ -1,7 +1,7 @@
 package com.xinaml.frame.entity.dynamic;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.xinaml.frame.common.constant.CommonConst;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,7 +9,9 @@ import java.util.List;
 /**
  * mongo 动态表操作 表
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Table {
+    @Id
     private String id;
     private String name;
     private LocalDateTime createTime;

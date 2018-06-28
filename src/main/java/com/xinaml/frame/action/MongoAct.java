@@ -3,7 +3,6 @@ package com.xinaml.frame.action;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xinaml.frame.base.atction.BaseAct;
-import com.xinaml.frame.base.rep.MongoRep;
 import com.xinaml.frame.common.custom.exception.ActException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.custom.result.ActResult;
@@ -15,18 +14,16 @@ import com.xinaml.frame.rep.dynamic.TableRep;
 import com.xinaml.frame.types.FieldType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
+/**
+ * mongo测试（目的为存储动态字段的表结构数据）
+ */
 @Controller
 @RequestMapping("mongo")
 public class MongoAct extends BaseAct {
@@ -38,14 +35,14 @@ public class MongoAct extends BaseAct {
     @GetMapping("table/save")
     public ActResult saveTable() {
         Table table = new Table();
-        table.setId("888");
+        table.setId(UUID.randomUUID().toString());
         table.setName("test");
         table.setCreateTime(LocalDateTime.now().minusDays(1));
         FieldConf username = new FieldConf("username", FieldType.STRING);
         FieldConf password = new FieldConf("password", FieldType.STRING);
         table.setFields(Arrays.asList(username, password));
         tableRep.save(table);
-        return new ActResult(SUCCESS);
+        return new ActResult((Object) table.getId());
     }
 
     @ResponseBody
@@ -55,21 +52,28 @@ public class MongoAct extends BaseAct {
         return new ActResult(tables);
     }
 
+    @ResponseBody
+    @GetMapping("table/field/{tableId}")
+    public ActResult findFieldByTable(@PathVariable String tableId) {
+        Table table = tableRep.findById(tableId);
+        return new ActResult(table.getFields());
+    }
+
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @ResponseBody
     @GetMapping("data/save")
-    public ActResult saveData() throws ActException {
+    public ActResult saveData(@RequestParam String tableId) throws ActException {
         try {
-            Table table = tableRep.findById("1");
+            Table table = tableRep.findById(tableId);
             List<Field> fields = new ArrayList<>();
             for (FieldConf conf : table.getFields()) {
                 Field field = new Field(conf.getName(), "234", conf.getType());
                 fields.add(field);
             }
             Object o = BeanUtil.createObj(fields);
-            mongoTemplate.save(JSON.toJSON(o), "rows");
+            mongoTemplate.save(JSON.toJSON(o), "dynamic_" + table.getName());
             return new ActResult(SUCCESS);
         } catch (SerException e) {
             throw new ActException(e.getMessage());
@@ -77,12 +81,17 @@ public class MongoAct extends BaseAct {
     }
 
     @ResponseBody
-    @GetMapping("data/list")
-    public ActResult list() throws ActException {
-        Query query =new Query(Criteria.where("username").is("123").and("password").is("123"));
-        List<JSONObject> objects = mongoTemplate.find(query,JSONObject.class,"rows");
+    @GetMapping("data/list/{tableId}")
+    public ActResult list(@PathVariable String tableId) throws ActException {
+        Table table = tableRep.findById(tableId);
+//        Query query =new Query(Criteria.where("username").is("123").and("password").is("123"));
+        Query query = new Query();
+        List<JSONObject> objects = mongoTemplate.find(query, JSONObject.class, "dynamic_" + table.getName());
+        for (Iterator<JSONObject> it = objects.iterator(); it.hasNext(); ) {
+            JSONObject obj = it.next();
+            obj.remove("_id");
+        }
         return new ActResult(objects);
-
     }
 
 }

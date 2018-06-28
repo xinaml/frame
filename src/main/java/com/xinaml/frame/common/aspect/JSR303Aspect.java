@@ -75,12 +75,10 @@ public class JSR303Aspect {
         if (result.hasErrors()) {
             List<FieldError> fieldErrors = result.getFieldErrors();
             if (null != fieldErrors && fieldErrors.size() > 0) {
-                Map<String, String> map = new HashMap<>(1);
-                map.put(fieldErrors.get(0).getField(), fieldErrors.get(0).getDefaultMessage());
                 ActResult actResult = new ActResult();
                 actResult.setCode(2);
-                actResult.setMsg("参数检验不通过");
-                actResult.setData(map);
+                actResult.setMsg("参数检验不通过["+fieldErrors.get(0).getDefaultMessage()+"]");
+                actResult.setData(null);
                 ResponseUtil.writeData(JSON.toJSONString(actResult));
                 return true;
             }

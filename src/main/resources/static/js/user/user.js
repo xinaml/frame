@@ -71,8 +71,8 @@ var User = (function () {
             onLoadError: function (data) {  //加载失败时执行
                 alert("服务器错误");
             },
-              ajaxOptions:{
-                    // headers: {"token":localStorage.token}
+            ajaxOptions: {
+                // headers: {"token":localStorage.token}
             },
             queryParams: function queryParams(params) {   //设置查询参数
                 var param = {
@@ -99,19 +99,20 @@ var User = (function () {
 
     User.prototype.delUser = function (arg) {
         var rows = $('#user_table').bootstrapTable("getSelections");
-        if(arg){
-            if(rows.length>0){
+        if (arg) {
+            if (rows.length > 0) {
                 $('#delModal').modal('show');
             }
-        }else{
+        } else {
             var ids = new Array();
             $.each(rows, function (index, obj) {
                 ids.push(obj.id);
             })
-            if(rows.length>0){
+            if (rows.length > 0) {
                 $.ajax({
                     type: 'POST',
                     url: '/user/del',
+                    dataType: 'json',
                     traditional: true,
                     data: {ids: ids},
                     success: function (rs) {
@@ -119,6 +120,9 @@ var User = (function () {
                             $(".success.selected").remove();
                             $(".selected").remove()
                             $('#delModal').modal('hide');
+                            toastr.success(rs.msg);
+                        } else {
+                            toastr.error(rs.msg);
                         }
                     },
                     error: function () {
@@ -145,6 +149,7 @@ var User = (function () {
                 type: 'POST',
                 url: '/user/add',
                 data: submitData,
+                dataType: 'json',
                 cache: false,//false是不缓存，true为缓存
                 async: true,//true为异步，false为同步
                 beforeSend: function () {
@@ -154,6 +159,9 @@ var User = (function () {
                     if (rs.code == 0) {
                         $('#modalUser').modal('hide');
                         $('#user_table').bootstrapTable('refresh')
+                        toastr.success(rs.msg);
+                    } else {
+                        toastr.error(rs.msg);
                     }
                 },
                 error: function () {
@@ -184,10 +192,14 @@ var User = (function () {
                     type: 'PUT',
                     url: '/user/edit',
                     data: submitData,
+                    dataType: 'json',
                     success: function (rs) {
                         if (rs.code == 0) {
                             $('#modalUser').modal('hide');
                             $('#user_table').bootstrapTable('refresh')
+                            toastr.success(rs.msg);
+                        } else {
+                            toastr.error(rs.msg);
                         }
                     },
                     error: function () {

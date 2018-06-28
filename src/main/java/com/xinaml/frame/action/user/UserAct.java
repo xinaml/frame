@@ -59,7 +59,7 @@ public class UserAct extends BaseAct {
     public Result list(UserDTO dto) throws ActException {
         try {
             dto.addRT(RT.eq("username", "lgq"));
-            return new ActResult(userSer.findByRTS(dto));
+            return new ActResult("获取列表成功！",userSer.findByRTS(dto));
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }
@@ -81,7 +81,7 @@ public class UserAct extends BaseAct {
             }
             user.setCreateDate(LocalDateTime.now());
             userSer.save(user);
-            return new ActResult(SUCCESS);
+            return new ActResult("添加用户成功！");
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }
@@ -94,7 +94,7 @@ public class UserAct extends BaseAct {
     public Result del(String[] ids) throws ActException {
         try {
             userSer.remove(ids);
-            return new ActResult(SUCCESS);
+            return new ActResult("删除用户成功！");
         } catch (Exception e) {
             throw new ActException(e.getMessage());
         }
@@ -112,7 +112,7 @@ public class UserAct extends BaseAct {
     public Result del(@PathVariable String id) throws ActException {
         try {
             userSer.remove(id);
-            return new ActResult(SUCCESS);
+            return new ActResult("删除用户成功！");
         } catch (Exception e) {
             throw new ActException(e.getMessage());
         }
@@ -127,7 +127,7 @@ public class UserAct extends BaseAct {
             User user = userSer.findById(to.getId());
             BeanUtils.copyProperties(to, user);
             userSer.update(user);
-            return new ActResult(SUCCESS);
+            return new ActResult("编辑用户成功！");
         } catch (Exception e) {
             throw new ActException(e.getMessage());
         }

@@ -1,12 +1,12 @@
 package com.xinaml.frame.common.config;
 
-import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.xinaml.frame.common.constant.CommonConst;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -22,9 +22,10 @@ import java.time.format.DateTimeFormatter;
  * 直接LocalDateTime，LocalDate，LocalTime接收
  */
 @Component
-public class DateConverterConf  {
+public class DateConverterConf {
     /**
      * 返回json的日期处理
+     *
      * @return
      */
     @Bean(name = "objectMapper")
@@ -39,12 +40,13 @@ public class DateConverterConf  {
     }
 
     @Bean
-    MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(ObjectMapper objectMapper){
+    MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(ObjectMapper objectMapper) {
         return new MappingJackson2HttpMessageConverter(objectMapper);
     }
 
     /**
      * 接收前端日期的转换处理
+     *
      * @return
      */
 
@@ -57,7 +59,9 @@ public class DateConverterConf  {
                 DateTimeFormatter df = DateTimeFormatter.ofPattern(CommonConst.DATETIME);
                 LocalDateTime date = null;
                 try {
-                    date = LocalDateTime.parse(source, df);
+                    if (StringUtils.isNotBlank(source)) {
+                        date = LocalDateTime.parse(source, df);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -75,7 +79,9 @@ public class DateConverterConf  {
                 DateTimeFormatter df = DateTimeFormatter.ofPattern(CommonConst.DATE);
                 LocalDate date = null;
                 try {
-                    date = LocalDate.parse(source, df);
+                    if (StringUtils.isNotBlank(source)) {
+                        date = LocalDate.parse(source, df);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -93,7 +99,9 @@ public class DateConverterConf  {
                 DateTimeFormatter df = DateTimeFormatter.ofPattern(CommonConst.TIME);
                 LocalTime time = null;
                 try {
-                    time = LocalTime.parse(source, df);
+                    if (StringUtils.isNotBlank(source)) {
+                        time = LocalTime.parse(source, df);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
