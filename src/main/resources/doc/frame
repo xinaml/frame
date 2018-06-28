@@ -26,3 +26,22 @@ AOP切面:
              200： code ： 1 业务抛出异常
              200： code ： 403 未登陆异常
              200： code ： 0 正常数据
+
+配置：common/config
+        BeanConf: 注入一些spring 注入不了的类，比如utils类
+        DateConverterConf： 日期相关自动转换类，该类会自动把前端传过来的日期字符串自动转换，并且返回的json数据对日期进行了处理
+        SwaggerConf ： api注入及配置类
+        WebConf ： 拦截器注册配置类
+
+
+常量类：CommonConst，FinalConst，PathConst常用的常量
+
+工具类：common/utils
+    ASEUtil： ase前端加密解密
+    RequestUtil： 获取当前request
+    ResponseUtil： 获取当前resonse
+    StringUtil： 处理字符串
+    UserUtil： 获取当前用户等
+    ...
+
+

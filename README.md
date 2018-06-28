@@ -3,7 +3,7 @@
 
 ``环境：fedora27+jdk1.8``
 
-``框架基础：SpringBoot2.0.1、Jpa、hibernate5.2、Gradle4+、Mysql5+``
+``框架基础：SpringBoot2.0.1、Jpa、hibernate5.2、Gradle4+、Mysql5+Mongo(可无)``
 
 ``页面渲染：thymeleaf``
 
@@ -60,3 +60,4 @@
     
 ` 日志文件目录：/storage/logs(假如应用没有权限创建，
         手动执行：sudo mkdir /storage;chmod 777 -R /storage)`  
+
