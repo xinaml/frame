@@ -81,8 +81,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
     @Override
     public BE findOne(BD dto) throws SerException {
         JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
-        PageRequest page = jpaSpec.getPageRequest(dto);
-        List<BE> list = rep.findAll(jpaSpec, page).getContent();
+        List<BE> list = rep.findAll(jpaSpec);
         if (null != list && list.size() > 1) {
             throw new SerException("find two and more data!");
         }

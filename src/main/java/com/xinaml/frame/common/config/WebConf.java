@@ -2,7 +2,6 @@ package com.xinaml.frame.common.config;
 
 import com.xinaml.frame.common.interceptor.LoginIntercept;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -21,15 +20,14 @@ public class WebConf implements WebMvcConfigurer {
         registryLogin(registry); //添加登录拦截
     }
 
-    private void registryLogin(InterceptorRegistry registry){
-        String[] loginExcludes =loginExclude.split(",");
-        for(int i=0;i<loginExcludes.length;i++){ //过滤设置无需登录url
-            loginExcludes[i]="/"+loginExcludes[i].trim()+"/**";
+    private void registryLogin(InterceptorRegistry registry) {
+        String[] loginExcludes = loginExclude.split(",");
+        for (int i = 0; i < loginExcludes.length; i++) { //过滤设置无需登录url
+            loginExcludes[i] = "/" + loginExcludes[i].trim() + "/**";
         }
         registry.addInterceptor(new LoginIntercept()).addPathPatterns("/**").
                 excludePathPatterns(loginExcludes);
     }
-
 
 
 }

@@ -14,6 +14,7 @@ import com.xinaml.frame.rep.dynamic.TableRep;
 import com.xinaml.frame.types.FieldType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +37,12 @@ public class MongoAct extends BaseAct {
     public ActResult saveTable() {
         Table table = new Table();
         table.setId(UUID.randomUUID().toString());
-        table.setName("test");
+        table.setName("test22");
         table.setCreateTime(LocalDateTime.now().minusDays(1));
         FieldConf username = new FieldConf("username", FieldType.STRING);
         FieldConf password = new FieldConf("password", FieldType.STRING);
-        table.setFields(Arrays.asList(username, password));
+        FieldConf age = new FieldConf("age", FieldType.STRING);
+        table.setFields(Arrays.asList(username, password, age));
         tableRep.save(table);
         return new ActResult((Object) table.getId());
     }
@@ -69,8 +71,10 @@ public class MongoAct extends BaseAct {
             Table table = tableRep.findById(tableId);
             List<Field> fields = new ArrayList<>();
             for (FieldConf conf : table.getFields()) {
-                Field field = new Field(conf.getName(), "234", conf.getType());
-                fields.add(field);
+                Field field = new Field(conf.getName(), "666", conf.getType());
+                if (!field.getName().equals("age")) {
+                    fields.add(field);
+                }
             }
             Object o = BeanUtil.createObj(fields);
             mongoTemplate.save(JSON.toJSON(o), "dynamic_" + table.getName());
@@ -84,8 +88,8 @@ public class MongoAct extends BaseAct {
     @GetMapping("data/list/{tableId}")
     public ActResult list(@PathVariable String tableId) throws ActException {
         Table table = tableRep.findById(tableId);
-//        Query query =new Query(Criteria.where("username").is("123").and("password").is("123"));
-        Query query = new Query();
+        Query query = new Query(Criteria.where("username").is("123").and("password").is("123"));
+//        Query query = new Query();
         List<JSONObject> objects = mongoTemplate.find(query, JSONObject.class, "dynamic_" + table.getName());
         for (Iterator<JSONObject> it = objects.iterator(); it.hasNext(); ) {
             JSONObject obj = it.next();

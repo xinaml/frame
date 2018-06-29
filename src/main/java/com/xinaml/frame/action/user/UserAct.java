@@ -59,7 +59,7 @@ public class UserAct extends BaseAct {
     public Result list(UserDTO dto) throws ActException {
         try {
             dto.addRT(RT.eq("username", "lgq"));
-            return new ActResult("获取列表成功！",userSer.findByRTS(dto));
+            return new ActResult("获取列表成功！", userSer.findByRTS(dto));
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }

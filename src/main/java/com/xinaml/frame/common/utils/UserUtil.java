@@ -1,8 +1,8 @@
 package com.xinaml.frame.common.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.xinaml.frame.common.constant.FinalConst;
 import com.xinaml.frame.base.rep.RedisRep;
+import com.xinaml.frame.common.constant.FinalConst;
 import com.xinaml.frame.entity.user.User;
 import com.xinaml.frame.ser.user.UserSer;
 import org.apache.commons.lang3.StringUtils;

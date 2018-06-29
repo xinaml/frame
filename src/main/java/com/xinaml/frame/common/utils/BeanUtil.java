@@ -2,7 +2,6 @@ package com.xinaml.frame.common.utils;
 
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.entity.dynamic.Field;
-import com.xinaml.frame.entity.dynamic.FieldConf;
 import org.springframework.cglib.beans.BeanGenerator;
 import org.springframework.cglib.beans.BeanMap;
 
@@ -25,6 +24,7 @@ public class BeanUtil {
             }
             return object;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new SerException("构建对象错误");
         }
 

@@ -10,7 +10,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 /**
- * Swagger 注册
+ * Swagger api 注册
  */
 @Configuration
 public class SwaggerConf {

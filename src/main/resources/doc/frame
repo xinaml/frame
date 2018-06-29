@@ -24,7 +24,8 @@ AOP切面:
     common/handler/ExceptionHandler 该类对所有异常进行统一处理
     异常编码： 500： code ：-1 系统异常
              200： code ： 1 业务抛出异常
-             200： code ： 403 未登陆异常
+             200： code ： 2 参数校验不通过异常
+             200： code ： 403 未登录异常
              200： code ： 0 正常数据
 
 配置：common/config
@@ -32,6 +33,7 @@ AOP切面:
         DateConverterConf： 日期相关自动转换类，该类会自动把前端传过来的日期字符串自动转换，并且返回的json数据对日期进行了处理
         SwaggerConf ： api注入及配置类
         WebConf ： 拦截器注册配置类
+        UploadConf ： 上传文件配置类
 
 
 常量类：CommonConst，FinalConst，PathConst常用的常量

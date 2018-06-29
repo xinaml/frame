@@ -27,9 +27,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class LoginAct extends BaseAct{
+public class LoginAct extends BaseAct {
     @Autowired
     private UserSer userSer;
+
     /**
      * 转登录页
      *

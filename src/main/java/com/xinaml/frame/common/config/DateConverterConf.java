@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.xinaml.frame.common.constant.CommonConst;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ import java.time.format.DateTimeFormatter;
  * 处理前端传过来的日期，及返回的json日期
  * 直接LocalDateTime，LocalDate，LocalTime接收
  */
-@Component
+@Configuration
 public class DateConverterConf {
     /**
      * 返回json的日期处理

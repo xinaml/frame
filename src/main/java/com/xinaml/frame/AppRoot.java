@@ -21,8 +21,7 @@ import javax.servlet.MultipartConfigElement;
 @EnableAutoConfiguration // 自动装备
 @ComponentScan(basePackages = {"com.xinaml.frame"}) //spring 扫描
 @EnableJpaRepositories(basePackages = {"com.xinaml.frame.rep"}) //持久化接口
-@EntityScan(basePackages = {"com.xinaml.frame.entity"}, basePackageClasses = Jsr310JpaConverters.class)
-//扫描实体映射类，Jsr310JpaConverters：对日期的转换处理
+@EntityScan(basePackages = {"com.xinaml.frame.entity"}, basePackageClasses = Jsr310JpaConverters.class)//扫描实体映射类，Jsr310JpaConverters：对日期的转换处理
 @PropertySource({"classpath:config.properties"}) //加载配置文件
 @EnableTransactionManagement //开启事务
 @EnableSwagger2 //Swagger api文档开启
@@ -34,20 +33,7 @@ public class AppRoot {
         SpringApplication.run(AppRoot.class, args);
     }
 
-    /**
-     * 文件上传大小
-     *
-     * @return
-     */
-    @Bean
-    public MultipartConfigElement multipartConfigElement() {
-        MultipartConfigFactory factory = new MultipartConfigFactory();
-        //单个文件最大
-        factory.setMaxFileSize("50MB"); //KB,MB
-        // 设置总上传数据总大小
-        factory.setMaxRequestSize("200MB");
-        return factory.createMultipartConfig();
-    }
+
 
 
 }
