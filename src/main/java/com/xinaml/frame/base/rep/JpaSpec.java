@@ -11,7 +11,6 @@ import com.xinaml.frame.base.dto.Restrict;
 import com.xinaml.frame.base.dto.RestrictType;
 import com.xinaml.frame.base.entity.BaseEntity;
 import com.xinaml.frame.common.custom.exception.RepException;
-import com.xinaml.frame.common.custom.types.RepExceptionType;
 import com.xinaml.frame.common.utils.ClazzTypeUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,10 +21,8 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.criteria.*;
 import java.lang.reflect.Method;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -34,7 +31,7 @@ import java.util.regex.Pattern;
  * @param <BE> 实体
  * @param <BD> 数据传输实体
  */
-@SuppressWarnings({ "rawtypes", "unchecked","deprecation" })
+@SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
 public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Specification<BE> {
     private BD dto;
 
@@ -52,7 +49,6 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
         return null;
     }
 
-    private static final Pattern PATTERN = Pattern.compile("\\[[a-zA-Z0-9]+\\]");
 
     @Nullable
     @Override
@@ -60,9 +56,9 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
         try {
 
             Predicate predicate = initPredicates(dto, root, criteriaBuilder);
-            if(null!=predicate){
+            if (null != predicate) {
                 return query.where(predicate).getRestriction();
-            }else {
+            } else {
                 return query.getRestriction();
             }
 
@@ -192,8 +188,7 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                exceptionHandler(e);
+                throw new RepException(e.getCause());
 
             }
 
@@ -239,8 +234,8 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
         if (fields_length >= 1) {  //存在连接查询
             for (int i = 0; i < fields_length; i++) {
                 String entityName = fields[i];
-                boolean isList = StringUtils.lastIndexOf(entityName,"List")>-1;
-                boolean isSet = StringUtils.lastIndexOf(entityName,"Set")>-1;
+                boolean isList = StringUtils.lastIndexOf(entityName, "List") > -1;
+                boolean isSet = StringUtils.lastIndexOf(entityName, "Set") > -1;
                 if (i == 0) {
                     if (isSet) {
                         join = root.joinSet(entityName, JoinType.LEFT);
@@ -250,13 +245,13 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
                         join = root.join(entityName, JoinType.LEFT);
                     }
                 } else {
-                    if(isList || isSet){
+                    if (isList || isSet) {
                         if (isList) {
                             join = join.joinList(entityName, JoinType.LEFT);
                         } else if (isSet) {
                             join = join.joinSet(entityName, JoinType.LEFT);
                         }
-                    }else {
+                    } else {
                         join = join.join(entityName, JoinType.LEFT);
                     }
                 }
@@ -268,41 +263,6 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
         return null;
     }
 
-    /**
-     * 查询异常处理
-     *
-     * @param e
-     * @return
-     */
-    public static RepException exceptionHandler(Exception e) throws RepException {
-        String msg = "";
-        RepExceptionType type = RepExceptionType.UNDEFINE;
-
-        if (e instanceof IllegalArgumentException) {
-            Matcher matcher = PATTERN.matcher(e.getMessage());
-            boolean isFind = matcher.find();
-            if (isFind) { //字段不匹配
-                msg = StringUtils.substring(matcher.group(), 1, -1);
-                type = RepExceptionType.NOT_FIND_FIELD;
-            } else if (e.getMessage().indexOf("wrong number of arguments") != -1) { //其他错误
-                msg = "wrong number of arguments";
-                type = RepExceptionType.ERROR_ARGUMENTS;
-            } else if (e instanceof NumberFormatException) {
-                msg = e.getMessage();
-                type = RepExceptionType.ERROR_NUMBER_FORMAT;
-            }
-        } else {
-            if (e instanceof DateTimeParseException) {
-                msg = e.getMessage();
-                type = RepExceptionType.ERROR_PARSE_DATE;
-            } else {
-                msg = e.getMessage();
-                type = RepExceptionType.UNDEFINE;
-            }
-
-        }
-        throw new RepException(type, msg);
-    }
 
     /**
      * 分页及排序

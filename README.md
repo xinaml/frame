@@ -30,7 +30,8 @@
         6-- rep     jpa接口映射类包
         7-- ser     业务层类包
         8-- types   枚举类型类包
-        9--common   通用包
+        9 --vo 值对象包
+        10--common   通用包
                 9.1-- aspect    切面处理类包                     
                 9.2-- custom    自定义类包
                       9.2.1 -- annotation：自定义注解包
@@ -41,17 +42,23 @@
                 9.4-- handler   处理器类包
                 9.5-- utils     通用调工具类包
                 9.6-- interceptor     拦截器处理类包
-        10 --AppRoot 启动类
+                9.7-- constant     常量类包
+        11 --AppRoot 启动类
          
-        11--resources
+        12--resources
             11.1-- static                 静态文件，js,css等
             11.2-- templates              页面
             11.3-- application.properties 主配置文件
             11.4-- config.properties      配置文件
-            11.5-- logback.properties     日志配置文件参数
-            11.6-- logback.xml            日志主配置文件
+            11.5-- log4j2.xml            日志主配置文件
+            11.6-- doc                   简单文档说明
+
+test   ：         
+        beetl：自动生成类模板工具，请参考里面的demo使用，
+            Bean.txt ：为类模板，生成类及包，运行Build.java的main方法即可
         
-  详见 doc/frame
+**详见 doc/frame**
+
 `打包：
     gradle build -xtest`
     
@@ -60,4 +67,8 @@
     
 ` 日志文件目录：/storage/logs(假如应用没有权限创建，
         手动执行：sudo mkdir /storage;chmod 777 -R /storage)`  
+        
+     
+ linux 下环境安装（mysql，mongo，redis）见博客（docker）：
+             https://blog.csdn.net/xinaml/article/details/72922039
 

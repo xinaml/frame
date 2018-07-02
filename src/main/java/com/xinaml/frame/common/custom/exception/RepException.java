@@ -6,36 +6,23 @@
  **/
 package com.xinaml.frame.common.custom.exception;
 
-import com.xinaml.frame.common.custom.types.RepExceptionType;
-
 public class RepException extends Exception {
 
-    private RepExceptionType type = RepExceptionType.UNDEFINE;
-
-    private RepException repException;
-
-    public RepException(RepExceptionType repExceptionType, String msg) {
-        super(msg);
-        this.type = repExceptionType;
-    }
+    private Throwable throwable;
 
     public RepException(String msg) {
         super(msg);
     }
 
-    public RepException getRepException() {
-        return repException;
+    public RepException(Throwable throwable) {
+        this.throwable = throwable;
     }
 
-    public void setRepException(RepException repException) {
-        this.repException = repException;
+    public Throwable getThrowable() {
+        return throwable;
     }
 
-    public RepExceptionType getType() {
-        return type;
-    }
-
-    public void setType(RepExceptionType type) {
-        this.type = type;
+    public void setThrowable(Throwable throwable) {
+        this.throwable = throwable;
     }
 }

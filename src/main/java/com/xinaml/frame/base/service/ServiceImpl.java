@@ -10,10 +10,14 @@ import com.xinaml.frame.base.dto.BaseDTO;
 import com.xinaml.frame.base.entity.BaseEntity;
 import com.xinaml.frame.base.rep.JapRep;
 import com.xinaml.frame.base.rep.JpaSpec;
-import com.xinaml.frame.common.constant.CommonConst;
 import com.xinaml.frame.common.custom.exception.RepException;
 import com.xinaml.frame.common.custom.exception.SerException;
+import com.xinaml.frame.common.utils.ClazzTypeUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.exception.DataException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,9 +29,6 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -37,22 +38,19 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
     @Autowired
     protected EntityManager entityManager;
 
-    private static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern(CommonConst.DATETIME);
-    private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern(CommonConst.TIME);
-    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern(CommonConst.DATE);
 
     @Override
     public List<BE> findAll() throws SerException {
         try {
             return rep.findAll();
         } catch (Exception e) {
-            throw new SerException(e.getMessage());
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
 
     }
 
     @Override
-    public  Map<String,Object> findByPage(BD dto) throws SerException {
+    public Map<String, Object> findByPage(BD dto) throws SerException {
         try {
             JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
             PageRequest page = jpaSpec.getPageRequest(dto);
@@ -62,7 +60,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             map.put("total", rs.getTotalElements());
             return map;
         } catch (Exception e) {
-            throw new SerException(e.getMessage());
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
 
     }
@@ -73,19 +71,20 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
             return rep.count(jpaSpec);
         } catch (Exception e) {
-            throw new SerException(e.getMessage());
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
 
     }
 
     @Override
     public BE findOne(BD dto) throws SerException {
-        JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
-        List<BE> list = rep.findAll(jpaSpec);
-        if (null != list && list.size() > 1) {
-            throw new SerException("find two and more data!");
+        try {
+            JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
+            Object o = rep.findOne(jpaSpec).get();
+            return (BE) o;
+        } catch (Exception e) {
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
-        return null != list && list.size() > 0 ? list.get(0) : null;
     }
 
 
@@ -96,17 +95,22 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
             return rep.findAll(jpaSpec);
         } catch (Exception e) {
-            throw new SerException(e.getMessage());
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
     }
 
     @Override
     public BE findById(String id) throws SerException {
-        try {
-            return rep.findById(id).get();
-        } catch (Exception e) {
-            throw new SerException(e.getMessage());
+        if (StringUtils.isNotBlank(id)) {
+            try {
+                return rep.findById(id).get();
+            } catch (NoSuchElementException e) {
+                throw new SerException("id为"+id+"的数据不存在!");
+            }
+        } else {
+            throw new SerException("查询 id 不能为空!");
         }
+
     }
 
     @Override
@@ -114,23 +118,23 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
         try {
             rep.saveAll(Arrays.asList(entities));
         } catch (Exception e) {
-            throw new SerException(e.getMessage());
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
     }
 
     @Override
     public void remove(String... ids) throws SerException {
 
-        if (null != ids) {
+        if (null != ids && ids.length > 0) {
             try {
                 for (String id : ids) {
                     rep.deleteById(id);
                 }
             } catch (Exception e) {
-                throw new SerException(e.getMessage());
+                throw repExceptionHandler(new RepException(e.getCause()));
             }
         } else {
-            throw new SerException("id 不能为空");
+            throw new SerException("删除 id 不能为空!");
         }
 
 
@@ -141,7 +145,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
         try {
             rep.deleteAll(Arrays.asList(entities));
         } catch (Exception e) {
-            throw new SerException(e.getMessage());
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
     }
 
@@ -152,7 +156,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
                 rep.save(be);
             }
         } catch (Exception e) {
-            throw new SerException(e.getMessage());
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
     }
 
@@ -161,7 +165,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
         try {
             return rep.existsById(id);
         } catch (Exception e) {
-            throw new SerException(e.getMessage());
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
     }
 
@@ -171,7 +175,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             Query nativeQuery = entityManager.createNativeQuery(sql);
             return nativeQuery.getResultList();
         } catch (Exception e) {
-            throw new SerException(e.getMessage());
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
 
     }
@@ -206,7 +210,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
                         if (field.getName().equals(fields[j])) {
                             field.setAccessible(true);
                             if (!field.getType().isEnum()) { //忽略枚举类型
-                                field.set(obj, convertDataType(field.getType().getSimpleName(), arr_obj[j]));
+                                field.set(obj, ClazzTypeUtil.convertDataType(field.getType().getSimpleName(), arr_obj[j]));
                             } else {
                                 Field[] enumFields = field.getType().getFields();
                                 for (int k = 0; k < enumFields.length; k++) {
@@ -227,8 +231,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
                 list.add((T) obj);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw repExceptionHandler(new RepException(e.getMessage()));
+            throw repExceptionHandler(new RepException(e.getCause()));
         }
 
         return list;
@@ -236,8 +239,13 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
 
     @Override
     public void executeSql(String sql) throws SerException {
-        Query query = entityManager.createNativeQuery(sql);
-        query.executeUpdate();
+        try {
+            Query query = entityManager.createNativeQuery(sql);
+            query.executeUpdate();
+        } catch (Exception e) {
+            throw repExceptionHandler(new RepException(e.getCause()));
+        }
+
     }
 
     @Override
@@ -259,78 +267,30 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
         } catch (Exception e) {
             throw new SerException(e.getMessage());
         }
-
-        throw new SerException("解析表名错误!");
+        String msg ="解析表名错误!";
+        throw new SerException(msg);
     }
 
-    /**
-     * 数据库类型转换
-     *
-     * @param obj
-     * @return
-     */
-    private Object convertDataType(String type, Object obj) {
-        if (null != obj) {
-            String val = obj.toString();
-            switch (type) {
-                case "int":
-                    obj = Integer.parseInt(val);
-                    break;
-                case "Float":
-                    obj = Float.parseFloat(val);
-                    break;
-                case "Double":
-                    obj = Double.parseDouble(val);
-                    break;
-                case "Long":
-                    obj = Long.parseLong(val);
-                    break;
-                case "BigDecimal":
-                    obj = Double.parseDouble(val);
-                    break;
-                case "Boolean":
-                    obj = Boolean.parseBoolean(val);
-                    break;
-                case "Integer":
-                    obj = Integer.parseInt(val);
-                    break;
-                case "LocalDateTime":
-                    obj = LocalDateTime.parse(StringUtils.substring(val, 0, val.length() - 2), DATE_TIME);
-                    break;
-                case "LocalTime":
-                    obj = LocalDateTime.parse(val, TIME);
-                    break;
-                case "LocalDate":
-                    obj = LocalDate.parse(val, DATE);
-                    break;
-                default:
-                    obj = String.valueOf(obj);
-                    break;
 
-            }
-        }
-        return obj;
-    }
-
-    private SerException repExceptionHandler(RepException e) {
+    protected SerException repExceptionHandler(RepException e) {
+        e.printStackTrace();
         String msg = "";
-        switch (e.getType()) {
-            case NOT_FIND_FIELD:
-                msg = "非法查询";
-                break;
-            case ERROR_ARGUMENTS:
-                msg = "参数不匹配";
-                break;
-            case ERROR_PARSE_DATE:
-                msg = "时间类型转换错误,字段类型不匹配";
-                break;
-            case ERROR_NUMBER_FORMAT:
-                msg = "整形转换错误,字段类型不匹配";
-                break;
-            default:
-                msg = e.getMessage();
+        Throwable throwable = e.getThrowable();
+        if (throwable instanceof ConstraintViolationException) { //唯一约束异常
+            ConstraintViolationException ex = ((ConstraintViolationException) throwable);
+            msg = ex.getCause().getMessage();
+            msg = StringUtils.substringAfter(msg, "Duplicate entry '");
+            msg = "[" + StringUtils.substringBefore(msg, "' for key") + "]已存在!";
+        } else if (throwable instanceof DataException) {
+            DataException ex = ((DataException) throwable);
+            msg = ex.getCause().getMessage();
+            msg = StringUtils.substringAfter(msg, "Data too long for column '");
+            msg = "[" + StringUtils.substringBefore(msg, "' at row") + "]数据超出长度!";
+        }
+        if (StringUtils.isBlank(msg)) {
+            msg = e.getMessage();
         }
         return new SerException(msg);
-    }
 
+    }
 }

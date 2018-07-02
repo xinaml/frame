@@ -1,10 +1,14 @@
 package com.xinaml.frame.common.utils;
 
+import com.xinaml.frame.common.constant.CommonConst;
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * 基础类型转换工具类
@@ -13,7 +17,9 @@ import java.time.LocalTime;
  * @date 2018/4/15
  **/
 public final class ClazzTypeUtil {
-
+    private static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern(CommonConst.DATETIME);
+    private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern(CommonConst.TIME);
+    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern(CommonConst.DATE);
     public static final Class[] PRIMITIVES = new Class[]{
             String.class,
             Integer.class,
@@ -148,5 +154,54 @@ public final class ClazzTypeUtil {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * 数据库类型转换
+     *
+     * @param obj
+     * @return
+     */
+    public static Object convertDataType(String type, Object obj) {
+        if (null != obj) {
+            String val = obj.toString();
+            switch (type) {
+                case "int":
+                    obj = Integer.parseInt(val);
+                    break;
+                case "Float":
+                    obj = Float.parseFloat(val);
+                    break;
+                case "Double":
+                    obj = Double.parseDouble(val);
+                    break;
+                case "Long":
+                    obj = Long.parseLong(val);
+                    break;
+                case "BigDecimal":
+                    obj = Double.parseDouble(val);
+                    break;
+                case "Boolean":
+                    obj = Boolean.parseBoolean(val);
+                    break;
+                case "Integer":
+                    obj = Integer.parseInt(val);
+                    break;
+                case "LocalDateTime":
+                    obj = LocalDateTime.parse(StringUtils.substring(val, 0, val.length() - 2), DATE_TIME);
+                    break;
+                case "LocalTime":
+                    obj = LocalDateTime.parse(val, TIME);
+                    break;
+                case "LocalDate":
+                    obj = LocalDate.parse(val, DATE);
+                    break;
+                default:
+                    obj = String.valueOf(obj);
+                    break;
+
+            }
+        }
+        return obj;
     }
 }
