@@ -48,7 +48,7 @@ public class ExceptionHandler extends AbstractHandlerExceptionResolver {
             rs.setCode(EXCEPTION_CODE);
         }
         if (!StringUtil.isChinese(e.getMessage())) {
-            rs.setMsg("服务器错误!");
+            rs.setMsg("服务器错误！");
         } else {
             if (StringUtils.isBlank(rs.getMsg())) {
                 rs.setMsg(e.getMessage());

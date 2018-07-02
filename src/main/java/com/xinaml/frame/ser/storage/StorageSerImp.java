@@ -98,10 +98,10 @@ public class StorageSerImp extends ServiceImpl<Storage, StorageDTO> implements S
             }
         } catch (IllegalStateException e) {
             e.printStackTrace();
-            throw new SerException("文件上传异常!");
+            throw new SerException("文件上传异常！");
         } catch (IOException e) {
             e.printStackTrace();
-            throw new SerException("文件上传异常!");
+            throw new SerException("文件上传异常！");
         }
         return getFileVO(files);
     }
@@ -190,7 +190,7 @@ public class StorageSerImp extends ServiceImpl<Storage, StorageDTO> implements S
                 return newFile;
             }
         } else {
-            throw new SerException("新文件名和旧文件名相同!");
+            throw new SerException("新文件名和旧文件名相同！");
         }
     }
 
@@ -565,7 +565,7 @@ public class StorageSerImp extends ServiceImpl<Storage, StorageDTO> implements S
             path = PathConst.ROOT_PATH + PathConst.SEPARATOR + username + path;
 
         } else {
-            throw new SerException("path 不能为空!");
+            throw new SerException("path 不能为空！");
         }
         return path;
     }

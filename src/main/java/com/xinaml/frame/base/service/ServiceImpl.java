@@ -16,8 +16,6 @@ import com.xinaml.frame.common.utils.ClazzTypeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.exception.DataException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -105,10 +103,10 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             try {
                 return rep.findById(id).get();
             } catch (NoSuchElementException e) {
-                throw new SerException("id为"+id+"的数据不存在!");
+                throw new SerException("id为" + id + "的数据不存在！");
             }
         } else {
-            throw new SerException("查询 id 不能为空!");
+            throw new SerException("查询 id 不能为空！");
         }
 
     }
@@ -134,7 +132,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
                 throw repExceptionHandler(new RepException(e.getCause()));
             }
         } else {
-            throw new SerException("删除 id 不能为空!");
+            throw new SerException("删除 id 不能为空！");
         }
 
 
@@ -267,7 +265,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
         } catch (Exception e) {
             throw new SerException(e.getMessage());
         }
-        String msg ="解析表名错误!";
+        String msg = "解析表名错误！";
         throw new SerException(msg);
     }
 
@@ -280,12 +278,12 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             ConstraintViolationException ex = ((ConstraintViolationException) throwable);
             msg = ex.getCause().getMessage();
             msg = StringUtils.substringAfter(msg, "Duplicate entry '");
-            msg = "[" + StringUtils.substringBefore(msg, "' for key") + "]已存在!";
+            msg = "[" + StringUtils.substringBefore(msg, "' for key") + "]已存在！";
         } else if (throwable instanceof DataException) {
             DataException ex = ((DataException) throwable);
             msg = ex.getCause().getMessage();
             msg = StringUtils.substringAfter(msg, "Data too long for column '");
-            msg = "[" + StringUtils.substringBefore(msg, "' at row") + "]数据超出长度!";
+            msg = "[" + StringUtils.substringBefore(msg, "' at row") + "]数据超出长度！";
         }
         if (StringUtils.isBlank(msg)) {
             msg = e.getMessage();

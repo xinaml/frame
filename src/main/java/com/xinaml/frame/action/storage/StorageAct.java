@@ -354,7 +354,7 @@ public class StorageAct {
             return parameter;
         } else {
             if (notNull) {
-                throw new SerException(name + "不能为空!");
+                throw new SerException(name + "不能为空！");
             }
             return null;
         }

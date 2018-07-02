@@ -79,7 +79,7 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
                 if (null != header && header.equals("XMLHttpRequest")) { //ajax请求
                     ActResult result = new ActResult();
                     result.setCode(403);
-                    result.setMsg("请先登录!");
+                    result.setMsg("请先登录！");
                     response.setStatus(200);
                     ResponseUtil.writeData(JSON.toJSONString(result));
                     return false;

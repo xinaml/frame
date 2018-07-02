@@ -121,7 +121,7 @@ public class FileUtil {
     public static List<MultipartFile> getMultipartFile(HttpServletRequest request) throws SerException {
 
         if (null != request && !isMultipartContent(request)) {
-            throw new ServiceException("上传表单不是multipart/form-data类型");
+            throw new ServiceException("上传表单不是multipart/form-data类型！");
         }
         MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request; // 转换成多部分request
         Map<String, MultipartFile> map = multiRequest.getFileMap();

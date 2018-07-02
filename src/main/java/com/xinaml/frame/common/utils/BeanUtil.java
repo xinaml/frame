@@ -25,7 +25,7 @@ public class BeanUtil {
             return object;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new SerException("构建对象错误");
+            throw new SerException("构建对象错误！");
         }
 
     }

@@ -42,17 +42,17 @@ public class UserSerImp extends ServiceImpl<User, UserDTO> implements UserSer {
             try {
                 isPass = PassWordUtil.validPwd(to.getPassword(), user.getPassword());
             } catch (Exception e) {
-                LOGGER.error("密码解析错误");
+                LOGGER.error("密码解析错误！");
             }
         } else {
-            throw new SerException("账号或密码错误");
+            throw new SerException("账号或密码错误！");
         }
         if (isPass) {
             token = TokenUtil.create(to.getIp());
             jRedis.put(token, JSON.toJSONString(user));
             return token;
         } else {
-            throw new SerException("账号或密码错误");
+            throw new SerException("账号或密码错误！");
         }
     }
 
@@ -71,11 +71,11 @@ public class UserSerImp extends ServiceImpl<User, UserDTO> implements UserSer {
                     throw new SerException(e.getMessage());
                 }
             }else {
-                throw  new SerException("用户名已被占用");
+                throw  new SerException("用户名已被占用！");
             }
 
         } else {
-            throw new SerException("密码不一致");
+            throw new SerException("密码不一致！");
         }
 
         return null;

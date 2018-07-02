@@ -105,7 +105,7 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
                                 type.equals(RestrictType.ISNOTNULL)) {
                             clazz = String.class;
                         } else {
-                            throw new RepException(type.name() + "查询:列【" + field + "】值不能为空");
+                            throw new RepException(type.name() + "查询:列【" + field + "】值不能为空！");
                         }
 
                     }

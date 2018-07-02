@@ -22,7 +22,7 @@ public class ClazzUtil {
         if (index >= params.length || index < 0) {
 
             throw new RuntimeException("你输入的索引"
-                    + (index < 0 ? "不能小于0" : "超出了参数的总数"));
+                    + (index < 0 ? "不能小于0" : "超出了参数的总数！"));
         }
         if (!(params[index] instanceof Class)) {
 
@@ -66,7 +66,7 @@ public class ClazzUtil {
             if (index >= typeArguments.length || index < 0) {
 
                 throw new RuntimeException("你输入的索引"
-                        + (index < 0 ? "不能小于0" : "超出了参数的总数"));
+                        + (index < 0 ? "不能小于0" : "超出了参数的总数！"));
             }
             return (Class) typeArguments[index];
         }
