@@ -23,7 +23,6 @@ import javax.persistence.criteria.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * JPA 高级查询

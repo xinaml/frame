@@ -108,7 +108,7 @@ public class ParseBean {
         if (module.equals("serImp")) {
             pathModule = "ser";
         }
-        File moduleDir = new File(path + "/" + pathModule); //模块目录 dao dto entity vo service 等。。。
+        File moduleDir = new File(path + "/" + pathModule); //模块目录 dao dto entity vo ser 等。。。
         if (!moduleDir.exists()) {
             moduleDir.mkdirs();
         }

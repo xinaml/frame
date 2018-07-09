@@ -1,6 +1,6 @@
 package com.xinaml.frame.action.storage;
 
-import com.alibaba.fastjson.JSON;
+import com.xinaml.frame.base.atction.BaseAct;
 import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.exception.ActException;
 import com.xinaml.frame.common.custom.exception.SerException;
@@ -14,6 +14,8 @@ import com.xinaml.frame.to.storage.FileInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -24,17 +26,16 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @RequestMapping(value = "storage")
 @Controller
 @Login
-public class StorageAct {
+public class StorageAct extends BaseAct {
 
     @Autowired
     private StorageSer storageSer;
 
-    @RequestMapping(value = "page")
+    @GetMapping("page")
     public String page() throws ActException {
         return "/storage/storage";
     }
@@ -47,7 +48,7 @@ public class StorageAct {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "list")
+    @GetMapping("list")
     public Result list(HttpServletRequest request) throws ActException {
         try {
             String path = getParameter(request, "path", true);
@@ -65,14 +66,13 @@ public class StorageAct {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "tree")
-    public String tree(HttpServletRequest request) throws SerException {
+    @GetMapping("tree")
+    public ActResult tree(HttpServletRequest request) throws ActException {
         try {
             String path = getParameter(request, "path", true);
-            return JSON.toJSONString(storageSer.tree(path));
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SerException(e.getMessage());
+            return new ActResult(storageSer.tree(path));
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
         }
     }
 
@@ -83,56 +83,39 @@ public class StorageAct {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "upload")
-    public String upload(HttpServletRequest request, FileInfo info) throws SerException {
+    @PostMapping("upload")
+    public ActResult upload(HttpServletRequest request, FileInfo info) throws ActException {
         try {
             initFileInfo(info, request); // 初始化文件上传信息
             if (info.getChunks() != null && info.getChunk() != null) { // 大文件分片上传
                 storageSer.savePartFile(info); // 将文件分块保存到临时文件夹里，便于之后的合并文件
                 storageSer.bigUploaded(info); // 完整的上传
-                return "success";
+                return new ActResult(SUCCESS);
             } else { // 普通小文件上传
                 try {
                     storageSer.upload(FileUtil.getMultipartFile(request), info.getPath());
-                    return "success";
+                    return new ActResult(SUCCESS);
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new SerException(e.getMessage());
+                    throw new ActException(e.getMessage());
                 }
             }
-        } catch (Exception e) {
-            HttpServletResponse response = ResponseUtil.get();
-            response.reset();
-            response.setCharacterEncoding("UTF-8");
-            response.setHeader("Content-Type", "text/plain;charset=UTF-8");
-            response.setHeader("icop-content-type", "exception");
-            response.setStatus(500);
-            PrintWriter writer = null;
-            try {
-                writer = response.getWriter();
-            } catch (IOException ie) {
-                ie.printStackTrace();
-            }
-            writer.flush();
-            writer.close();
-            writer.write(e.getMessage());
-            e.printStackTrace();
+        } catch (SerException e) {
+            ResponseUtil.writeData(new ActResult(e.getMessage()));
         }
-        return "success";
+        return new ActResult(SUCCESS);
     }
 
     /**
      * 检测文件是否存在
      */
     @ResponseBody
-    @RequestMapping(value = "exists")
-    public String exist(HttpServletRequest request) {
+    @GetMapping("exists")
+    public ActResult exist(HttpServletRequest request) throws ActException {
         try {
             String path = getParameter(request, "path", true);
-            return String.valueOf(storageSer.existsFile(path));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "false";
+            return new ActResult(storageSer.existsFile(path));
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
         }
     }
 
@@ -140,16 +123,15 @@ public class StorageAct {
      * 检测MD5是否存在，实现秒传
      */
     @ResponseBody
-    @RequestMapping(value = "md5/exist")
-    public String md5Exist(HttpServletRequest request) {
+    @GetMapping("md5/exist")
+    public ActResult md5Exist(HttpServletRequest request) throws ActException {
         try {
             String fileMd5 = getParameter(request, "fileMd5", true);
             String toPath = getParameter(request, "toPath", true);
             String fileName = getParameter(request, "fileName", true);
-            return String.valueOf(storageSer.md5Exist(fileMd5, toPath, fileName,true));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "false";
+            return new ActResult(storageSer.md5Exist(fileMd5, toPath, fileName, true));
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
         }
     }
 
@@ -162,8 +144,8 @@ public class StorageAct {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "download")
-    public void downLoad(HttpServletRequest request, HttpServletResponse response, boolean isFolder) throws SerException {
+    @GetMapping("download")
+    public void downLoad(HttpServletRequest request, HttpServletResponse response, boolean isFolder) throws ActException {
         try {
             String path = getParameter(request, "path", true);
             File file = storageSer.download(path, isFolder);
@@ -174,8 +156,8 @@ public class StorageAct {
                 }
             }
 
-        } catch (Exception e) {
-            throw new SerException(e.getMessage());
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
         }
     }
 
@@ -189,16 +171,15 @@ public class StorageAct {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "mkdir")
-    public String mkdir(HttpServletRequest request) throws SerException {
+    @PostMapping( "mkdir")
+    public ActResult mkdir(HttpServletRequest request) throws ActException {
         try {
             String path = getParameter(request, "path", true);
             String dir = getParameter(request, "dir", true);
             storageSer.mkDir(path, dir);
-            return "success";
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SerException(e.getMessage());
+            return new ActResult(SUCCESS);
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
         }
     }
 
@@ -211,17 +192,16 @@ public class StorageAct {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "rename")
-    public String rename(HttpServletRequest request) throws SerException {
+    @PostMapping( "rename")
+    public ActResult rename(HttpServletRequest request) throws ActException {
         try {
             String path = getParameter(request, "path", true);
             String newName = getParameter(request, "newName", true);
             String oldName = getParameter(request, "oldName", true);
             storageSer.rename(path, oldName, newName);
-            return "success";
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SerException(e.getMessage());
+            return  new ActResult(SUCCESS);
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
         }
     }
 
@@ -234,17 +214,16 @@ public class StorageAct {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "move")
-    public String move(HttpServletRequest request) throws SerException {
+    @PostMapping( "move")
+    public ActResult move(HttpServletRequest request) throws ActException {
         try {
             String from = getParameter(request, "fromPath", true);
             String toPath = getParameter(request, "toPath", true);
             String[] fromPath = from.split("##");
             storageSer.move(fromPath, toPath);
-            return "success";
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SerException(e.getMessage());
+            return new ActResult(SUCCESS);
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
         }
     }
 
@@ -257,20 +236,19 @@ public class StorageAct {
      * @throws SerException
      */
     @ResponseBody
-    @RequestMapping(value = "delfile")
-    public String delFile(HttpServletRequest request) throws SerException {
+    @PostMapping("delfile")
+    public ActResult delFile(HttpServletRequest request) throws ActException {
         try {
             String values = getParameter(request, "paths", true);
             String[] paths = values.split("##");
             if (null != paths) {
                 storageSer.delFile(paths);
-                return "success";
+               return new ActResult(SUCCESS);
             } else {
                 throw new SerException("paths不能为空");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SerException(e.getMessage());
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
         }
     }
 
@@ -283,17 +261,16 @@ public class StorageAct {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "copy")
-    public String copy(HttpServletRequest request) throws SerException {
+    @PostMapping("copy")
+    public ActResult copy(HttpServletRequest request) throws ActException {
         try {
             String from = getParameter(request, "fromPath", true);
             String toPath = getParameter(request, "toPath", true);
             String[] fromPaths = from.split("##");
             storageSer.copy(fromPaths, toPath);
-            return "success";
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SerException(e.getMessage());
+            return new ActResult(SUCCESS);
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
         }
     }
 
@@ -306,15 +283,17 @@ public class StorageAct {
      * @throws SerException
      */
     @ResponseBody
-    @RequestMapping(value = "thumbnails")
-    public void thumbnails(HttpServletRequest request, HttpServletResponse response) throws SerException {
-        String path = getParameter(request, "path", true);
-        String width = getParameter(request, "width", false);
-        String height = getParameter(request, "height", false);
+    @GetMapping("thumbnails")
+    public void thumbnails(HttpServletRequest request, HttpServletResponse response) throws ActException {
         try {
+            String path = getParameter(request, "path", true);
+            String width = getParameter(request, "width", false);
+            String height = getParameter(request, "height", false);
             writeImage(response, storageSer.thumbnails(path, width, height));
-        } catch (IOException e) {
-            throw new SerException("获取缩略图错误！");
+        } catch (SerException e) {
+            throw new ActException(e.getMessage());
+        }catch (IOException e){
+            throw new ActException("获取缩略图错误！");
         }
     }
 
@@ -327,13 +306,13 @@ public class StorageAct {
      * @throws SerException
      */
     @ResponseBody
-    @RequestMapping(value = "gif")
-    public void gif(HttpServletRequest request, HttpServletResponse response) throws SerException {
-        String path = getParameter(request, "path", true);
+    @GetMapping(value = "gif")
+    public void gif(HttpServletRequest request, HttpServletResponse response) throws ActException {
         try {
+            String path = getParameter(request, "path", true);
             FileUtil.writeOutFile(response, storageSer.download(path, false));
-        } catch (IOException e) {
-            throw new SerException("获取缩略图错误！");
+        } catch (SerException e) {
+            throw new ActException("获取缩略图错误！");
         }
     }
 
@@ -347,7 +326,7 @@ public class StorageAct {
     private String getParameter(HttpServletRequest request, String name, boolean notNull) throws SerException {
         String parameter = request.getParameter(name);
         if (StringUtils.isNotBlank(parameter)) {
-            if(StringUtils.isNumeric(parameter)){
+            if (StringUtils.isNumeric(parameter)) {
                 return parameter;
             }
             parameter = ASEUtil.decrypt(parameter);
@@ -406,7 +385,7 @@ public class StorageAct {
             info.setPartName(partName);
         }
         info.setRelevanceId(relevanceId);
-        String path =ASEUtil.decrypt(info.getPath());
+        String path = ASEUtil.decrypt(info.getPath());
         info.setPath(path);
     }
 }

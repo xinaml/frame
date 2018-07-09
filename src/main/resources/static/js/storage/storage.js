@@ -145,12 +145,11 @@ var Storage = (function () {
         $.post($baseUrl + "/mkdir", {
             'path': $storage.encrypt($currentPath),
             'dir': $storage.encrypt(dir)
-        }, function (result) {
-            if (result == "success") {
+        }, function (rs) {
+            if (rs.code == 0) {
                 promptBox("创建文件夹成功!", 1000);
             } else {
-                var data = JSON.parse(result);
-                promptBox(data.msg);
+                promptBox(rs.msg);
             }
             $fileNums = $fileNums + 1;
             $(".undefinedCount").hide();
@@ -166,15 +165,14 @@ var Storage = (function () {
         promptBox("正在删除文件...");
         $.post($baseUrl + "/delfile", {
             'paths': $storage.encrypt(paths)
-        }, function (result) {
-            if (result == "success") {
+        }, function (rs) {
+            if (rs.code == 0) {
                 $storage.list($currentPath);
                 $("#myModal").hide();
                 $(".modal-backdrop").hide();
                 promptBox("删除文件成功!", 1000);
             } else {
-                var data = JSON.parse(result);
-                promptBox(data.msg);
+                promptBox(rs.msg);
             }
         });
     }
@@ -210,12 +208,11 @@ var Storage = (function () {
                 'path': $storage.encrypt(path),
                 "oldName": $storage.encrypt(textInput),
                 'newName': $storage.encrypt(newValue)
-            }, function (result) {
-                if (result == "success") {
+            }, function (rs) {
+                if (rs.code==0) {
                     promptBox("重命名文件成功!", 1000);
                 } else {
-                    var data = JSON.parse(result);
-                    promptBox(data.msg);
+                    promptBox(rs.msg);
                 }
             });
         });
@@ -245,13 +242,12 @@ var Storage = (function () {
                 $.post($baseUrl + "/move", {
                     'fromPath': $storage.encrypt(arrays.join("##")),
                     'toPath': $storage.encrypt(selectedNodes[0].id)
-                }, function (result) {
-                    if (result == "success") {
+                }, function (rs) {
+                    if (rs.code == 0) {
                         promptBox("移动文件成功!", 1000);
                         $storage.list($currentPath);
                     } else {
-                        var data = JSON.parse(result);
-                        promptBox(data.msg);
+                        promptBox(rs.msg);
                     }
                 });
             }
@@ -281,18 +277,16 @@ var Storage = (function () {
             $.unique(arrays);
             var zTreeOjb = $.fn.zTree.getZTreeObj("tree"); // ztree的Id zTreeId
             var selectedNodes = zTreeOjb.getSelectedNodes();
-            console.info(arrays)
             if (selectedNodes.length > 0) {
                 $.post($baseUrl + "/copy", {
                     'fromPath': $storage.encrypt(arrays.join("##")),
                     'toPath': $storage.encrypt(selectedNodes[0].id)
-                }, function (result) {
-                    if (result == "success") {
+                }, function (rs) {
+                    if (rs.code ==0) {
                         $storage.list($currentPath);
                         promptBox("复制文件成功!", 1000);
                     } else {
-                        var data = JSON.parse(result);
-                        promptBox(data.msg);
+                        promptBox(rs.msg);
                     }
                 });
             }
@@ -315,17 +309,18 @@ var Storage = (function () {
     Storage.prototype.validateMd5 = function (uploader, file) {
         $.ajax({// 向服务端发送请求
             cache: false,
-            type: "post",
+            type: "get",
+            dataType: "json",
             url: $baseUrl + "/md5/exist",
             data: {
                 fileMd5: $storage.encrypt(file.wholeMd5),
                 fileName: $storage.encrypt(file.name),
                 toPath: $storage.encrypt($currentPath),
             },
-            success: function (result) {
+            success: function (rs) {
                 $('#upload_msg').html("");
                 $('#upload_msg').fadeOut();
-                if (result == "true") {
+                if (rs.code == 0) {
 //							console.log("开始秒传！");
                     uploader.removeFile(file, true);
                     var html = ' <div style="width:220px;display:inline-block;height:30px; padding-top:10px;" class="progress progress-striped active"><div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%;">100%</div></div>';
@@ -445,20 +440,29 @@ var Storage = (function () {
         newValue = $spaceInout.val();
         var rowText = '<li  ondblclick="$storage.dblclick(this)"><div onclick="$storage.click()" class="important"><input path="' + $currentPath + '/' + newValue + '" filetype="FOLDER" class="ischcked" type="checkbox" index="'
             + ($fileNums + 1) + '"><img src="' + '../images/storage/wjj_d.png" alt=""><p class="space">' + newValue + '</p><p>-</p><p>' + getDate() + '</p></div></li>';
-        $.get($baseUrl + "/exists", {
-            'path': $currentPath + "/" + newValue
-        }, function (result) {
-            if (result == "true") {
-                promptBox('该目录已存在！');
-            } else {
-                $('.istrue').parents('li').remove();
-                $('.colInfo ul').prepend(rowText);
-                ishover();
-                mkdir(newValue);
-                $button.hide();
+
+        $.ajax({
+            cache: true,
+            type: "get",
+            dataType:'json',
+            url: $baseUrl + "/exists",
+            data:{'path': $currentPath + "/" + newValue},
+            async: false,
+            success: function (rs) {
+                if(rs.data==true){
+                    promptBox('该目录已存在！');
+                }else {
+                    $('.istrue').parents('li').remove();
+                    $('.colInfo ul').prepend(rowText);
+                    ishover();
+                    mkdir(newValue);
+                    $button.hide();
+                }
+            },
+            error: function (data) {
+                alert("error");
             }
         });
-
     }
 
     // 下载,复制,移动按钮显示和隐藏
@@ -652,10 +656,11 @@ var Storage = (function () {
         $.ajax({
             cache: true,
             type: "get",
+            dataType:'json',
             url: $baseUrl + "/tree?path=" + $storage.encrypt("/"),
             async: false,
-            success: function (data) {
-                zNodes = JSON.parse(data);
+            success: function (rs) {
+                zNodes = rs.data;
             },
             error: function (data) {
                 alert("error");
@@ -702,13 +707,14 @@ var Storage = (function () {
         $.ajax({
             cache: true,
             type: "get",
+            dataType:'json',
             url: $baseUrl + "/tree",
             data: {
                 'path': $storage.encrypt(treeNode.id)
             },
             async: true,
-            success: function (data) {
-                zTree.addNodes(treeNode, JSON.parse(data));
+            success: function (rs) {
+                zTree.addNodes(treeNode, rs.data);
             },
             error: function (data) {
                 alert("error");

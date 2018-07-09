@@ -2,7 +2,7 @@
  * @author lgq
  * @date 2018/4/15
  **/
-package com.xinaml.frame.base.service;
+package com.xinaml.frame.base.ser;
 
 import com.xinaml.frame.base.dto.BaseDTO;
 import com.xinaml.frame.base.entity.BaseEntity;

@@ -1,6 +1,6 @@
 package com.xinaml.frame.ser.user;
 
-import com.xinaml.frame.base.service.Ser;
+import com.xinaml.frame.base.ser.Ser;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.dto.user.UserDTO;
 import com.xinaml.frame.entity.user.User;

@@ -2,7 +2,7 @@ package com.xinaml.frame.ser.storage;
 
 import com.google.common.io.Files;
 import com.xinaml.frame.base.dto.RT;
-import com.xinaml.frame.base.service.ServiceImpl;
+import com.xinaml.frame.base.ser.ServiceImpl;
 import com.xinaml.frame.common.constant.PathConst;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.thread.CopyFileThread;
@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.io.*;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.*;
 

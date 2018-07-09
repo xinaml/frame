@@ -2,7 +2,7 @@ package com.xinaml.frame.ser.user;
 
 import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.base.dto.RT;
-import com.xinaml.frame.base.service.ServiceImpl;
+import com.xinaml.frame.base.ser.ServiceImpl;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.base.rep.RedisRep;
 import com.xinaml.frame.common.utils.PassWordUtil;

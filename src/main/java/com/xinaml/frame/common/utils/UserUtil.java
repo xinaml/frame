@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 用户工具，（定时器请勿从此处获取）
  */
-public class UserUtil {
+public final class UserUtil {
     public static UserSer userSer;
     public static RedisRep redisRep;
 

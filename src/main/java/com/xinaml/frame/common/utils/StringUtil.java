@@ -1,9 +1,12 @@
 package com.xinaml.frame.common.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class StringUtil {
+
     private static final String REG = "[\u4e00-\u9fa5]";
 
     /**
@@ -12,7 +15,7 @@ public final class StringUtil {
      * @return
      */
     public static  boolean isChinese(String str) {
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(str)) {
+        if (StringUtils.isNotBlank(str)) {
             Pattern p = Pattern.compile(REG);
             Matcher m = p.matcher(str);
             if (m.find()) {

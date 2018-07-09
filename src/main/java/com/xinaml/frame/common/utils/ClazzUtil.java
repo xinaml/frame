@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public class ClazzUtil {
+public final class ClazzUtil {
     @SuppressWarnings("unchecked")
     public static Class getSuperClassGenricType(Class clazz, int index) {
 

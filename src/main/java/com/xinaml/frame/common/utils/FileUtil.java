@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class FileUtil {
+public final class FileUtil {
 
     /**
      * 获取文件类型
@@ -261,7 +261,7 @@ public class FileUtil {
     }
 
 
-    public static void writeOutFile(HttpServletResponse response, File file) throws IOException {
+    public static void writeOutFile(HttpServletResponse response, File file) {
         try {
             if (file.exists()) {
                 String dfileName = file.getName();
@@ -286,8 +286,7 @@ public class FileUtil {
                 out.print("<script>alert(\"not find the file\")</script>");
             }
         } catch (IOException ex) {
-            PrintWriter out = response.getWriter();
-            out.print("<script>alert(\"not find the file\")</script>");
+            ResponseUtil.writeData("<script>alert(\"not find the file\")</script>");
         }
     }
 

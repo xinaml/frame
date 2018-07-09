@@ -8,7 +8,7 @@ import org.springframework.cglib.beans.BeanMap;
 import java.util.List;
 import java.util.UUID;
 
-public class BeanUtil {
+public final class BeanUtil {
     public static Object createObj(List<Field> fields) throws SerException {
         try {
             BeanGenerator generator = new BeanGenerator();

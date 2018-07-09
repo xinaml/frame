@@ -4,7 +4,7 @@
  * @author lgq
  * @date 2018/4/15
  **/
-package com.xinaml.frame.base.service;
+package com.xinaml.frame.base.ser;
 
 import com.xinaml.frame.base.dto.BaseDTO;
 import com.xinaml.frame.base.entity.BaseEntity;
@@ -14,6 +14,7 @@ import com.xinaml.frame.common.custom.exception.RepException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.utils.ClazzTypeUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.QueryTimeoutException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -272,7 +273,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
 
     protected SerException repExceptionHandler(RepException e) {
         e.printStackTrace();
-        String msg = "";
+        String msg=null;
         Throwable throwable = e.getThrowable();
         if (throwable instanceof ConstraintViolationException) { //唯一约束异常
             ConstraintViolationException ex = ((ConstraintViolationException) throwable);
@@ -284,6 +285,8 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             msg = ex.getCause().getMessage();
             msg = StringUtils.substringAfter(msg, "Data too long for column '");
             msg = "[" + StringUtils.substringBefore(msg, "' at row") + "]数据超出长度！";
+        }else if (throwable instanceof QueryTimeoutException) {
+            msg="查询超时！";
         }
         if (StringUtils.isBlank(msg)) {
             msg = e.getMessage();
