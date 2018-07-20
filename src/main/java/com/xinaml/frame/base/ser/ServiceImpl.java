@@ -273,20 +273,32 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
 
     protected SerException repExceptionHandler(RepException e) {
         e.printStackTrace();
-        String msg=null;
+        String msg = null;
         Throwable throwable = e.getThrowable();
         if (throwable instanceof ConstraintViolationException) { //唯一约束异常
             ConstraintViolationException ex = ((ConstraintViolationException) throwable);
             msg = ex.getCause().getMessage();
             msg = StringUtils.substringAfter(msg, "Duplicate entry '");
-            msg = "[" + StringUtils.substringBefore(msg, "' for key") + "]已存在！";
+            if (StringUtils.isNotBlank(msg)) {
+                msg = "[" + StringUtils.substringBefore(msg, "' for key") + "]已存在！";
+            } else {
+                msg = ex.getCause().getMessage();
+            }
+            if (msg.indexOf("cannot be null") != -1) {
+                msg = StringUtils.substringAfter(msg,"'");
+                msg = StringUtils.substringBefore(msg,"'").toLowerCase()+"不能为空！";
+            }
         } else if (throwable instanceof DataException) {
             DataException ex = ((DataException) throwable);
             msg = ex.getCause().getMessage();
             msg = StringUtils.substringAfter(msg, "Data too long for column '");
-            msg = "[" + StringUtils.substringBefore(msg, "' at row") + "]数据超出长度！";
-        }else if (throwable instanceof QueryTimeoutException) {
-            msg="查询超时！";
+            if (StringUtils.isNotBlank(msg)) {
+                msg = "[" + StringUtils.substringBefore(msg, "' at row") + "]数据超出长度！";
+            } else {
+                msg = ex.getCause().getMessage();
+            }
+        } else if (throwable instanceof QueryTimeoutException) {
+            msg = "查询超时！";
         }
         if (StringUtils.isBlank(msg)) {
             msg = e.getMessage();
