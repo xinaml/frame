@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 
 public class UserTO extends BaseTO {
     @NotBlank(groups = {ADD.class, EDIT.class}, message = "用户名不能为空！")
-    @ApiModelProperty(value = "用户名", name = "username", required = true)
+    @ApiModelProperty(value = "用户名", required = true)
     private String username;
 
     @NotBlank(groups = {ADD.class, EDIT.class}, message = "手机不能为空！")
-    @ApiModelProperty(value = "手机号", name = "phone", required = true)
+    @ApiModelProperty(value = "手机号", required = true)
     private String phone;
 
-    @ApiModelProperty(value = "邮箱", name = "email", required = true)
+    @ApiModelProperty(value = "邮箱", required = true)
     @Email
     @NotBlank(groups = {ADD.class, EDIT.class}, message = "邮箱不能为空！")
     private String email;

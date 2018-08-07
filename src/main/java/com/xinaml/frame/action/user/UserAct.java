@@ -9,6 +9,7 @@ import com.xinaml.frame.common.custom.annotation.Login;
 import com.xinaml.frame.common.custom.exception.ActException;
 import com.xinaml.frame.common.custom.exception.SerException;
 import com.xinaml.frame.common.custom.result.ActResult;
+import com.xinaml.frame.common.custom.result.MapResult;
 import com.xinaml.frame.common.custom.result.Result;
 import com.xinaml.frame.common.utils.PassWordUtil;
 import com.xinaml.frame.dto.user.UserDTO;
@@ -18,6 +19,7 @@ import com.xinaml.frame.to.user.UserTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Api(value = "UserAPI", tags = {"用户接口"})
@@ -38,16 +41,16 @@ public class UserAct extends BaseAct {
     private UserSer userSer;
 
     @GetMapping({"/", ""})
-    public String user(UserDTO dto) throws ActException {
+    public String user() throws ActException {
         return "user/user";
     }
 
     @ResponseBody
     @GetMapping("maps")
-    public String maps(UserDTO dto) throws ActException {
+    public MapResult<User> maps(UserDTO dto) throws ActException {
         try {
             Map<String, Object> maps = userSer.findByPage(dto);
-            return JSON.toJSONString(maps);
+            return new MapResult( maps);
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }
@@ -56,7 +59,7 @@ public class UserAct extends BaseAct {
     @ApiOperation(value = "列表")
     @ResponseBody
     @GetMapping("list")
-    public Result list(UserDTO dto) throws ActException {
+    public Result<User> list(UserDTO dto) throws ActException {
         try {
             dto.addRT(RT.eq("username", "lgq"));
             return new ActResult("获取列表成功！", userSer.findByRTS(dto));

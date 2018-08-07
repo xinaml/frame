@@ -8,10 +8,10 @@ import com.alibaba.fastjson.JSON;
  * @author lgq
  * @date 2018/4/15
  **/
-public class ActResult implements Result {
+public class ActResult<T> implements Result {
     private int code = 0;
     private String msg;
-    private Object data;
+    private T data;
 
     public ActResult() {
     }
@@ -20,7 +20,7 @@ public class ActResult implements Result {
         this.msg = msg;
     }
 
-    public ActResult(Object data) {
+    public ActResult(T data) {
         this.data = data;
     }
 
@@ -29,12 +29,12 @@ public class ActResult implements Result {
         this.msg = msg;
     }
 
-    public ActResult(String msg, Object data) {
+    public ActResult(String msg, T data) {
         this.msg = msg;
         this.data = data;
     }
 
-    public ActResult(int code, String msg, Object data) {
+    public ActResult(int code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -63,7 +63,7 @@ public class ActResult implements Result {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
     @Override

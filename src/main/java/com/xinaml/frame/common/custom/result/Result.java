@@ -6,7 +6,7 @@ package com.xinaml.frame.common.custom.result;
  * @author lgq
  * @date 2018/4/15
  **/
-public interface Result {
+public interface Result<T> {
     /**
      * 消息码 1 自定义异常，-1,系统异常，其他
      */
@@ -20,5 +20,5 @@ public interface Result {
     /**
      * 返回数据
      */
-    Object getData();
+    T getData();
 }

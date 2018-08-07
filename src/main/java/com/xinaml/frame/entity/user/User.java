@@ -8,6 +8,7 @@ package com.xinaml.frame.entity.user;
 
 import com.xinaml.frame.base.entity.BaseEntity;
 import com.xinaml.frame.types.SexType;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.Column;
@@ -18,9 +19,10 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "tb_user")
 public class User extends BaseEntity {
-
+    @ApiModelProperty("用户名")
     @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(25) COMMENT '用户名'")
     private String username;
+    @ApiModelProperty("密码")
 
     @Column(nullable = false, columnDefinition = "VARCHAR(56) COMMENT '密码'")
     private String password;
