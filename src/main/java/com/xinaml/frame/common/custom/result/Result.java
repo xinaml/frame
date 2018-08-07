@@ -1,5 +1,7 @@
 package com.xinaml.frame.common.custom.result;
 
+import io.swagger.annotations.ApiModel;
+
 /**
  * action 返回接口
  *

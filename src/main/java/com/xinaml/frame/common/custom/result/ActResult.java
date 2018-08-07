@@ -1,6 +1,8 @@
 package com.xinaml.frame.common.custom.result;
 
 import com.alibaba.fastjson.JSON;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * action 返回对象
@@ -8,9 +10,13 @@ import com.alibaba.fastjson.JSON;
  * @author lgq
  * @date 2018/4/15
  **/
+@ApiModel(value = "result")
 public class ActResult<T> implements Result {
+    @ApiModelProperty("编码")
     private int code = 0;
+    @ApiModelProperty("提示消息")
     private String msg;
+    @ApiModelProperty("数据")
     private T data;
 
     public ActResult() {

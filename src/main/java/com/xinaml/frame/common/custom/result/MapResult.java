@@ -1,10 +1,11 @@
 package com.xinaml.frame.common.custom.result;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 import java.util.Map;
-
+@ApiModel(value = "result")
 public class MapResult<T> {
     @ApiModelProperty("数据行")
     private List<T> rows;
