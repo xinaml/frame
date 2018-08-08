@@ -84,7 +84,7 @@ public class LoginIntercept extends HandlerInterceptorAdapter {
                     ResponseUtil.writeData(JSON.toJSONString(result));
                     return false;
                 } else { //url请求
-                    String url = request.getHeader("Referer"); //上次请求页面
+                    String url ;//request.getHeader("Referer"); //上次请求页面
                     url = request.getRequestURI();
 
                     if (null == url || StringUtils.isBlank(StringUtils.substringAfterLast(url,"/"))) { //当前请求页面

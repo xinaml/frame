@@ -79,8 +79,11 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
     public BE findOne(BD dto) throws SerException {
         try {
             JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
-            Object o = rep.findOne(jpaSpec).get();
-            return (BE) o;
+            Optional<BE> op = rep.findOne(jpaSpec);
+            if(op.isPresent()){
+                return op.get();
+            }
+            return null;
         } catch (Exception e) {
             throw repExceptionHandler(new RepException(e.getCause()));
         }
