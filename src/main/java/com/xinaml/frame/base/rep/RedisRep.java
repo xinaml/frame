@@ -1,7 +1,9 @@
 package com.xinaml.frame.base.rep;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class RedisRep {
+    private static Logger LOGGER = LoggerFactory.getLogger(RedisRep.class);
+    private static String FAIL_MSG = "redis 连接失败！";
     @Autowired
     private StringRedisTemplate template;
 
@@ -22,8 +26,16 @@ public class RedisRep {
      * @param value
      */
     public void put(String key, String value) {
-        ValueOperations<String, String> ops = template.opsForValue();
-        ops.set(key, value);
+
+        try {
+            ValueOperations<String, String> ops = template.opsForValue();
+            ops.set(key, value);
+        } catch (RedisConnectionFailureException e) {
+            LOGGER.error(FAIL_MSG);
+            throw new RuntimeException(e.getCause());
+        }
+
+
     }
 
     /**
@@ -35,8 +47,13 @@ public class RedisRep {
      * @param timeUnit
      */
     public void put(String key, String value, long timeOut, TimeUnit timeUnit) {
-        ValueOperations<String, String> ops = template.opsForValue();
-        ops.set(key, value, timeOut, timeUnit);
+        try {
+            ValueOperations<String, String> ops = template.opsForValue();
+            ops.set(key, value, timeOut, timeUnit);
+        } catch (RedisConnectionFailureException e) {
+            LOGGER.error(FAIL_MSG);
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     /**
@@ -46,8 +63,13 @@ public class RedisRep {
      * @return
      */
     public String get(String key) {
-        ValueOperations<String, String> ops = this.template.opsForValue();
-        return ops.get(key);
+        try {
+            ValueOperations<String, String> ops = this.template.opsForValue();
+            return ops.get(key);
+        } catch (RedisConnectionFailureException e) {
+            LOGGER.error(FAIL_MSG);
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     /**
@@ -58,7 +80,12 @@ public class RedisRep {
      * @param timeUnit
      */
     public void expire(String key, long timeOut, TimeUnit timeUnit) {
-        this.template.expire(key, timeOut, timeUnit);
+        try {
+            this.template.expire(key, timeOut, timeUnit);
+        } catch (RedisConnectionFailureException e) {
+            LOGGER.error(FAIL_MSG);
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     /**
@@ -67,8 +94,13 @@ public class RedisRep {
      * @param key
      * @param timeUnit
      */
-    public void getExpire(String key, TimeUnit timeUnit) {
-        long time = this.template.getExpire(key, timeUnit);
+    public Long getExpire(String key, TimeUnit timeUnit) {
+        try {
+            return this.template.getExpire(key, timeUnit);
+        } catch (RedisConnectionFailureException e) {
+            LOGGER.error(FAIL_MSG);
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     /**
@@ -77,7 +109,12 @@ public class RedisRep {
      * @param key
      */
     public void del(String key) {
-        this.template.delete(key);
+        try {
+            this.template.delete(key);
+        } catch (RedisConnectionFailureException e) {
+            LOGGER.error(FAIL_MSG);
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     /**
@@ -86,7 +123,12 @@ public class RedisRep {
      * @param key
      */
     public boolean exists(String key) {
-        return this.template.hasKey(key);
+        try {
+            return this.template.hasKey(key);
+        } catch (RedisConnectionFailureException e) {
+            LOGGER.warn(FAIL_MSG);
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     /**
@@ -96,7 +138,12 @@ public class RedisRep {
      * @param value
      */
     public void setHashSet(String key, String... value) {
-        template.opsForSet().add(key, value);
+        try {
+            template.opsForSet().add(key, value);
+        } catch (RedisConnectionFailureException e) {
+            LOGGER.error(FAIL_MSG);
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     /**
@@ -106,7 +153,12 @@ public class RedisRep {
      * @return
      */
     public Set<String> getHashSet(String key) {
-        return template.opsForSet().members(key);
+        try {
+            return template.opsForSet().members(key);
+        } catch (RedisConnectionFailureException e) {
+            LOGGER.error(FAIL_MSG);
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     /**
@@ -117,7 +169,12 @@ public class RedisRep {
      * @return
      */
     public boolean existsHashSet(String key, String value) {
-        return template.opsForSet().isMember(key, value);
+        try {
+            return template.opsForSet().isMember(key, value);
+        } catch (RedisConnectionFailureException e) {
+            LOGGER.error(FAIL_MSG);
+            throw new RuntimeException(e.getCause());
+        }
     }
 
 }
