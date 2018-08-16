@@ -22,8 +22,8 @@ allprojects {
     ext {
         fastjson_v = '1.2.47'
         lang3_v = '3.7'
-        swaggerUI_v = '2.7.0'
-        swagger2_v = '2.7.0'
+        swaggerUI_v = '2.9.2'
+        swagger2_v = '2.9.2'
         druid_v='1.1.9'
         log4j2_v='2.0.1.RELEASE'
         thymeleaf_v='2.0.1.RELEASE'
@@ -33,5 +33,6 @@ allprojects {
         thumbnailator_v='0.4.8'
         redis_v='2.0.2.RELEASE'
         cache_v='2.0.2.RELEASE'
+        activiti_v='6.0.0'
     }
 }
