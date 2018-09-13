@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1534754642939" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="qingjia" isClosed="false" isExecutable="true" processType="None">
+    <startEvent id="start" name="start"/>
+    <userTask activiti:assignee="${student}" activiti:exclusive="true" id="apply" name="apply"/>
+    <sequenceFlow id="_4" sourceRef="start" targetRef="apply"/>
+    <userTask activiti:assignee="${depter}" activiti:exclusive="true" id="dept_audit" name="dept audit"/>
+    <userTask activiti:assignee="${manger}" activiti:exclusive="true" id="manger_audit" name="manger audit"/>
+    <endEvent id="_end" name="end"/>
+    <sequenceFlow id="_10" sourceRef="manger_audit" targetRef="_end"/>
+    <parallelGateway gatewayDirection="Unspecified" id="_11" name="ParallelGateway"/>
+    <sequenceFlow id="_12" sourceRef="apply" targetRef="_11"/>
+    <userTask activiti:exclusive="true" id="_13" name="dept2 audit"/>
+    <sequenceFlow id="_14" sourceRef="_11" targetRef="dept_audit"/>
+    <sequenceFlow id="_15" sourceRef="_11" targetRef="_13"/>
+    <parallelGateway gatewayDirection="Unspecified" id="_16" name="ParallelGateway"/>
+    <sequenceFlow id="_17" sourceRef="dept_audit" targetRef="_16"/>
+    <sequenceFlow id="_18" sourceRef="_13" targetRef="_16"/>
+    <sequenceFlow id="_19" sourceRef="_16" targetRef="manger_audit"/>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="qingjia">
+      <bpmndi:BPMNShape bpmnElement="start" id="Shape-start">
+        <omgdc:Bounds height="32.0" width="32.0" x="495.0" y="65.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="apply" id="Shape-apply">
+        <omgdc:Bounds height="55.0" width="85.0" x="465.0" y="180.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dept_audit" id="Shape-dept_audit">
+        <omgdc:Bounds height="55.0" width="85.0" x="390.0" y="405.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="manger_audit" id="Shape-manger_audit">
+        <omgdc:Bounds height="55.0" width="85.0" x="485.0" y="605.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_end" id="Shape-_end">
+        <omgdc:Bounds height="32.0" width="32.0" x="530.0" y="695.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_11" id="Shape-_11">
+        <omgdc:Bounds height="32.0" width="32.0" x="490.0" y="295.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_13" id="Shape-_13">
+        <omgdc:Bounds height="55.0" width="85.0" x="580.0" y="410.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_16" id="Shape-_16">
+        <omgdc:Bounds height="32.0" width="32.0" x="515.0" y="505.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_12" id="BPMNEdge__12" sourceElement="apply" targetElement="_11">
+        <omgdi:waypoint x="506.0" y="235.0"/>
+        <omgdi:waypoint x="506.0" y="295.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_15" id="BPMNEdge__15" sourceElement="_11" targetElement="_13">
+        <omgdi:waypoint x="522.0" y="311.0"/>
+        <omgdi:waypoint x="620.0" y="380.0"/>
+        <omgdi:waypoint x="620.0" y="410.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_14" id="BPMNEdge__14" sourceElement="_11" targetElement="dept_audit">
+        <omgdi:waypoint x="490.0" y="311.0"/>
+        <omgdi:waypoint x="435.0" y="380.0"/>
+        <omgdi:waypoint x="435.0" y="405.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_17" id="BPMNEdge__17" sourceElement="dept_audit" targetElement="_16">
+        <omgdi:waypoint x="435.0" y="460.0"/>
+        <omgdi:waypoint x="435.0" y="465.0"/>
+        <omgdi:waypoint x="515.0" y="521.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_19" id="BPMNEdge__19" sourceElement="_16" targetElement="manger_audit">
+        <omgdi:waypoint x="531.0" y="537.0"/>
+        <omgdi:waypoint x="531.0" y="605.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_18" id="BPMNEdge__18" sourceElement="_13" targetElement="_16">
+        <omgdi:waypoint x="620.0" y="465.0"/>
+        <omgdi:waypoint x="620.0" y="480.0"/>
+        <omgdi:waypoint x="547.0" y="521.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_4" id="BPMNEdge__4" sourceElement="start" targetElement="apply">
+        <omgdi:waypoint x="511.0" y="97.0"/>
+        <omgdi:waypoint x="511.0" y="180.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_10" id="BPMNEdge__10" sourceElement="manger_audit" targetElement="_end">
+        <omgdi:waypoint x="546.0" y="660.0"/>
+        <omgdi:waypoint x="546.0" y="695.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

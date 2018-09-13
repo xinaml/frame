@@ -1,4 +1,4 @@
-package com.xinaml.frame.demo;
+package com.xinaml.frame.action.demo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

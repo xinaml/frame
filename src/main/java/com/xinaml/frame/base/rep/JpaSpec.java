@@ -109,7 +109,7 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
 
                     }
                     String[] fields = model.getField().split("\\.");
-                    join = handlerJoinTable(root, fields);  //是否有连接查询
+                    join = handlerJoinTable(root, fields,model.getJoinType());  //是否有连接查询
                     Method method = handlerMethod(cb, model);//获得反射调用方法
                     Boolean existJoin = (null != join);
                     if (existJoin) {
@@ -227,7 +227,7 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
      * @param root
      * @return
      */
-    private Join<BE, Object> handlerJoinTable(Root<BE> root, String[] fields) {
+    private Join<BE, Object> handlerJoinTable(Root<BE> root, String[] fields,JoinType joinType) {
         int fields_length = fields.length - 1; //忽略最后的属性查询字段 如user.userinfo.email 只取user.userinfo
         Join<BE, Object> join = null;
         if (fields_length >= 1) {  //存在连接查询
@@ -237,21 +237,21 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
                 boolean isSet = StringUtils.lastIndexOf(entityName, "Set") > -1;
                 if (i == 0) {
                     if (isSet) {
-                        join = root.joinSet(entityName, JoinType.LEFT);
+                        join = root.joinSet(entityName, joinType);
                     } else if (isList) {
-                        join = root.joinList(entityName, JoinType.LEFT);
+                        join = root.joinList(entityName, joinType);
                     } else {
-                        join = root.join(entityName, JoinType.LEFT);
+                        join = root.join(entityName, joinType);
                     }
                 } else {
                     if (isList || isSet) {
                         if (isList) {
-                            join = join.joinList(entityName, JoinType.LEFT);
+                            join = join.joinList(entityName, joinType);
                         } else if (isSet) {
-                            join = join.joinSet(entityName, JoinType.LEFT);
+                            join = join.joinSet(entityName, joinType);
                         }
                     } else {
-                        join = join.join(entityName, JoinType.LEFT);
+                        join = join.join(entityName, joinType);
                     }
                 }
 
