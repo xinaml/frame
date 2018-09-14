@@ -12,8 +12,11 @@ import com.xinaml.frame.common.custom.result.ActResult;
 import com.xinaml.frame.common.custom.result.MapResult;
 import com.xinaml.frame.common.custom.result.Result;
 import com.xinaml.frame.common.utils.PassWordUtil;
+import com.xinaml.frame.dto.storage.StorageDTO;
 import com.xinaml.frame.dto.user.UserDTO;
+import com.xinaml.frame.entity.storage.Storage;
 import com.xinaml.frame.entity.user.User;
+import com.xinaml.frame.ser.storage.StorageSer;
 import com.xinaml.frame.ser.user.UserSer;
 import com.xinaml.frame.to.user.UserTO;
 import io.swagger.annotations.Api;
@@ -27,6 +30,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.JoinType;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +43,9 @@ public class UserAct extends BaseAct {
 
     @Autowired
     private UserSer userSer;
+
+    @Autowired
+    private StorageSer storageSer;
 
     @GetMapping({"/", ""})
     public String user() throws ActException {
@@ -61,6 +68,10 @@ public class UserAct extends BaseAct {
     @GetMapping("list")
     public Result<User> list(UserDTO dto) throws ActException {
         try {
+            StorageDTO storageDTO = new StorageDTO();
+            storageDTO.addRT(RT.like("user.username","lgq",JoinType.LEFT));
+            storageDTO.addRT(RT.like("path","lgq1"));
+            storageSer.findByRTS(storageDTO);
             dto.addRT(RT.eq("username", "lgq"));
             return new ActResult("获取列表成功！", userSer.findByRTS(dto));
         } catch (SerException e) {

@@ -118,21 +118,21 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
                     switch (type) {
                         case LIKE:
                             if (existJoin) {
-                                predicate = cb.like(join.get(field).as(clazz), "%" + model.getValue() + "%");
+                                join.on(cb.like(join.get(field).as(clazz), "%" + model.getValue() + "%"));
                             } else {
                                 predicate = cb.like(root.get(field).as(clazz), "%" + model.getValue() + "%");
                             }
                             break;
                         case ISNULL:
                             if (existJoin) {
-                                predicate = cb.isNull(join.get(field).as(clazz));
+                                join.on( cb.isNull(join.get(field).as(clazz)));
                             } else {
                                 predicate = cb.isNull(root.get(field).as(clazz));
                             }
                             break;
                         case ISNOTNULL:
                             if (existJoin) {
-                                predicate = cb.isNotNull(join.get(field).as(clazz));
+                                join.on(cb.isNotNull(join.get(field).as(clazz)));
                             } else {
                                 predicate = cb.isNotNull(root.get(field).as(clazz));
                             }
@@ -141,7 +141,7 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
                             Object[] vals = ClazzTypeUtil.convertValuesByType(model.getValue());
                             CriteriaBuilder.In in = null;
                             if (existJoin) {
-                                in = cb.in(join.get(field));
+                                join.on(cb.in(join.get(field)));
                             } else {
                                 in = cb.in(root.get(field));
                             }
@@ -153,7 +153,7 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
                         case OR:
                             isOrPre = true;
                             if (existJoin) {
-                                predicate = cb.or(cb.equal(join.get(field).as(clazz), model.getValue()));
+                                join.on(cb.or(cb.equal(join.get(field).as(clazz), model.getValue())));
                             } else {
                                 predicate = cb.or(cb.equal(root.get(field).as(clazz), model.getValue()));
                             }
@@ -161,7 +161,7 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
                         case IN: {
                             Object[] values = ClazzTypeUtil.convertValuesByType(model.getValue());
                             if (existJoin) {
-                                predicate = join.get(field).as(clazz).in(values);
+                                join.on(join.get(field).as(clazz).in(values));
                             } else {
                                 predicate = root.get(field).as(clazz).in(values);
                             }
@@ -171,7 +171,7 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
                         default:
                             Object[] values = ClazzTypeUtil.convertValuesByType(model.getValue());
                             if (existJoin) {
-                                predicate = (Predicate) method.invoke(cb, ArrayUtils.add(values, 0, join.get(field).as(clazz)));
+                                join.on((Predicate) method.invoke(cb, ArrayUtils.add(values, 0, join.get(field).as(clazz))));
                             } else {
                                 predicate = (Predicate) method.invoke(cb, ArrayUtils.add(values, 0, root.get(field).as(clazz)));
 
