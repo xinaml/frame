@@ -33,9 +33,8 @@ public class MapResult<T> {
     }
 
     public MapResult(Map<String, Object> maps) {
-        MapResult rs = new MapResult<T>();
-        rs.setRows((List<T>) maps.get("rows"));
-        rs.setTotal((Long) maps.get("total"));
+        rows =  (List<T>) maps.get("rows");
+        total=(Long) maps.get("total");
     }
 
 }

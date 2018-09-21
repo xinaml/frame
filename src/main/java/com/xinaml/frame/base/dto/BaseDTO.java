@@ -83,7 +83,7 @@ public abstract class BaseDTO extends PageDTO implements Serializable {
     }
 
     public String getSerId() {
-        return JSON.toJSONString(this.restricts);
+        return JSON.toJSONString(this.restricts)+page;
     }
 
 
