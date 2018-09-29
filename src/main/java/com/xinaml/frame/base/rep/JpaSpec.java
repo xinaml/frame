@@ -263,6 +263,7 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
     }
 
 
+
     /**
      * 分页及排序
      *
@@ -271,34 +272,39 @@ public class JpaSpec<BE extends BaseEntity, BD extends BaseDTO> implements Speci
      */
     public PageRequest getPageRequest(BD dto) {
         PageRequest pageRequest;
-        Sort sort = null;
+
         List<String> _sorts = dto.getSorts();
         if (_sorts != null && _sorts.size() > 0) {
-            String field;
-            String order = null;
-            for (String sorts : _sorts) {
-                String[] _sort = sorts.split("=");
-                if (_sort.length > 1) {
-                    order = _sort[1];
-                }
-                field = _sort[0];
-                Sort.Direction dct = null;
-                if (null != order && order.equalsIgnoreCase("asc")) {
-                    dct = Sort.Direction.ASC;
-                } else {
-                    dct = Sort.Direction.DESC;
-                }
-                if (null == sort) {
-                    sort = new Sort(dct, field);
-                } else {
-                    sort = sort.and(new Sort(dct, field));
-                }
-            }
-            pageRequest = PageRequest.of(dto.getPage(), dto.getLimit(), sort); //分页带排序
+            pageRequest =new PageRequest(dto.getPage(), dto.getLimit(),getSort(_sorts));
         } else {
-            pageRequest = PageRequest.of(dto.getPage(), dto.getLimit()); //分页不带排序
+            pageRequest =new PageRequest(dto.getPage(), dto.getLimit());
         }
         return pageRequest;
+    }
+
+    public  Sort  getSort(List<String> _sorts ){
+        Sort sort = null;
+        String field;
+        String order = null;
+        for (String sorts : _sorts) {
+            String[] _sort = sorts.split("=");
+            if (_sort.length > 1) {
+                order = _sort[1];
+            }
+            field = _sort[0];
+            Sort.Direction dct = null;
+            if (null != order && order.equalsIgnoreCase("asc")) {
+                dct = Sort.Direction.ASC;
+            } else {
+                dct = Sort.Direction.DESC;
+            }
+            if (null == sort) {
+                sort = new Sort(dct, field);
+            } else {
+                sort = sort.and(new Sort(dct, field));
+            }
+        }
+        return sort;
     }
 
 }

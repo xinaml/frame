@@ -95,7 +95,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
 
         try {
             JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
-            return rep.findAll(jpaSpec);
+            return rep.findAll(jpaSpec,jpaSpec.getSort(dto.getSorts()));
         } catch (Exception e) {
             throw repExceptionHandler(new RepException(e.getCause()));
         }
