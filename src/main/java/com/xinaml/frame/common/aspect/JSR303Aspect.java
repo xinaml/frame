@@ -3,6 +3,7 @@ package com.xinaml.frame.common.aspect;
 import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.common.custom.result.ActResult;
 import com.xinaml.frame.common.utils.ResponseUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -68,6 +71,22 @@ public class JSR303Aspect {
                 return null;
             }
         }
+        //处理 NotNull NotBlank 注解，必须放第一个
+        int index=0;
+        for (Annotation[] ants : argAnnotations) {
+            if (ants.length > 0 && (ants[0] instanceof NotBlank ||ants[0] instanceof NotNull)) {
+                Object obj = args[index++];
+                if(null!=obj && StringUtils.isNotBlank(obj.toString()) ){
+                }else {
+                    String msg = ants[0].toString();
+                    msg = StringUtils.substringAfter(msg,"message=");
+                    msg = StringUtils.substringBefore(msg,",");
+                    writeResult(msg);
+                    return null;
+                }
+
+            }
+        }
         return joinPoint.proceed(args);
     }
 
@@ -84,5 +103,12 @@ public class JSR303Aspect {
             }
         }
         return false;
+    }
+    protected void writeResult(String msg) {
+        ActResult actResult = new ActResult();
+        actResult.setCode(2);
+        actResult.setMsg("参数校验不通过[" + msg + "]");
+        actResult.setData("");
+        ResponseUtil.writeData(JSON.toJSONString(actResult));
     }
 }
