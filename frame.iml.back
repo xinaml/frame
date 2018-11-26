@@ -2,6 +2,9 @@ package com.demo;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @Author: [liguiqin]
@@ -11,28 +14,53 @@ import java.net.*;
  * @Copy: [com.changbei]
  */
 public class Test {
-    static  String ip = "58.67.193.173";
-    static  Integer host= 6666;//8888
+    final static  String ip = "58.67.193.173";
+    final static  Integer host= 8888;//8888
     public static void main(String[] args) throws Exception {
+        ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+        for (int i = 0; i < 100; i++) {
+            final int index = i;
+            cachedThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        writeData();
+                        System.out.println(index);
+                        Thread.sleep(200);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+    }
+    private static void writeData()throws Exception{
         if(isRunning(ip,host)){
             Socket socket = new Socket(ip, host);
             OutputStream os = socket.getOutputStream();//字节输出流
             PrintWriter pw = new PrintWriter(os);//将输出流包装成打印流
-            pw.write("hello");
-            pw.flush();
-            System.out.println(isServerClose(socket));
-            socket.shutdownOutput();
+            try {
+                System.out.println("write data now...");
+                while (isServerClose(socket)){
+                    pw.write("g=CN%7Czh-CN%7CCNY%7C156; lidg=CN%7Czh-CN%7CCNY%7C156; lid=%E9%BB%8E%E8%B4%B5%E5%BA%AD; ali_apache_track=c_mid=b2b-694728327knhy7|c_lid=%E9%BB%8E%E8%B4%B5%E5%BA%AD|c_ms=1; _cn_slid_=BA0Pat7Uwh; alicnweb=touch_tb_at%3D1541465920803%7ChomeIdttS%3D80427241021100858853784013234570356850%7Clastlogonid%3D%25E9%25BB%258E%25E8%25B4%25B5%25E5%25BA%25AD%7ChomeIdttSAction%3Dtrue; isg=BAsLctYT1DJuS=%E9%BB%8E%E8%B4%B5%E5%BA%AD; ali_apache_track=c_mid=b2b-694728327knhy7|c_lid=%E9%BB%8E%E8%B4%B5%E5%BA%AD|c_ms=1; _cn_slid_=BA0Pat7Uwh; alicnweb=touch_tb_at%3D1541465920803%7ChomeIdttS%3D804272410g=CN%7Czh-CN%7CCNY%7C156; lid=%E9%BB%8E%E8%B4%B5%E5%BA%AD; ali_apache_track=c_mid=b2b-694728327knhy7|c_lid=%E9%BB%8E%E8%B4%B5%E5%BA%AD|c_ms=1; _cn_slid_=BA0Pat7Uwh; alicnweb=touch_tb_at%3D1541465920803%7ChomeIdttS%3D80427241021100858853784013234570356850%7Clastlogonid%3D%25E9%25BB%258E%25E8%25B4%25B5%25E5%25BA%25AD%7ChomeIdttSAction%3Dtrue; isg=BAsLctYT1DJuS21100858853784013234570356850%7Clastlogonid%3D%g=CN%7Czh-CN%7CCNY%7C156; lid=%E9%BB%8E%E8%B4%B5%E5%BA%AD; ali_apache_track=c_mid=b2b-694728327knhy7|c_lid=%E9%BB%8E%E8%B4%B5%E5%BA%AD|c_ms=1; _cn_slid_=BA0Pat7Uwh; alicnweb=touch_tb_at%3D1541465920803%7ChomeIdttS%3D80427241021100858853784013234570356850%7Clastlogonid%3D%25E9%25BB%258E%25E8%25B4%25B5%25E5%25BA%25AD%7ChomeIdttSAction%3Dtrue; isg=BAsLctYT1DJuS25E9%25BB%258E%25E8%25B4%25B5%25E5%25BA%25AD%7ChomeIdttSAction%3Dtrue; isg=BAsLctYT1DJuS");
+                    pw.flush();
+                }
+            }catch (Exception e){
+                System.out.println("shut down now...");
+                socket.shutdownOutput();
+            }
             InputStream is = socket.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String info = null;
             while ((info = br.readLine()) !=null){
-                System.out.println("服务器返回数据：" + info);
+                System.out.println("server return data：" + info);
             }
         }else {
-            System.out.println("ip或端口无效！");
+            System.out.println("ip or port is invalid!");
         }
-
     }
+
     public static Boolean isServerClose(Socket socket){
         try{
             socket.sendUrgentData(0xFF);
