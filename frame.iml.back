@@ -1,0 +1,77 @@
+package com.demo;
+
+import java.io.*;
+import java.net.*;
+
+/**
+ * @Author: [liguiqin]
+ * @Date:[2018-11-26 10:29]
+ * @Description: [ ]
+ * @Version: [3.0]
+ * @Copy: [com.changbei]
+ */
+public class Test {
+    static  String ip = "58.67.193.173";
+    static  Integer host= 6666;//8888
+    public static void main(String[] args) throws Exception {
+        if(isRunning(ip,host)){
+            Socket socket = new Socket(ip, host);
+            OutputStream os = socket.getOutputStream();//字节输出流
+            PrintWriter pw = new PrintWriter(os);//将输出流包装成打印流
+            pw.write("hello");
+            pw.flush();
+            System.out.println(isServerClose(socket));
+            socket.shutdownOutput();
+            InputStream is = socket.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String info = null;
+            while ((info = br.readLine()) !=null){
+                System.out.println("服务器返回数据：" + info);
+            }
+        }else {
+            System.out.println("ip或端口无效！");
+        }
+
+    }
+    public static Boolean isServerClose(Socket socket){
+        try{
+            socket.sendUrgentData(0xFF);
+            return false;
+        }catch(Exception se){
+            return true;
+        }
+    }
+
+    public static boolean isRunning(String host, int port) {
+        Socket sClient = null;
+        try {
+            SocketAddress saAdd = new InetSocketAddress(host.trim(), port);
+            sClient = new Socket();
+            sClient.connect(saAdd, 1000);
+        }
+        catch (UnknownHostException e) {
+            return false;
+        }
+        catch (SocketTimeoutException e) {
+            return false;
+        }
+        catch (IOException e) {
+            return false;
+        }
+        catch (Exception e) {
+            return false;
+        }
+        finally {
+            try {
+                if (sClient != null) {
+                    sClient.close();
+                }
+            }
+            catch (Exception e) {
+            }
+        }
+        return true;
+    }
+
+
+}
