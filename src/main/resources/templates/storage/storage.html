@@ -133,10 +133,7 @@
 <script>
     var $storage = new Storage();
     var currentPath = $storage.getCookie("currentPath");
-    if (currentPath =="") {
-        currentPath == "/"
-    }
-    $storage.list(currentPath);
+    $storage.list("/");
     var uploader = WebUploader.create({
         auto: false,
         swf: '../' + "webuploader/Uploader.swf",

@@ -13,12 +13,12 @@ import com.xinaml.frame.common.utils.UserUtil;
 import com.xinaml.frame.ser.user.UserSer;
 import com.xinaml.frame.to.user.LoginTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 public class LoginAct extends BaseAct {
     @Autowired
     private UserSer userSer;
@@ -40,21 +40,21 @@ public class LoginAct extends BaseAct {
      * @throws ActException
      */
     @GetMapping("/login")
-    public String login(Model model, HttpServletRequest request) throws ActException {
+    public ModelAndView login(Model model, HttpServletRequest request) throws ActException {
         try {
             Object prevUrl = request.getSession().getAttribute(PathConst.PREV_URL);//获取上次请求页
             if (UserUtil.isLogin(request)) {
                 if (null != prevUrl) {
-                    return "redirect:" + prevUrl;
+                    return new ModelAndView("redirect:" + prevUrl);
                 }
-                return "redirect:/";
+                return new ModelAndView("redirect:/");
             } else {
                 model.addAttribute(PathConst.PREV_URL, prevUrl);
-                return "/login"; //跳转登录页
+                return new ModelAndView("/login"); //跳转登录页
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "/login";//跳转登录页
+            return new ModelAndView("/login");//跳转登录页
         }
     }
 
@@ -67,7 +67,6 @@ public class LoginAct extends BaseAct {
      * @return
      * @throws ActException
      */
-    @ResponseBody
     @PostMapping("/login")
     public Result login(@Validated(ADD.class) LoginTO to, HttpServletRequest request, HttpServletResponse response) throws ActException {
         try {
@@ -94,7 +93,7 @@ public class LoginAct extends BaseAct {
      * @throws ActException
      */
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) throws ActException {
+    public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) throws ActException {
         try {
             String token = UserUtil.getToken(request);
             boolean isOut = userSer.logout(token);
@@ -103,7 +102,7 @@ public class LoginAct extends BaseAct {
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
             }
-            return "redirect:/login";
+            return new ModelAndView("redirect:/login");
 
         } catch (SerException e) {
             throw new ActException(e.getMessage());

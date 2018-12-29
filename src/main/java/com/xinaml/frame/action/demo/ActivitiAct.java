@@ -14,12 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("activiti")
 public class ActivitiAct {
     @Autowired
@@ -31,7 +32,6 @@ public class ActivitiAct {
      *
      * @return
      */
-    @ResponseBody
     @GetMapping("start/process")
     public String startProcess(String key) {
         String keys = "qingjia";
@@ -43,7 +43,6 @@ public class ActivitiAct {
         return "success";
     }
 
-    @ResponseBody
     @GetMapping("find/history/task")
     public String deployList() {
         //如果只想获取到已经执行完成的，那么就要加入completed这个过滤条件
@@ -66,7 +65,6 @@ public class ActivitiAct {
      *
      * @return
      */
-    @ResponseBody
     @GetMapping("add/task")
     public String addAssigneeTask() {
         processEngine.getTaskService().setAssignee("2505", "员工7号");
@@ -78,7 +76,6 @@ public class ActivitiAct {
      *
      * @return
      */
-    @ResponseBody
     @GetMapping("find/task")
     public String myTask() {
         TaskQuery query = processEngine.getTaskService().createTaskQuery();
@@ -102,7 +99,6 @@ public class ActivitiAct {
      *
      * @return
      */
-    @ResponseBody
     @GetMapping("complete/task")
     public String complete() {
         //任务ID
@@ -128,7 +124,6 @@ public class ActivitiAct {
      *
      * @return
      */
-    @ResponseBody
     @GetMapping("list")
     public String list() {
         //获取流程引擎
@@ -157,7 +152,6 @@ public class ActivitiAct {
      *
      * @return
      */
-    @ResponseBody
     @GetMapping("is/finish")
     public String isFinish() {
         ProcessInstance processInstance = processEngine.getRuntimeService()//正在执行的流程
@@ -179,7 +173,6 @@ public class ActivitiAct {
      *
      * @return
      */
-    @ResponseBody
     @GetMapping("del")
     public String del() {
         processEngine.getRepositoryService().deleteDeployment("22505");

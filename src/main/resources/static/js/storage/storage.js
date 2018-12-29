@@ -320,20 +320,24 @@ var Storage = (function () {
             success: function (rs) {
                 $('#upload_msg').html("");
                 $('#upload_msg').fadeOut();
-                if (rs.code == 0) {
-//							console.log("开始秒传！");
-                    uploader.removeFile(file, true);
-                    var html = ' <div style="width:220px;display:inline-block;height:30px; padding-top:10px;" class="progress progress-striped active"><div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%;">100%</div></div>';
-                    $('#' + file.id).append(html);
-                    $("#status").html("上传完成");
-                    $storage.list($currentPath);
-                    $('#upload_msg').html(
-                        " <div class='title-left' style='text-align:center'><span >"
-                        + $('.item').length + "个文件上传成功</span>").fadeIn('slow');
+                if (rs.code==0 ) {
+                    if(rs.data==false){
+                        uploader.options.formData.md5value = file.wholeMd5;// 每个文件都附带一个md5，便于实现秒传
+                        $storage.upload(uploader);
+                        console.log("秒传失败！");
+                    }else {
+                        console.log("开始秒传！");
+                        uploader.removeFile(file, true);
+                        var html = ' <div style="width:220px;display:inline-block;height:30px; padding-top:10px;" class="progress progress-striped active"><div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%;">100%</div></div>';
+                        $('#' + file.id).append(html);
+                        $("#status").html("上传完成");
+                        $storage.list($currentPath);
+                        $('#upload_msg').html(
+                            " <div class='title-left' style='text-align:center'><span >"
+                            + $('.item').length + "个文件上传成功</span>").fadeIn('slow');
+                    }
                 } else {
-                    uploader.options.formData.md5value = file.wholeMd5;// 每个文件都附带一个md5，便于实现秒传
-                    $storage.upload(uploader);
-					console.log("秒传失败！");
+					console.log(rs.data);
                 }
             }
         });
@@ -529,7 +533,6 @@ var Storage = (function () {
 
         // 当有文件被添加进队列的时候
         uploader.on('fileQueued', function (file) {
-
             var ext = file.ext;
             var thumb = "";
             $.each(exts, function (index, ext) {

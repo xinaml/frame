@@ -95,8 +95,13 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
 
         try {
             JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
-            return rep.findAll(jpaSpec,jpaSpec.getSort(dto.getSorts()));
+            if(dto.getSorts().size()>0){
+                return rep.findAll(jpaSpec,jpaSpec.getSort(dto.getSorts()));
+            }else {
+                return rep.findAll(jpaSpec);
+            }
         } catch (Exception e) {
+            e.printStackTrace();
             throw repExceptionHandler(new RepException(e.getCause()));
         }
     }
@@ -150,7 +155,10 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             throw repExceptionHandler(new RepException(e.getCause()));
         }
     }
-
+    @Override
+    public void update(List<BE> entities) throws SerException {
+        rep.saveAll(entities);
+    }
     @Override
     public void update(BE... entities) throws SerException {
         try {
@@ -170,6 +178,8 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             throw repExceptionHandler(new RepException(e.getCause()));
         }
     }
+
+
 
     @Override
     public List<Object> findBySql(String sql) throws SerException {

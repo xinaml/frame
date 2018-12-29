@@ -129,6 +129,15 @@ public interface Ser<BE extends BaseEntity, BD extends BaseDTO> {
     default void update(BE... entities) throws SerException {
 
     }
+    /**
+     * 更新对象
+     *
+     * @param entities
+     * @throws SerException
+     */
+    default void update(List<BE> entities) throws SerException {
+
+    }
 
     /**
      * 通过id查询对象是否存在

@@ -25,14 +25,13 @@ import java.util.*;
 /**
  * mongo测试（目的为存储动态字段的表结构数据）
  */
-@Controller
+@RestController
 @RequestMapping("mongo")
 public class MongoAct extends BaseAct {
     @Autowired
     private TableRep tableRep;
 
 
-    @ResponseBody
     @GetMapping("table/save")
     public ActResult saveTable() {
         Table table = new Table();
@@ -47,14 +46,12 @@ public class MongoAct extends BaseAct {
         return new ActResult((Object) table.getId());
     }
 
-    @ResponseBody
     @GetMapping("table/list")
     public ActResult findTable() {
         List<Table> tables = tableRep.find(null);
         return new ActResult(tables);
     }
 
-    @ResponseBody
     @GetMapping("table/field/{tableId}")
     public ActResult findFieldByTable(@PathVariable String tableId) {
         Table table = tableRep.findById(tableId);
@@ -64,7 +61,6 @@ public class MongoAct extends BaseAct {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    @ResponseBody
     @GetMapping("data/save")
     public ActResult saveData(@RequestParam String tableId) throws ActException {
         try {
@@ -84,7 +80,6 @@ public class MongoAct extends BaseAct {
         }
     }
 
-    @ResponseBody
     @GetMapping("data/list/{tableId}")
     public ActResult list(@PathVariable String tableId) throws ActException {
         Table table = tableRep.findById(tableId);

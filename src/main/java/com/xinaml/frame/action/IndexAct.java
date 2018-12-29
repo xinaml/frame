@@ -7,6 +7,7 @@ package com.xinaml.frame.action;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 首页
@@ -18,10 +19,10 @@ public class IndexAct {
 
 
     @GetMapping("/")
-    public String index(String data) {
+    public ModelAndView index(String data) {
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
         System.out.println(path);
-        System.out.println("utf-8s 测试：" + data);
-        return "index";
+        System.out.println("utf-8s 测试,传递参数为：" + data);
+        return new ModelAndView("index");
     }
 }

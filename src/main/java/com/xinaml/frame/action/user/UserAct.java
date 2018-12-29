@@ -1,6 +1,5 @@
 package com.xinaml.frame.action.user;
 
-import com.alibaba.fastjson.JSON;
 import com.xinaml.frame.base.atction.BaseAct;
 import com.xinaml.frame.base.dto.RT;
 import com.xinaml.frame.base.entity.ADD;
@@ -14,7 +13,6 @@ import com.xinaml.frame.common.custom.result.Result;
 import com.xinaml.frame.common.utils.PassWordUtil;
 import com.xinaml.frame.dto.storage.StorageDTO;
 import com.xinaml.frame.dto.user.UserDTO;
-import com.xinaml.frame.entity.storage.Storage;
 import com.xinaml.frame.entity.user.User;
 import com.xinaml.frame.ser.storage.StorageSer;
 import com.xinaml.frame.ser.user.UserSer;
@@ -22,22 +20,19 @@ import com.xinaml.frame.to.user.UserTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.criteria.JoinType;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 @Api(value = "UserAPI", tags = {"用户接口"})
-@Controller
+@RestController
 @RequestMapping("user")
 @Login
 public class UserAct extends BaseAct {
@@ -49,29 +44,27 @@ public class UserAct extends BaseAct {
     private StorageSer storageSer;
 
     @GetMapping({"/", ""})
-    public String user() throws ActException {
-        return "user/user";
+    public ModelAndView user() throws ActException {
+        return new ModelAndView("user/user");
     }
 
-    @ResponseBody
     @GetMapping("maps")
     public MapResult<User> maps(UserDTO dto) throws ActException {
         try {
             Map<String, Object> maps = userSer.findByPage(dto);
-            return new MapResult( maps);
+            return new MapResult(maps);
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }
     }
 
     @ApiOperation(value = "列表")
-    @ResponseBody
     @GetMapping("list")
     public Result<User> list(UserDTO dto) throws ActException {
         try {
             StorageDTO storageDTO = new StorageDTO();
-            storageDTO.addRT(RT.like("user.username","lgq",JoinType.LEFT));
-            storageDTO.addRT(RT.like("path","lgq1"));
+            storageDTO.addRT(RT.like("user.username", "lgq", JoinType.LEFT));
+            storageDTO.addRT(RT.like("path", "lgq1"));
             storageSer.findByRTS(storageDTO);
             dto.addRT(RT.eq("username", "lgq"));
             return new ActResult("获取列表成功！", userSer.findByRTS(dto));
@@ -83,7 +76,6 @@ public class UserAct extends BaseAct {
 
     @ApiOperation(value = "添加")
     @ApiImplicitParam(dataTypeClass = UserTO.class)
-    @ResponseBody
     @PostMapping("add")
     public Result add(@Validated(ADD.class) UserTO to, BindingResult rs) throws ActException {
         try {
@@ -104,7 +96,6 @@ public class UserAct extends BaseAct {
 
 
     // DeleteMapping 这种方式接收不到数组参数，见下一方法，必须用过url来传参
-    @ResponseBody
     @PostMapping("del")
     public Result del(String[] ids) throws ActException {
         try {
@@ -122,7 +113,6 @@ public class UserAct extends BaseAct {
      * @return
      * @throws ActException
      */
-    @ResponseBody
     @DeleteMapping("del/{id}")
     public Result del(@PathVariable String id) throws ActException {
         try {
@@ -134,7 +124,6 @@ public class UserAct extends BaseAct {
     }
 
 
-    @ResponseBody
     @PutMapping("edit")
     public Result edit(@Validated(EDIT.class) UserTO to, BindingResult rs) throws ActException {
         try {

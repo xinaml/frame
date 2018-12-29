@@ -13,11 +13,11 @@ import com.xinaml.frame.ser.storage.StorageSer;
 import com.xinaml.frame.to.storage.FileInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ import java.io.File;
 import java.io.IOException;
 
 @RequestMapping(value = "storage")
-@Controller
+@RestController
 @Login
 public class StorageAct extends BaseAct {
 
@@ -36,8 +36,8 @@ public class StorageAct extends BaseAct {
     private StorageSer storageSer;
 
     @GetMapping("page")
-    public String page() throws ActException {
-        return "/storage/storage";
+    public ModelAndView page() throws ActException {
+        return new ModelAndView("/storage/storage");
     }
 
     /**
@@ -47,7 +47,6 @@ public class StorageAct extends BaseAct {
      *
      * @return
      */
-    @ResponseBody
     @GetMapping("list")
     public Result list(HttpServletRequest request) throws ActException {
         try {
@@ -65,7 +64,6 @@ public class StorageAct extends BaseAct {
      *
      * @return
      */
-    @ResponseBody
     @GetMapping("tree")
     public ActResult tree(HttpServletRequest request) throws ActException {
         try {
@@ -82,7 +80,6 @@ public class StorageAct extends BaseAct {
      * @param info 上传文件信息
      * @return
      */
-    @ResponseBody
     @PostMapping("upload")
     public ActResult upload(HttpServletRequest request, FileInfo info) throws ActException {
         try {
@@ -108,7 +105,6 @@ public class StorageAct extends BaseAct {
     /**
      * 检测文件是否存在
      */
-    @ResponseBody
     @GetMapping("exists")
     public ActResult exist(HttpServletRequest request) throws ActException {
         try {
@@ -122,7 +118,6 @@ public class StorageAct extends BaseAct {
     /**
      * 检测MD5是否存在，实现秒传
      */
-    @ResponseBody
     @GetMapping("md5/exist")
     public ActResult md5Exist(HttpServletRequest request) throws ActException {
         try {
@@ -143,7 +138,6 @@ public class StorageAct extends BaseAct {
      * @param isFolder 是否为文件夹，默认为文件(下载文件夹设置为true)
      * @return
      */
-    @ResponseBody
     @GetMapping("download")
     public void downLoad(HttpServletRequest request, HttpServletResponse response, boolean isFolder) throws ActException {
         try {
@@ -170,8 +164,7 @@ public class StorageAct extends BaseAct {
      *
      * @return
      */
-    @ResponseBody
-    @PostMapping( "mkdir")
+    @PostMapping("mkdir")
     public ActResult mkdir(HttpServletRequest request) throws ActException {
         try {
             String path = getParameter(request, "path", true);
@@ -191,15 +184,14 @@ public class StorageAct extends BaseAct {
      *
      * @return
      */
-    @ResponseBody
-    @PostMapping( "rename")
+    @PostMapping("rename")
     public ActResult rename(HttpServletRequest request) throws ActException {
         try {
             String path = getParameter(request, "path", true);
             String newName = getParameter(request, "newName", true);
             String oldName = getParameter(request, "oldName", true);
             storageSer.rename(path, oldName, newName);
-            return  new ActResult(SUCCESS);
+            return new ActResult(SUCCESS);
         } catch (SerException e) {
             throw new ActException(e.getMessage());
         }
@@ -213,8 +205,7 @@ public class StorageAct extends BaseAct {
      *
      * @return
      */
-    @ResponseBody
-    @PostMapping( "move")
+    @PostMapping("move")
     public ActResult move(HttpServletRequest request) throws ActException {
         try {
             String from = getParameter(request, "fromPath", true);
@@ -235,7 +226,6 @@ public class StorageAct extends BaseAct {
      * @return
      * @throws SerException
      */
-    @ResponseBody
     @PostMapping("delfile")
     public ActResult delFile(HttpServletRequest request) throws ActException {
         try {
@@ -243,7 +233,7 @@ public class StorageAct extends BaseAct {
             String[] paths = values.split("##");
             if (null != paths) {
                 storageSer.delFile(paths);
-               return new ActResult(SUCCESS);
+                return new ActResult(SUCCESS);
             } else {
                 throw new SerException("paths不能为空");
             }
@@ -260,7 +250,6 @@ public class StorageAct extends BaseAct {
      *
      * @return
      */
-    @ResponseBody
     @PostMapping("copy")
     public ActResult copy(HttpServletRequest request) throws ActException {
         try {
@@ -282,7 +271,6 @@ public class StorageAct extends BaseAct {
      * @param response
      * @throws SerException
      */
-    @ResponseBody
     @GetMapping("thumbnails")
     public void thumbnails(HttpServletRequest request, HttpServletResponse response) throws ActException {
         try {
@@ -292,7 +280,7 @@ public class StorageAct extends BaseAct {
             writeImage(response, storageSer.thumbnails(path, width, height));
         } catch (SerException e) {
             throw new ActException(e.getMessage());
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new ActException("获取缩略图错误！");
         }
     }
@@ -305,7 +293,6 @@ public class StorageAct extends BaseAct {
      * @param response
      * @throws SerException
      */
-    @ResponseBody
     @GetMapping(value = "gif")
     public void gif(HttpServletRequest request, HttpServletResponse response) throws ActException {
         try {

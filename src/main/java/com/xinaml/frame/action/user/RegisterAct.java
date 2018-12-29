@@ -9,23 +9,22 @@ import com.xinaml.frame.common.custom.result.Result;
 import com.xinaml.frame.ser.user.UserSer;
 import com.xinaml.frame.to.user.RegisterTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+@RestController
 public class RegisterAct extends BaseAct {
     @Autowired
     private UserSer userSer;
 
     @GetMapping("/register")
-    public String register() throws ActException {
-        return "/register";//跳转注册页
+    public ModelAndView register() throws ActException {
+        return new ModelAndView("/register");//跳转注册页
     }
 
-    @ResponseBody
     @PostMapping("/register")
     public Result register(@Validated(ADD.class) RegisterTO to) throws ActException {
         try {
