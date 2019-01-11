@@ -19,7 +19,7 @@ import java.util.Set;
  * @Date:[2018-12-29 10:09]
  * @Description: [定时器实现逻辑 ]
  * @Version: [3.0]
- * @Copy: [com.changbei]
+ * @Copy: [com.xinaml]
  */
 @Service
 public class ScheduleSerImpl implements ScheduleSer {

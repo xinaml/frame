@@ -17,7 +17,7 @@ import java.util.List;
  * @Date:[2018-12-29 10:46]
  * @Description: [ ]
  * @Version: [3.0]
- * @Copy: [com.changbei]
+ * @Copy: [com.xinaml]
  */
 @Service
 public class ScheduleJobGroupSerImpl extends ServiceImpl<ScheduleJobGroup, ScheduleJobGroupDTO> implements ScheduleJobGroupSer {

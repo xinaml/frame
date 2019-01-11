@@ -11,7 +11,7 @@ import java.util.List;
  * @Date:[2018-12-29 10:08]
  * @Description: [ 定时器实现逻辑]
  * @Version: [3.0]
- * @Copy: [com.changbei]
+ * @Copy: [com.xinaml]
  */
 public interface ScheduleSer {
     /**

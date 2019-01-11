@@ -9,7 +9,7 @@ import com.xinaml.frame.entity.quartz.ScheduleJob;
  * @Date:[2018-12-29 09:49]
  * @Description: [ ]
  * @Version: [3.0]
- * @Copy: [com.changbei]
+ * @Copy: [com.xinaml]
  */
 public interface ScheduleJobRep extends JapRep<ScheduleJob, ScheduleJobDTO> {
 }

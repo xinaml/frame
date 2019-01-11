@@ -21,7 +21,7 @@ import java.util.List;
  * @Date:[2018-12-29 10:32]
  * @Description: [ ]
  * @Version: [3.0]
- * @Copy: [com.changbei]
+ * @Copy: [com.xinaml]
  */
 @Service
 public class ScheduleJobSerImpl extends ServiceImpl<ScheduleJob, ScheduleJobDTO> implements ScheduleJobSer {

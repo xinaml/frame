@@ -34,10 +34,10 @@ public class ActivitiAct {
      */
     @GetMapping("start/process")
     public String startProcess(String key) {
-        String keys = "qingjia";
+         key = "leave";
         Map<String, Object> vals = new HashMap<>();
         vals.put("student", "学生3号");
-        ProcessInstance pi = processEngine.getRuntimeService().startProcessInstanceByKey(keys, vals);
+        ProcessInstance pi = processEngine.getRuntimeService().startProcessInstanceByKey(key, vals);
         System.out.println("流程实例ID:" + pi.getId());
         System.out.println("流程定义ID:" + pi.getProcessDefinitionId());
         return "success";

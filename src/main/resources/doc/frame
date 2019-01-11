@@ -41,7 +41,7 @@ AOP切面:
 工具类：common/utils
     ASEUtil： ase前端加密解密
     RequestUtil： 获取当前request
-    ResponseUtil： 获取当前resonse
+    ResponseUtil： 获取当前response
     StringUtil： 处理字符串
     UserUtil： 获取当前用户等
     ...

@@ -4,9 +4,10 @@
  **/
 package com.xinaml.frame.action;
 
-import org.springframework.stereotype.Controller;
+import com.xinaml.frame.common.custom.exception.SerException;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -14,15 +15,20 @@ import org.springframework.web.servlet.ModelAndView;
  *
  * @author lgq
  */
-@Controller
+@RestController
 public class IndexAct {
 
 
     @GetMapping("/")
-    public ModelAndView index(String data) {
-        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-        System.out.println(path);
-        System.out.println("utf-8s 测试,传递参数为：" + data);
+    public ModelAndView index(String data) throws SerException {
+        print(data);
         return new ModelAndView("index");
+    }
+
+    private void print(String data) {
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        System.out.println("utf-8 测试,传递参数为：" + (data != null ? data : ""));
+        StackTraceElement[] element = Thread.currentThread().getStackTrace();
+        System.out.println("调用本方法 "+element[1].getMethodName()+" 的方法为： "+element[2].getMethodName());
     }
 }

@@ -160,10 +160,22 @@ public interface Ser<BE extends BaseEntity, BD extends BaseDTO> {
      * @return
      * @throws SerException
      */
-    default <T> List<T> findBySql(String sql, Class clazz, String[] fields) throws SerException {
+    default <T> List<T> findBySql(String sql, Class clazz, String... fields) throws SerException {
         return null;
     }
 
+    /**
+     * 查询一条数据通过sql
+     * @param sql
+     * @param clazz
+     * @param fields
+     * @param <T>
+     * @return
+     * @throws SerException
+     */
+    default <T> T findOneBySql(String sql, Class clazz, String... fields) throws SerException {
+        return null;
+    }
     /**
      * sql原生查询,执行结果需要自己解析
      *

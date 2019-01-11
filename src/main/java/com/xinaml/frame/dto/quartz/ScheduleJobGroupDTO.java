@@ -7,7 +7,7 @@ import com.xinaml.frame.base.dto.BaseDTO;
  * @Date:[2018-12-29 09:50]
  * @Description: [ ]
  * @Version: [3.0]
- * @Copy: [com.changbei]
+ * @Copy: [com.xinaml]
  */
 public class ScheduleJobGroupDTO extends BaseDTO {
 }

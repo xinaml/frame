@@ -11,7 +11,7 @@ import com.xinaml.frame.to.quartz.ScheduleJobGroupTO;
  * @Date:[2018-12-29 10:10]
  * @Description: [ 定时器组]
  * @Version: [3.0]
- * @Copy: [com.changbei]
+ * @Copy: [com.xinaml]
  */
 public interface ScheduleJobGroupSer extends Ser<ScheduleJobGroup, ScheduleJobGroupDTO> {
 

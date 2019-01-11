@@ -11,7 +11,7 @@ import javax.persistence.Table;
  * @Date:[2018-12-29 09:44]
  * @Description: [ ]
  * @Version: [3.0]
- * @Copy: [com.changbei]
+ * @Copy: [com.xinaml]
  */
 @Entity
 @Table(name = "tb_schedule_job_group")

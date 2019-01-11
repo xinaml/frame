@@ -80,7 +80,7 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
         try {
             JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
             Optional<BE> op = rep.findOne(jpaSpec);
-            if(op.isPresent()){
+            if (op.isPresent()) {
                 return op.get();
             }
             return null;
@@ -95,9 +95,9 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
 
         try {
             JpaSpec jpaSpec = new JpaSpec<BE, BD>(dto);
-            if(dto.getSorts().size()>0){
-                return rep.findAll(jpaSpec,jpaSpec.getSort(dto.getSorts()));
-            }else {
+            if (dto.getSorts().size() > 0) {
+                return rep.findAll(jpaSpec, jpaSpec.getSort(dto.getSorts()));
+            } else {
                 return rep.findAll(jpaSpec);
             }
         } catch (Exception e) {
@@ -155,10 +155,12 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
             throw repExceptionHandler(new RepException(e.getCause()));
         }
     }
+
     @Override
     public void update(List<BE> entities) throws SerException {
         rep.saveAll(entities);
     }
+
     @Override
     public void update(BE... entities) throws SerException {
         try {
@@ -180,7 +182,6 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
     }
 
 
-
     @Override
     public List<Object> findBySql(String sql) throws SerException {
         try {
@@ -193,7 +194,17 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
     }
 
     @Override
-    public <T> List<T> findBySql(String sql, Class clazz, String[] fields) throws SerException {
+    public <T> T findOneBySql(String sql, Class clazz, String... fields) throws SerException {
+        List<T> objects = findBySql(sql, clazz, fields);
+        if (objects.size() > 0) {
+            return objects.get(0);
+        } else {
+            return  null;
+        }
+    }
+
+    @Override
+    public <T> List<T> findBySql(String sql, Class clazz, String... fields) throws SerException {
         List<Field> all_fields = new ArrayList<>(); //源类属性列表
         Class temp_clazz = clazz;
         while (null != temp_clazz) { //数据源类所有属性（包括父类）
@@ -298,8 +309,8 @@ public class ServiceImpl<BE extends BaseEntity, BD extends BaseDTO> implements S
                 msg = ex.getCause().getMessage();
             }
             if (msg.indexOf("cannot be null") != -1) {
-                msg = StringUtils.substringAfter(msg,"'");
-                msg = StringUtils.substringBefore(msg,"'").toLowerCase()+"不能为空！";
+                msg = StringUtils.substringAfter(msg, "'");
+                msg = StringUtils.substringBefore(msg, "'").toLowerCase() + "不能为空！";
             }
         } else if (throwable instanceof DataException) {
             DataException ex = ((DataException) throwable);
