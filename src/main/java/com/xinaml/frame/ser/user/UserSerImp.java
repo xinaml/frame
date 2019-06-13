@@ -63,7 +63,7 @@ public class UserSerImp extends ServiceImpl<User, UserDTO> implements UserSer {
                 try {
                     User user = new User();
                     user.setUsername(to.getUsername());
-                    user.setPassword(PassWordUtil.genSaltPwd(to.getUsername()));
+                    user.setPassword(PassWordUtil.genSaltPwd(to.getPassword()));
                     user.setCreateDate(LocalDateTime.now());
                     super.save(user);
                 } catch (Exception e) {
